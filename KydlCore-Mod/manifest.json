@@ -1,0 +1,10 @@
+{
+  "name": "KydlCore",
+  "version_number": "0.1.0",
+  "website_url": "",
+  "description": "Shared runtime for all KydlDev mods: one UI root and theme, the KY hub window (F10) and the KY-Items category and registry.",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2202",
+    "ValheimModding-Jotunn-2.30.2"
+  ]
+}
