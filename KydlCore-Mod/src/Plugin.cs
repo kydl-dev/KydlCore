@@ -9,7 +9,7 @@ using UnityEngine;
 namespace KydlCore
 {
     /// <summary>
-    /// KydlCore: Shared runtime for all KydlDev mods: one UI root and theme, the KY hub window (F10) and the KY-Items category and registry.
+    /// KydlCore: Shared runtime for all KydlDev mods: one UI root and theme, the KY hub window (F6; the one menu of every KydlDev mod) and the KY-Items category and registry.
     /// Entry point. Order in Awake matters: log first, then the config (player settings), then text, then everything that uses them.
     /// </summary>
     [BepInPlugin(ModGuid, ModName, ModVersion)]
@@ -47,7 +47,7 @@ namespace KydlCore
             Bundle = LoadBundle();
             UiInputLock.Install(ModGuid);           // the character does not move while one of the mod's menus is open
             new Harmony(ModGuid).PatchAll(Assembly.GetExecutingAssembly());
-            ModLog.Verbose("Plugin: Awake finished (Harmony patches applied, menu key " + ModSettings.MenuKey.Value + ")");
+            ModLog.Verbose("Plugin: Awake finished (Harmony patches applied, mod " + (ModSettings.On ? "on" : "inert: EnableAll is false") + ", bundle " + (Bundle != null ? "loaded" : "none") + ")");
         }
 
         // 1) embedded in the DLL (Kydl.Mod.targets embeds Assets\<bundle>; read fully into memory: LoadFromStream breaks once the stream
@@ -78,8 +78,6 @@ namespace KydlCore
         void Update()
         {
             if (_cfgWatcher != null) _cfgWatcher.Tick();
-            if (!ModSettings.On) return;
-            Ui.MainMenu.Tick();
         }
 
         void OnDestroy()

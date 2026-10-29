@@ -1,6 +1,5 @@
 using BepInEx.Configuration;
 using Kydl.Common;
-using UnityEngine;
 
 namespace KydlCore
 {
@@ -16,7 +15,6 @@ namespace KydlCore
     {
         // [General]
         public static ConfigEntry<bool> EnableAll;
-        public static ConfigEntry<KeyCode> MenuKey;
         // [DebugLog]
         public static ConfigEntry<bool> DebugLog;
 
@@ -34,8 +32,6 @@ namespace KydlCore
 
             EnableAll = c.Bind("General", "EnableAll", true,
                 "Switches the whole mod on / off while playing. Off: no effects and no menus from this mod; things already built stay in the world.");
-            MenuKey = c.Bind("General", "MenuKey", KeyCode.F6,
-                "Opens / closes the KydlCore menu. None = no menu.");
             DebugLog = c.Bind("DebugLog", "Enable", false,
                 "Writes detailed lines about everything the mod does to the BepInEx log (for bug reports). Leave off while playing normally.");
 
@@ -43,8 +39,8 @@ namespace KydlCore
             ConfigTools.DropRemoved(c);
 
             EnableAll.SettingChanged += (s, e) => ModLog.Info("Config: EnableAll = " + EnableAll.Value + (EnableAll.Value ? ", the mod is on" : ", the mod is inert (no effects or menus)"));
-            ModLog.Verbose("Config: bound (EnableAll " + EnableAll.Value + ", menu key " + MenuKey.Value + ", debug log " + DebugLog.Value + ")");
-            return EnableAll != null && MenuKey != null && DebugLog != null;
+            ModLog.Verbose("Config: bound (EnableAll " + EnableAll.Value + ", debug log " + DebugLog.Value + ")");
+            return EnableAll != null && DebugLog != null;
         }
     }
 }

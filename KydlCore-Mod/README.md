@@ -6,7 +6,6 @@ Shared runtime for all KydlDev mods: one UI root and theme, the KY hub window (F
 - (fill in)
 
 ## How to use
-- Press **F6** (config `[General] MenuKey`) to open the KydlCore menu.
 - Build pieces of this mod are in the hammer's **KY-Items** category.
 
 ## Configuration
@@ -15,7 +14,6 @@ Shared runtime for all KydlDev mods: one UI root and theme, the KY hub window (F
 | Section | Setting | Default | What it does |
 |---------|---------|---------|--------------|
 | General | EnableAll | true | Switches the whole mod on / off while playing |
-| General | MenuKey | F6 | Opens / closes the menu |
 | DebugLog | Enable | false | Detailed lines in the BepInEx log for bug reports |
 
 Edits to the file are picked up while the game runs.

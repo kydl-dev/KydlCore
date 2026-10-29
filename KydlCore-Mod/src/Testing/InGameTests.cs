@@ -15,7 +15,7 @@ namespace KydlCore.Testing
         static string Startup_ConfigBound()
         {
             if (ModSettings.EnableAll == null) return "FAIL: ModSettings.Bind did not run (EnableAll is null)";
-            return ModSettings.On ? "PASS: EnableAll on, menu key " + ModSettings.MenuKey.Value : "SKIP: EnableAll is off in the config";
+            return ModSettings.On ? "PASS: EnableAll on, debug log " + (ModSettings.DebugLog != null && ModSettings.DebugLog.Value ? "on" : "off") : "SKIP: EnableAll is off in the config";
         }
 
         /// The local player exists once a world is loaded (example of a World_ test; replace with the mod's own checks).
