@@ -1,6 +1,6 @@
 # KydlCore
 
-Shared runtime for all KydlDev mods: one UI root and theme, the KY hub window (F10) and the KY-Items category and registry.
+Shared runtime for all KydlDev mods: one UI root and theme, the KY hub window (F6; the one menu of every KydlDev mod) and the KY-Items category and registry.
 
 ## Features
 - (fill in)
