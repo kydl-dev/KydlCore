@@ -68,11 +68,15 @@ namespace Kydl.Ui
         }
 
         // --- text -------------------------------------------------------------------------------------------------------------
-        /// An upper-case gold section title with a line under it (FollowPlayer's Section).
+        /// A section title with a line under it (FollowPlayer's Section). Other mods: upper-case, NameColor. KydlCore build: the text as written (PascalCase) in TabColor, because a section is a settings tab (D-049).
         public static VisualElement Heading(string text)
         {
             var s = new VisualElement(); s.style.flexShrink = 0; s.style.marginTop = 16; s.style.marginBottom = 6;
+#if KYDL_CORE_PUBLIC
+            var head = UiKit.Label(text, UiKit.SectionSize, UiKit.TabColor, true);
+#else
             var head = UiKit.Label(text.ToUpperInvariant(), UiKit.SectionSize, UiKit.NameColor, true);
+#endif
             head.style.letterSpacing = 1.5f;
             s.Add(head);
             var line = new VisualElement(); line.style.height = 1; line.style.backgroundColor = UiKit.Border; line.style.marginTop = 4;
