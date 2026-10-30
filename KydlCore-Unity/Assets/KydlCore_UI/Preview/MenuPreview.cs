@@ -33,7 +33,7 @@ namespace KydlCore.Ui
             if (kind == PreviewKind.Hub)
             {
                 var model = FakeHub();
-                _hub = new HubView(model, UiText.English, (mod, tab) => FakePage(mod, model.TabTitle(mod, tab)), () => Debug.Log("[MenuPreview] close pressed"));
+                _hub = new HubView(model, UiText.English, (mod, tab) => FakePage(), () => Debug.Log("[MenuPreview] close pressed"));
                 root.Add(_hub.Root);
                 Debug.Log("[MenuPreview] KY hub shown (fake mods)");
                 return;
@@ -68,11 +68,9 @@ namespace KydlCore.Ui
             return m;
         }
 
-        static VisualElement FakePage(string mod, string tabTitle)
+        static VisualElement FakePage()
         {
             var page = new VisualElement();
-            page.Add(UiControls.Heading(tabTitle));
-            page.Add(UiControls.Note("Preview page of " + mod + " / " + tabTitle + "."));
             page.Add(UiControls.Toggle("Example switch", true, on => Debug.Log("[MenuPreview] switch " + on)));
             page.Add(UiControls.Row("Example value", UiControls.Slider(0f, 10f, 5f, "0.0", v => Debug.Log("[MenuPreview] slider " + v))));
             return page;

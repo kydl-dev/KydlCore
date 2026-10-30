@@ -17,7 +17,8 @@ namespace KydlCore.Ui
             { "kydlcore_menu_example_switch", "Example switch" },
             { "kydlcore_menu_example_slider", "Example value" },
             { "kydlcore_menu_close", "Close" },
-            { "kydlcore_hub_title", "KY" },
+            { "kydlcore_hub_title", "KydlCore Control Panel" },
+            { "kydlcore_hub_page_of", "Page: {0} / {1}" },
             { "kydlcore_hub_empty", "No KydlDev mod is loaded." },
             { "kydlcore_hub_page_empty", "This tab has nothing to show yet." },
         };
