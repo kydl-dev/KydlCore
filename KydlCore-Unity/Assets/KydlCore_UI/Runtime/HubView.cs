@@ -13,7 +13,7 @@ namespace KydlCore.Ui
     /// Look (D-048, user feedback 2026-10-30, D-055): tabs are as big as the buttons (same padding); mod names (row 1) are red text, settings tabs
     /// (row 2) have a red button border and gold text; the selected tab has a rounded gold border, a faint gold halo around it (UI Toolkit has no
     /// drop shadow) and sits 3 px higher; a thin red border while the pointer is over a tab. The title, the tab names and the page start on one
-    /// vertical line (TextX). Under the settings tabs a line as thick as the one under the mod names, then every page starts with a line saying which page it is. Rows wrap onto further lines; scroll bar + paging for more
+    /// vertical line (TextX). Under the settings tabs the same gold line as under the mod names (same element, Rule()), then every page starts with a line saying which page it is. Rows wrap onto further lines; scroll bar + paging for more
     /// than 2 rows is T-035.
     /// The view redraws when the model fires Changed; Dispose unhooks it.
     /// </summary>
@@ -49,10 +49,8 @@ namespace KydlCore.Ui
             var rows = new VisualElement { name = "kydl-hub-rows" };
             rows.style.flexShrink = 0; rows.style.marginLeft = TabEdge; rows.style.marginRight = TabEdge; rows.style.marginTop = 8;
             _row1 = Row("kydl-hub-row1");
-            var line = new VisualElement { name = "kydl-hub-line" };
-            line.style.height = 2; line.style.backgroundColor = UiKit.Gold; line.style.marginTop = 2; line.style.marginBottom = 6;
             _row2 = Row("kydl-hub-row2");
-            rows.Add(_row1); rows.Add(line); rows.Add(_row2);
+            rows.Add(_row1); rows.Add(Rule("kydl-hub-line")); rows.Add(_row2); rows.Add(Rule("kydl-hub-page-line"));   // both lines are the same element: gold, 2 px, full width
             Root.Insert(1, rows);                                  // between the title bar and the page area
 
             _onChanged = Rebuild;
@@ -66,6 +64,13 @@ namespace KydlCore.Ui
         {
             _model.Changed -= _onChanged;
             UiLog.Verbose("HubView: disposed");
+        }
+
+        static VisualElement Rule(string name)
+        {
+            var l = new VisualElement { name = name };
+            l.style.height = 2; l.style.backgroundColor = UiKit.Gold; l.style.marginTop = 2; l.style.marginBottom = 6; l.style.flexShrink = 0;
+            return l;
         }
 
         static VisualElement Row(string name)
@@ -102,12 +107,6 @@ namespace KydlCore.Ui
             var c = _body.Content;
             c.Clear();
             VisualElement page = mod == null ? null : _page(mod, tab);
-            if (mod != null)
-            {
-                var rule = new VisualElement { name = "kydl-hub-page-line" };          // the thin line under the settings tabs (the one a section heading has)
-                rule.style.height = 2; rule.style.backgroundColor = UiKit.Border; rule.style.marginTop = 6; rule.style.marginBottom = 8; rule.style.flexShrink = 0;
-                c.Add(rule);
-            }
             if (mod != null) c.Add(UiControls.Note(string.Format(_text("kydlcore_hub_page_of"), _model.ModTitle(mod), _model.TabTitle(mod, tab))));
             if (page != null) c.Add(page);
             else c.Add(UiControls.Note(_text(mod == null ? "kydlcore_hub_empty" : "kydlcore_hub_page_empty")));
