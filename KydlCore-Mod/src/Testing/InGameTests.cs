@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Kydl.Common;
+using UnityEngine;
 
 namespace KydlCore.Testing
 {
@@ -17,6 +19,35 @@ namespace KydlCore.Testing
             if (ModSettings.EnableAll == null) return "FAIL: ModSettings.Bind did not run (EnableAll is null)";
             return ModSettings.On ? "PASS: EnableAll on, debug log " + (ModSettings.DebugLog != null && ModSettings.DebugLog.Value ? "on" : "off") : "SKIP: EnableAll is off in the config";
         }
+
+        /// PLAN T-022a: is Valheim's font NotoSansSC-Regular among the loaded Font objects (the same lookup UiKit.LoadFonts uses: Font.name, exact)?
+        /// At the main menu ...
+        static string Startup_FontsLoaded() { return CheckFonts(); }
+
+        /// ... and again once a world is loaded (the game may load fonts lazily, so both moments are recorded).
+        static string World_FontsLoaded() { return CheckFonts(); }
+
+        static string CheckFonts()
+        {
+            var names = new HashSet<string>();
+            var related = new List<string>();
+            int total = 0;
+            foreach (var f in Resources.FindObjectsOfTypeAll<Font>())
+            {
+                if (f == null) continue;
+                total++;
+                names.Add(f.name);
+                if (f.name.IndexOf("Noto", System.StringComparison.OrdinalIgnoreCase) >= 0 || f.name.IndexOf("Norse", System.StringComparison.OrdinalIgnoreCase) >= 0)
+                    related.Add(f.name + (f.dynamic ? " (dynamic)" : " (static)"));
+            }
+            string detail = total + " Font objects loaded; NotoSansSC-Regular " + Has(names, "NotoSansSC-Regular") + ", NotoSansSC-Thin " + Has(names, "NotoSansSC-Thin")
+                          + ", Norse " + Has(names, "Norse") + ", Norsebold " + Has(names, "Norsebold") + ", NotoEmoji-Regular " + Has(names, "NotoEmoji-Regular")
+                          + "; Noto / Norse fonts by name: " + (related.Count == 0 ? "none" : string.Join(", ", related.ToArray()));
+            ModLog.Verbose("InGameTests: " + detail);
+            return names.Contains("NotoSansSC-Regular") ? "PASS: " + detail : "FAIL: NotoSansSC-Regular is not a loaded Font: " + detail;
+        }
+
+        static string Has(HashSet<string> names, string name) { return names.Contains(name) ? "yes" : "NO"; }
 
         /// The local player exists once a world is loaded (example of a World_ test; replace with the mod's own checks).
         static string World_PlayerPresent()
