@@ -1,0 +1,113 @@
+static class Kydl.Common.UiInputLock
+  method System.Boolean Kydl.Common.UiInputLock::Hold(System.String)
+  method System.Boolean Kydl.Common.UiInputLock::Install(System.String)
+  method System.Boolean Kydl.Common.UiInputLock::Release(System.String)
+  method System.Int32 Kydl.Common.UiInputLock::get_Count()
+sealed class Kydl.Ui.UiColorPicker
+static class Kydl.Ui.UiControls
+  method UnityEngine.UIElements.Button Kydl.Ui.UiControls::Button(System.String,System.Action,System.Boolean)
+  method UnityEngine.UIElements.Button Kydl.Ui.UiControls::Dropdown(System.Collections.Generic.IList`1<System.String>,System.String,System.Func`2<System.String,System.String>,System.Action`1<System.String>)
+  method UnityEngine.UIElements.Button Kydl.Ui.UiControls::Field(System.String,System.Action)
+  method UnityEngine.UIElements.Label Kydl.Ui.UiControls::Note(System.String)
+  method UnityEngine.UIElements.TextField Kydl.Ui.UiControls::TextField(System.String,System.Int32,System.Action`1<System.String>)
+  method UnityEngine.UIElements.VisualElement Kydl.Ui.UiControls::ColorPicker(System.String,System.Action`1<System.String>,System.Action`1<System.String>&)
+  method UnityEngine.UIElements.VisualElement Kydl.Ui.UiControls::Heading(System.String)
+  method UnityEngine.UIElements.VisualElement Kydl.Ui.UiControls::Line(UnityEngine.UIElements.VisualElement[])
+  method UnityEngine.UIElements.VisualElement Kydl.Ui.UiControls::Row(System.String,UnityEngine.UIElements.VisualElement)
+  method UnityEngine.UIElements.VisualElement Kydl.Ui.UiControls::Slider(System.Single,System.Single,System.Single,System.String,System.Action`1<System.Single>)
+  method UnityEngine.UIElements.VisualElement Kydl.Ui.UiControls::Toggle(System.String,System.Boolean,System.Action`1<System.Boolean>)
+static class Kydl.Ui.UiKit
+  field Border : UnityEngine.Color
+  field ButtonSize : System.Int32 = 21
+  field FontSize : System.Int32 = 22
+  field Gold : UnityEngine.Color
+  field GoldDim : UnityEngine.Color
+  field NameColor : UnityEngine.Color
+  field NameSize : System.Int32 = 24
+  field OnDark : UnityEngine.Color
+  field Owner : System.String
+  field Panel : UnityEngine.Color
+  field PanelHover : UnityEngine.Color
+  field PanelLight : UnityEngine.Color
+  field SectionSize : System.Int32 = 24
+  field SmallSize : System.Int32 = 18
+  field TabColor : UnityEngine.Color
+  field Text : UnityEngine.Color
+  field TextDim : UnityEngine.Color
+  field Track : UnityEngine.Color
+  field ValueColor : UnityEngine.Color
+  method System.Void Kydl.Ui.UiKit::Borders(UnityEngine.UIElements.VisualElement,System.Single,UnityEngine.Color)
+  method System.Void Kydl.Ui.UiKit::Fade(UnityEngine.UIElements.VisualElement,System.String[])
+  method System.Void Kydl.Ui.UiKit::Pad(UnityEngine.UIElements.VisualElement,System.Single,System.Single)
+  method System.Void Kydl.Ui.UiKit::Radius(UnityEngine.UIElements.VisualElement,System.Single)
+  method UnityEngine.UIElements.Label Kydl.Ui.UiKit::Label(System.String,System.Single,UnityEngine.Color,System.Boolean)
+  method UnityEngine.UIElements.PanelSettings Kydl.Ui.UiKit::get_Settings()
+  method UnityEngine.UIElements.VisualElement Kydl.Ui.UiKit::Window(System.String,System.String,System.Action,Kydl.Ui.UiScroll&)
+  method UnityEngine.UIElements.VisualElement Kydl.Ui.UiKit::get_Root()
+static class Kydl.Ui.UiLog
+  field ErrorSink : System.Action`1<System.String>
+  field VerboseSink : System.Action`1<System.String>
+  field WarnSink : System.Action`1<System.String>
+  method System.Void Kydl.Ui.UiLog::Error(System.String)
+  method System.Void Kydl.Ui.UiLog::Verbose(System.String)
+  method System.Void Kydl.Ui.UiLog::Warn(System.String)
+sealed class Kydl.Ui.UiScroll
+  field Content : UnityEngine.UIElements.VisualElement
+  field Root : UnityEngine.UIElements.VisualElement
+  method System.Void Kydl.Ui.UiScroll::.ctor(System.String)
+  method System.Void Kydl.Ui.UiScroll::ScrollBy(System.Single)
+  method System.Void Kydl.Ui.UiScroll::ScrollTo(System.Single)
+sealed class Kydl.Ui.UiSlider
+sealed class KydlCore.KyEntry
+  field Kind : KydlCore.KyKind
+  field ModGuid : System.String
+  field ModName : System.String
+  field NameToken : System.String
+  field Prefab : System.String
+  field PrefabObject : UnityEngine.GameObject
+  field Source : System.String
+  field Tags : System.Collections.Generic.IReadOnlyList`1<System.String>
+  method System.String KydlCore.KyEntry::get_DisplayName()
+  method System.Void KydlCore.KyEntry::.ctor()
+  method System.Void KydlCore.KyEntry::set_Icon(UnityEngine.Sprite)
+  method UnityEngine.Sprite KydlCore.KyEntry::get_Icon()
+static class KydlCore.KyHub
+  event TabShown : System.Action`2<System.String,System.String>
+  method KydlCore.KyTab KydlCore.KyHub::AddTab(System.String,System.String,System.String,System.Func`1<UnityEngine.UIElements.VisualElement>,System.Int32)
+  method System.Boolean KydlCore.KyHub::RemoveTab(System.String,System.String)
+  method System.Boolean KydlCore.KyHub::get_IsOpen()
+  method System.Void KydlCore.KyHub::Close()
+  method System.Void KydlCore.KyHub::Open(System.String,System.String)
+  method System.Void KydlCore.KyHub::SetModTitle(System.String,System.String,UnityEngine.Sprite)
+  method System.Void KydlCore.KyHub::add_TabShown(System.Action`2<System.String,System.String>)
+  method System.Void KydlCore.KyHub::remove_TabShown(System.Action`2<System.String,System.String>)
+  method UnityEngine.UIElements.VisualElement KydlCore.KyHub::ConfigEntries(BepInEx.Configuration.ConfigFile,System.String[])
+static class KydlCore.KyItems
+  event Changed : System.Action
+  field CategoryName : System.String = KY-Items
+  method KydlCore.KyEntry KydlCore.KyItems::Find(System.String)
+  method System.Boolean KydlCore.KyItems::IsUserGuid(System.String)
+  method System.Boolean KydlCore.KyItems::Register(UnityEngine.GameObject,System.String,KydlCore.KyKind,System.String[])
+  method System.Boolean KydlCore.KyItems::get_Ready()
+  method System.Collections.Generic.IEnumerable`1<KydlCore.KyEntry> KydlCore.KyItems::ByMod(System.String)
+  method System.Collections.Generic.IReadOnlyList`1<KydlCore.KyEntry> KydlCore.KyItems::get_All()
+  method System.Nullable`1<Piece/PieceCategory> KydlCore.KyItems::get_Category()
+  method System.Void KydlCore.KyItems::add_Changed(System.Action)
+  method System.Void KydlCore.KyItems::remove_Changed(System.Action)
+enum KydlCore.KyKind
+  field Item : KydlCore.KyKind = 0
+  field Piece : KydlCore.KyKind = 1
+  field value__ : System.Int32
+sealed class KydlCore.KyTab
+  method System.Int32 KydlCore.KyTab::get_Order()
+  method System.String KydlCore.KyTab::get_Id()
+  method System.String KydlCore.KyTab::get_ModGuid()
+  method System.String KydlCore.KyTab::get_Title()
+  method System.Void KydlCore.KyTab::.ctor()
+  method System.Void KydlCore.KyTab::Refresh()
+class KydlCore.Plugin
+  field BundleName : System.String = kydlcore
+  field ModGuid : System.String = com.kydldev.KydlCore
+  field ModName : System.String = KydlCore
+  field ModVersion : System.String
+  method System.Void KydlCore.Plugin::.ctor()

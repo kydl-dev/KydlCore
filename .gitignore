@@ -85,3 +85,6 @@ CLAUDE.md
 
 # test-quality output (coverage, Stryker): rebuilt by _agent/tools/test-quality.ps1
 /*-Tests/_quality/
+
+# public API check: written by a failing PublicApiTests run, copied over PublicApi.approved.txt after review
+/*-Tests/Integration/PublicApi.received.txt
