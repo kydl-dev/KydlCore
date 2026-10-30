@@ -106,12 +106,24 @@ namespace KydlCore.Ui
             ShowPage(mod, tab);
         }
 
+        /// <summary>Text size of the settings page: this part of the kit's size (user 2026-10-30, D-061). The "Page:" line uses it too, so it equals the tips.</summary>
+        internal const float PageFontScale = 0.65f;
+
+        // The "Page: mod / tab" line: the size of the tips under each setting, little space above and below.
+        static Label PageLine(string text)
+        {
+            Label l = UiControls.Note(text);
+            l.style.fontSize = UiKit.SmallSize * PageFontScale;
+            l.style.marginTop = 0; l.style.marginBottom = 2;
+            return l;
+        }
+
         void ShowPage(string mod, string tab)
         {
             var c = _body.Content;
             c.Clear();
             VisualElement page = mod == null ? null : _page(mod, tab);
-            if (mod != null) c.Add(UiControls.Note(string.Format(_text("kydlcore_hub_page_of"), _model.ModTitle(mod), _model.TabTitle(mod, tab))));
+            if (mod != null) c.Add(PageLine(string.Format(_text("kydlcore_hub_page_of"), _model.ModTitle(mod), _model.TabTitle(mod, tab))));
             if (page != null) c.Add(page);
             else c.Add(UiControls.Note(_text(mod == null ? "kydlcore_hub_empty" : "kydlcore_hub_page_empty")));
             _body.ScrollTo(0f);

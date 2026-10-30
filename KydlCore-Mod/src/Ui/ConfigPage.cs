@@ -20,7 +20,7 @@ namespace KydlCore.Ui
     {
         const long PollMs = 250;                  // the config event can come from the file watcher thread: the page redraws on the UI thread
         const int TextMax = 256;
-        const float FontScale = 0.8f;             // every text of the page is this much smaller than the kit's size (user 2026-10-30, D-060)
+        const float FontScale = HubView.PageFontScale;  // every text of the page is this part of the kit's size (user 2026-10-30: 65%, D-061)
         const float LabelWidth = 230f;            // the setting-name column (before the scale does not apply to widths)
 
         readonly ConfigFile _file;
@@ -179,6 +179,9 @@ namespace KydlCore.Ui
             Type type = entry.SettingType;
             var slider = UiControls.Slider((float)min, (float)max, Convert.ToSingle(entry.BoxedValue), ConfigControlMap.SliderFormat(type), v => Write(entry, ConfigControlMap.Clamp(type, v, min, max)));
             slider.name = "kydl-slider";
+            slider.style.minHeight = 24;
+            var input = slider.Q<TextField>();                                      // the number box: narrower and lower (user 2026-10-30, D-061)
+            if (input != null) { input.style.width = 46; input.style.height = 20; }
             return slider;
         }
 
@@ -186,6 +189,12 @@ namespace KydlCore.Ui
         {
             var t = UiControls.Toggle(key, (bool)entry.BoxedValue, on => Write(entry, on));
             t.name = "kydl-toggle";
+            // the kit puts the switch before its text; here the text comes first and the switch sits at the right edge (user 2026-10-30, D-061)
+            VisualElement sw = t[0], label = t[1];
+            t.Insert(0, label);
+            label.style.flexGrow = 1;
+            sw.style.marginRight = 0; sw.style.marginLeft = 8;
+            t.style.paddingLeft = 0; t.style.marginRight = 0;
             return t;
         }
 
