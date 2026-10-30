@@ -6,7 +6,11 @@ namespace Kydl.Ui
     /// The shared UI code (Kydl.Ui) logs through these hooks: in Unity they write to the console, in the game the mod points them at
     /// its own ModLog (Plugin.Awake: debug-only lines through ModLog.Verbose, so they follow the mod's debug switch and the 2.5 s repeat filter).
     /// </summary>
+#if KYDL_CORE_PUBLIC
+    public static class UiLog
+#else
     internal static class UiLog
+#endif
     {
         public static Action<string> VerboseSink = s => UnityEngine.Debug.Log("[Kydl UI] " + s);
         public static Action<string> WarnSink = s => UnityEngine.Debug.LogWarning("[Kydl UI] " + s);

@@ -10,7 +10,11 @@ namespace Kydl.Ui
     /// value; hue and saturation stay, also through black). Sliders are UiSlider objects that are moved, never rebuilt, so a drag is never cut off
     /// (the T-65 problem of the older picker). `changed` gets "#RRGGBB". UiControls.ColorPicker is unchanged for the older menus.
     /// </summary>
+#if KYDL_CORE_PUBLIC
+    public sealed class UiColorPicker
+#else
     internal sealed class UiColorPicker
+#endif
     {
         static readonly string[] Palette = { "#FFFFFF", "#000000", "#E8D5A9", "#FFB85C", "#C0392B", "#E67E22", "#F1C40F", "#2ECC71", "#1ABC9C", "#00FFFF", "#3498DB", "#9B59B6", "#FF33FF", "#7F8C8D" };
 

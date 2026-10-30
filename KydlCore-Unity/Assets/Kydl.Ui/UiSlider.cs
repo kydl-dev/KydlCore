@@ -11,7 +11,11 @@ namespace Kydl.Ui
     /// the menu can change later: SetValueWithoutNotify, SetRange (min / max move with the selection), Enabled, and optional clickable MARKS
     /// (dots under the track at fractions 0..1: a click puts the handle there). UiControls.Slider is unchanged for the older menus.
     /// </summary>
+#if KYDL_CORE_PUBLIC
+    public sealed class UiSlider
+#else
     internal sealed class UiSlider
+#endif
     {
         internal readonly VisualElement Root;
         readonly VisualElement _hit, _fill, _handle, _marks;

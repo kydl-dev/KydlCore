@@ -11,7 +11,11 @@ namespace Kydl.Ui
     /// pill switches, thin sliders with a round handle and a typed number box, drop-downs, text fields, a colour editor. Plain VisualElements
     /// with inline styles (no theme needed). Nothing shrinks (flexShrink 0): the window scrolls instead.
     /// </summary>
+#if KYDL_CORE_PUBLIC
+    public static class UiControls
+#else
     internal static class UiControls
+#endif
     {
         // --- button ---------------------------------------------------------------------------------------------------------
         internal static Button Button(string text, Action onClick, bool primary = false)

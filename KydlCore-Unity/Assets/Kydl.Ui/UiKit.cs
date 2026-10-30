@@ -16,7 +16,11 @@ namespace Kydl.Ui
     /// thin sliders with a typed number box, a slim gold scrollbar. Every font falls back to the game's NotoEmoji font (emoji in any font).
     /// All looks are inline styles: a game build has no USS importer / default theme. The panel scales with the screen height (1080p ref).
     /// </summary>
+#if KYDL_CORE_PUBLIC
+    public static class UiKit
+#else
     internal static class UiKit
+#endif
     {
         // palette (from FollowPlayer's Theme; dim text a little brighter: the user found grey notes hard to read)
         internal static readonly Color Panel = new(0.075f, 0.058f, 0.043f, 0.96f), PanelLight = new(0.125f, 0.098f, 0.072f, 0.96f);
