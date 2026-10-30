@@ -28,6 +28,8 @@ namespace KydlCore.Tests.Integration
             { Ui + "UiScroll", new[] { ".ctor", "Root", "Content", "ScrollBy", "ScrollTo" } },
             { Ui + "UiLog", new[] { "VerboseSink", "WarnSink", "ErrorSink", "Verbose", "Warn", "Error" } },
             { Common + "UiInputLock", new[] { "Count", "Install", "Hold", "Release" } },
+            { "KydlCore.KyHub", new[] { "AddTab", "RemoveTab", "SetModTitle", "ConfigEntries", "Open", "Close", "IsOpen", "add_TabShown", "remove_TabShown" } },       // T-034: the hub API of every mod
+            { "KydlCore.KyTab", new[] { "ModGuid", "Id", "Title", "Order", "Refresh" } },
             { Ui + "UiSlider", new string[0] },         // returned by UiControls.Slider as a plain VisualElement: the type is public, no member is needed
             { Ui + "UiColorPicker", new string[0] }
         };

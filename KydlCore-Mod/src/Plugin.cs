@@ -81,11 +81,13 @@ namespace KydlCore
         void Update()
         {
             if (_cfgWatcher != null) _cfgWatcher.Tick();
+            HubHost.Tick();
         }
 
         void OnDestroy()
         {
             if (_cfgWatcher != null) { _cfgWatcher.Dispose(); _cfgWatcher = null; }
+            HubHost.Close("plugin destroyed");
             ModLog.Verbose("Plugin: destroyed");
         }
     }

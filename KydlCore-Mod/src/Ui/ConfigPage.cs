@@ -22,14 +22,16 @@ namespace KydlCore.Ui
         const int TextMax = 256;
 
         readonly ConfigFile _file;
+        readonly string[] _sections;              // null / empty = every section
         readonly VisualElement _root = new VisualElement { name = "kydl-config-page" };
         volatile bool _dirty;
         bool _writing;
         IVisualElementScheduledItem _poll;
 
-        internal ConfigPage(ConfigFile file)
+        internal ConfigPage(ConfigFile file, string[] sections = null)
         {
             _file = file;
+            _sections = sections != null && sections.Length > 0 ? sections : null;
             _root.style.flexShrink = 0;
             _file.SettingChanged += OnSettingChanged;
             Fill();
@@ -70,7 +72,7 @@ namespace KydlCore.Ui
             foreach (ConfigDefinition def in _file.Keys)
             {
                 ConfigEntryBase entry = _file[def];
-                if (!ConfigControlMap.IsHidden(Tags(entry))) shown.Add(entry);
+                if (InSections(def.Section) && !ConfigControlMap.IsHidden(Tags(entry))) shown.Add(entry);
             }
             foreach (var section in shown.GroupBy(e => e.Definition.Section))        // GroupBy keeps the order of first appearance
             {
@@ -79,6 +81,11 @@ namespace KydlCore.Ui
             }
             if (shown.Count == 0) _root.Add(UiControls.Note("This mod has no settings."));
             ModLog.Verbose("ConfigPage: " + shown.Count + " setting(s) shown");
+        }
+
+        bool InSections(string section)
+        {
+            return _sections == null || Array.IndexOf(_sections, section) >= 0;
         }
 
         static IEnumerable<object> Tags(ConfigEntryBase entry)
@@ -121,14 +128,19 @@ namespace KydlCore.Ui
             switch (ConfigControlMap.Classify(type, hasRange, list != null))
             {
                 case ControlKind.Toggle: return Toggle(entry, key);
-                case ControlKind.Slider: return UiControls.Slider((float)min, (float)max, Convert.ToSingle(entry.BoxedValue), ConfigControlMap.SliderFormat(type),
-                    v => Write(entry, ConfigControlMap.Clamp(type, v, min, max)));
+                case ControlKind.Slider: return Slider(entry, min, max);
                 case ControlKind.Number: return UiControls.TextField(ConfigControlMap.Format(type, entry.BoxedValue), TextMax, t => Write(entry, ConfigControlMap.Parse(type, t)));
                 case ControlKind.Text: return UiControls.TextField((string)entry.BoxedValue, TextMax, t => Write(entry, t));
                 case ControlKind.Dropdown: return Dropdown(entry, list);
                 case ControlKind.Color: return ColorEditor(entry);
                 default: return UiControls.Note(entry.GetSerializedValue());
             }
+        }
+
+        VisualElement Slider(ConfigEntryBase entry, double min, double max)
+        {
+            Type type = entry.SettingType;
+            return UiControls.Slider((float)min, (float)max, Convert.ToSingle(entry.BoxedValue), ConfigControlMap.SliderFormat(type), v => Write(entry, ConfigControlMap.Clamp(type, v, min, max)));
         }
 
         VisualElement Toggle(ConfigEntryBase entry, string key)

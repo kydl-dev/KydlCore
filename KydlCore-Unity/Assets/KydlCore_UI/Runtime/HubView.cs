@@ -59,6 +59,14 @@ namespace KydlCore.Ui
             UiLog.Verbose("HubView: built, " + _model.ModCount + " mod(s), selected " + _model.SelectedMod + " / " + _model.SelectedTab);
         }
 
+        /// <summary>Builds the shown page again (KyTab.Refresh): the page factory is asked once more.</summary>
+        internal void Refresh()
+        {
+            if (!_built) return;
+            ShowPage(_shownMod, _shownTab);
+            UiLog.Verbose("HubView: page refreshed");
+        }
+
         /// <summary>Stops listening to the model (call when the window is destroyed).</summary>
         public void Dispose()
         {

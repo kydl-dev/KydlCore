@@ -62,7 +62,8 @@ namespace KydlCore.Tests.Unit
         [Test] public void ControlKind_HasTheSevenKinds() { Assert.That(Enum.GetNames(KindType), Is.EquivalentTo(new[] { "Unsupported", "Toggle", "Slider", "Number", "Text", "Dropdown", "Color" })); }
 
         // --- IsNumber / Format ------------------------------------------------------------------------------------------------
-        [Test] public void IsNumber_OnlyTheFourNumberTypes()
+        [Test]
+        public void IsNumber_OnlyTheFourNumberTypes()
         {
             foreach (var t in new[] { typeof(int), typeof(long), typeof(float), typeof(double) }) Assert.That(Call("IsNumber", t), Is.True, t.Name);
             foreach (var t in new[] { typeof(short), typeof(byte), typeof(decimal), typeof(string), typeof(bool), null }) Assert.That(Call("IsNumber", t), Is.False, t == null ? "null" : t.Name);
@@ -73,7 +74,8 @@ namespace KydlCore.Tests.Unit
         [Test] public void Format_Float_TwoDecimalsAtMost() { Assert.That(Format(typeof(float), 1.256f), Is.EqualTo("1.26")); }
         [Test] public void Format_Float_WholeHasNoDecimals() { Assert.That(Format(typeof(float), 5f), Is.EqualTo("5")); }
         [Test] public void Format_Double_UsesADot() { Assert.That(Format(typeof(double), 0.5), Is.EqualTo("0.5")); }
-        [Test] public void Format_DoesNotUseTheCurrentCulture()
+        [Test]
+        public void Format_DoesNotUseTheCurrentCulture()
         {
             var old = System.Threading.Thread.CurrentThread.CurrentCulture;
             try
@@ -87,7 +89,8 @@ namespace KydlCore.Tests.Unit
         [Test] public void Format_Null_IsEmpty() { Assert.That(Format(typeof(int), null), Is.EqualTo("")); }
         [Test] public void Format_NonNumber_IsToString() { Assert.That(Format(typeof(string), "abc"), Is.EqualTo("abc")); }
         [Test] public void Format_Bool_IsToString() { Assert.That(Format(typeof(bool), true), Is.EqualTo("True")); }
-        [Test] public void SliderFormat_WholeAndFraction()
+        [Test]
+        public void SliderFormat_WholeAndFraction()
         {
             Assert.That(Call("SliderFormat", typeof(int)), Is.EqualTo("0"));
             Assert.That(Call("SliderFormat", typeof(long)), Is.EqualTo("0"));
@@ -102,7 +105,8 @@ namespace KydlCore.Tests.Unit
         [Test] public void Parse_IntRejectsAFraction() { Assert.That(Parse(typeof(int), "1.5"), Is.Null); }
         [Test] public void Parse_IntRejectsACommaFraction() { Assert.That(Parse(typeof(int), "1,5"), Is.Null); }
         [Test] public void Parse_IntRejectsOutOfRange() { Assert.That(Parse(typeof(int), "2147483648"), Is.Null); }
-        [Test] public void Parse_IntKeepsTheLimits()
+        [Test]
+        public void Parse_IntKeepsTheLimits()
         {
             Assert.That(Parse(typeof(int), "2147483647"), Is.EqualTo(int.MaxValue));
             Assert.That(Parse(typeof(int), "-2147483648"), Is.EqualTo(int.MinValue));
@@ -121,17 +125,20 @@ namespace KydlCore.Tests.Unit
         [Test] public void Parse_LongKeepsEveryDigit() { Assert.That(Parse(typeof(long), "9007199254740993"), Is.EqualTo(9007199254740993L)); }
         [Test] public void Parse_Double() { Assert.That(Parse(typeof(double), "-0.25"), Is.EqualTo(-0.25).And.TypeOf<double>()); }
         [Test] public void Parse_DoubleBigButFinite() { Assert.That(Parse(typeof(double), "1e39"), Is.EqualTo(1e39)); }
-        [Test] public void Parse_NaNAndInfinity_AreNull()
+        [Test]
+        public void Parse_NaNAndInfinity_AreNull()
         {
             foreach (var s in new[] { "NaN", "Infinity", "-Infinity", "1e999" }) Assert.That(Parse(typeof(double), s), Is.Null, s);
         }
-        [Test] public void Parse_Garbage_IsNull()
+        [Test]
+        public void Parse_Garbage_IsNull()
         {
             foreach (var s in new[] { "", " ", "abc", "1.2.3", "--1", "1 2", "0x10" }) Assert.That(Parse(typeof(double), s), Is.Null, "'" + s + "'");
         }
         [Test] public void Parse_Null_IsNull() { Assert.That(Parse(typeof(int), null), Is.Null); }
         [Test] public void Parse_NotANumberType_IsNull() { Assert.That(Parse(typeof(string), "5"), Is.Null); }
-        [Test] public void Parse_DoesNotUseTheCurrentCulture()
+        [Test]
+        public void Parse_DoesNotUseTheCurrentCulture()
         {
             var old = System.Threading.Thread.CurrentThread.CurrentCulture;
             try
@@ -195,7 +202,8 @@ namespace KydlCore.Tests.Unit
 
         // --- tags -------------------------------------------------------------------------------------------------------------
         [Test] public void Tags_None_NothingIsHiddenOrAdminOnly() { Assert.That(Hidden(), Is.False); Assert.That(Admin(), Is.False); }
-        [Test] public void Tags_Null_NothingIsHiddenOrAdminOnly()
+        [Test]
+        public void Tags_Null_NothingIsHiddenOrAdminOnly()
         {
             Assert.That(Call("IsHidden", new object[] { null }), Is.False);
             Assert.That(Call("IsAdminOnly", new object[] { null }), Is.False);
@@ -211,7 +219,8 @@ namespace KydlCore.Tests.Unit
         [Test] public void Tags_WrongTypedMember_IsIgnored() { Assert.That(Hidden(new WrongTypeTag()), Is.False); Assert.That(Admin(new WrongTypeTag()), Is.False); }
         [Test] public void Tags_UnrelatedTag_IsIgnored() { Assert.That(Hidden(new UnrelatedTag()), Is.False); Assert.That(Admin(new UnrelatedTag(), "text", 5), Is.False); }
         [Test] public void Tags_StringAndIndexerTags_DoNotThrow() { Assert.That(Hidden("a string", new IndexerTag()), Is.False); }
-        [Test] public void Tags_AdminOnlyTrue_FieldAndProperty()
+        [Test]
+        public void Tags_AdminOnlyTrue_FieldAndProperty()
         {
             Assert.That(Admin(new FieldTag { IsAdminOnly = true }), Is.True);
             Assert.That(Admin(new PropertyTag { IsAdminOnly = true }), Is.True);
