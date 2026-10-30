@@ -18,7 +18,8 @@ namespace Kydl.Ui
     {
         static readonly string[] Palette = { "#FFFFFF", "#000000", "#E8D5A9", "#FFB85C", "#C0392B", "#E67E22", "#F1C40F", "#2ECC71", "#1ABC9C", "#00FFFF", "#3498DB", "#9B59B6", "#FF33FF", "#7F8C8D" };
 
-        internal readonly VisualElement Root;
+        /// <summary>The colour editor element to add to a parent.</summary>
+        public readonly VisualElement Root;
         readonly VisualElement _preview;
         readonly UiSlider _r, _g, _b, _bright;
         readonly TextField _hex;
@@ -26,10 +27,13 @@ namespace Kydl.Ui
         Color _c;
         float _h, _s;               // kept separately: at brightness 0 the colour alone has no hue / saturation
 
-        internal string Hex { get { return "#" + ColorUtility.ToHtmlStringRGB(_c); } }
-        internal Color Color { get { return _c; } }
+        /// <summary>The colour as "#RRGGBB".</summary>
+        public string Hex { get { return "#" + ColorUtility.ToHtmlStringRGB(_c); } }
+        /// <summary>The colour.</summary>
+        public Color Color { get { return _c; } }
 
-        internal UiColorPicker(string hex, Action<string> changed, bool brightness)
+        /// <summary>A colour editor starting at `hex` ("#RRGGBB"); `changed` gets "#RRGGBB" for every change made by the user; `brightness` adds the 0 - 100 % brightness slider.</summary>
+        public UiColorPicker(string hex, Action<string> changed, bool brightness)
         {
             _changed = changed;
             if (!ColorUtility.TryParseHtmlString(hex ?? "#FFFFFF", out _c)) _c = Color.white;
@@ -120,7 +124,7 @@ namespace Kydl.Ui
         }
 
         /// Shows another colour (e.g. a different part was selected) without calling `changed`. Expected outcome: Hex equals the given colour.
-        internal bool Set(Color c)
+        public bool Set(Color c)
         {
             SetColor(c, true, false);
             return ColorUtility.ToHtmlStringRGB(_c) == ColorUtility.ToHtmlStringRGB(new Color(c.r, c.g, c.b, 1f));

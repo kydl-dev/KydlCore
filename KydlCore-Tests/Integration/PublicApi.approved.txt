@@ -4,6 +4,11 @@ static class Kydl.Common.UiInputLock
   method System.Boolean Kydl.Common.UiInputLock::Release(System.String)
   method System.Int32 Kydl.Common.UiInputLock::get_Count()
 sealed class Kydl.Ui.UiColorPicker
+  field Kydl.Ui.UiColorPicker::Root : UnityEngine.UIElements.VisualElement
+  method System.Boolean Kydl.Ui.UiColorPicker::Set(UnityEngine.Color)
+  method System.String Kydl.Ui.UiColorPicker::get_Hex()
+  method System.Void Kydl.Ui.UiColorPicker::.ctor(System.String,System.Action`1<System.String>,System.Boolean)
+  method UnityEngine.Color Kydl.Ui.UiColorPicker::get_Color()
 static class Kydl.Ui.UiControls
   method UnityEngine.UIElements.Button Kydl.Ui.UiControls::Button(System.String,System.Action,System.Boolean)
   method UnityEngine.UIElements.Button Kydl.Ui.UiControls::Dropdown(System.Collections.Generic.IList`1<System.String>,System.String,System.Func`2<System.String,System.String>,System.Action`1<System.String>)
@@ -62,6 +67,15 @@ sealed class Kydl.Ui.UiScroll
   method System.Void Kydl.Ui.UiScroll::ScrollBy(System.Single)
   method System.Void Kydl.Ui.UiScroll::ScrollTo(System.Single)
 sealed class Kydl.Ui.UiSlider
+  field Kydl.Ui.UiSlider::Root : UnityEngine.UIElements.VisualElement
+  method System.Boolean Kydl.Ui.UiSlider::SetRange(System.Single,System.Single)
+  method System.Boolean Kydl.Ui.UiSlider::SetValueWithoutNotify(System.Single)
+  method System.Boolean Kydl.Ui.UiSlider::get_Enabled()
+  method System.Single Kydl.Ui.UiSlider::get_Max()
+  method System.Single Kydl.Ui.UiSlider::get_Min()
+  method System.Single Kydl.Ui.UiSlider::get_Value()
+  method System.Void Kydl.Ui.UiSlider::.ctor(System.Single,System.Single,System.Single,System.String,System.Action`1<System.Single>,System.Collections.Generic.IList`1<System.Single>)
+  method System.Void Kydl.Ui.UiSlider::set_Enabled(System.Boolean)
 sealed class KydlCore.KyEntry
   field KydlCore.KyEntry::Kind : KydlCore.KyKind
   field KydlCore.KyEntry::ModGuid : System.String
