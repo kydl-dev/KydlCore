@@ -13,7 +13,7 @@ namespace KydlCore.Ui
     /// Look (D-048, user feedback 2026-10-30, D-055): tabs are as big as the buttons (same padding); mod names (row 1) are red text, settings tabs
     /// (row 2) have a red button border and gold text; the selected tab has a rounded gold border, a faint gold halo around it (UI Toolkit has no
     /// drop shadow) and sits 3 px higher; a thin red border while the pointer is over a tab. The title, the tab names and the page start on one
-    /// vertical line (TextX). Every page starts with a line saying which page it is. Rows wrap onto further lines; scroll bar + paging for more
+    /// vertical line (TextX). Under the settings tabs a thin line, then every page starts with a line saying which page it is. Rows wrap onto further lines; scroll bar + paging for more
     /// than 2 rows is T-035.
     /// The view redraws when the model fires Changed; Dispose unhooks it.
     /// </summary>
@@ -102,6 +102,12 @@ namespace KydlCore.Ui
             var c = _body.Content;
             c.Clear();
             VisualElement page = mod == null ? null : _page(mod, tab);
+            if (mod != null)
+            {
+                var rule = new VisualElement { name = "kydl-hub-page-line" };          // the thin line under the settings tabs (the one a section heading has)
+                rule.style.height = 1; rule.style.backgroundColor = UiKit.Border; rule.style.marginTop = 6; rule.style.marginBottom = 8; rule.style.flexShrink = 0;
+                c.Add(rule);
+            }
             if (mod != null) c.Add(UiControls.Note(string.Format(_text("kydlcore_hub_page_of"), _model.ModTitle(mod), _model.TabTitle(mod, tab))));
             if (page != null) c.Add(page);
             else c.Add(UiControls.Note(_text(mod == null ? "kydlcore_hub_empty" : "kydlcore_hub_page_empty")));
