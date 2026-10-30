@@ -23,7 +23,29 @@ namespace KydlCore
         public KyKind Kind;
         /// <summary>The localisation key / name from the game data ("$item_x" or a plain name); <see cref="DisplayName"/> is the shown text.</summary>
         public string NameToken = "";
-        public Sprite Icon;
+        Sprite _icon;
+        /// <summary>
+        /// The icon, read from the prefab EVERY time it is asked: a mod may swap it after registering (DrainTarPit puts a placeholder first and renders the
+        /// real icons when a world is loaded), so a copy taken at registration would be the placeholder for good. Falls back to the icon seen at registration.
+        /// </summary>
+        public Sprite Icon
+        {
+            get { Sprite live = LiveIcon(); return live != null ? live : _icon; }
+            set { _icon = value; }
+        }
+
+        Sprite LiveIcon()
+        {
+            if (PrefabObject == null) return null;
+            ItemDrop drop = PrefabObject.GetComponent<ItemDrop>();
+            if (drop != null)
+            {
+                Sprite[] icons = drop.m_itemData.m_shared.m_icons;
+                return icons != null && icons.Length > 0 ? icons[0] : null;
+            }
+            Piece piece = PrefabObject.GetComponent<Piece>();
+            return piece != null ? piece.m_icon : null;
+        }
         /// <summary>Free tags the registering mod gave (may be empty).</summary>
         public IReadOnlyList<string> Tags = new string[0];
         /// <summary>How the registry found it: "Jotunn", "category" or "Register".</summary>
