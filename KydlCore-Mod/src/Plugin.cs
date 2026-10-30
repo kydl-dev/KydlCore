@@ -81,6 +81,7 @@ namespace KydlCore
         void Update()
         {
             if (_cfgWatcher != null) _cfgWatcher.Tick();
+            Ui.KeyCapture.Tick();                 // first: a key chosen for a setting is not also the hub key or Escape
             HubHost.Tick();
             KyWindows.Tick();                  // Escape closes the front window: the hub or a KyUi window
         }

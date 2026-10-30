@@ -37,6 +37,13 @@ namespace KydlCore.Tests.Unit
         // --- Classify ---------------------------------------------------------------------------------------------------------
         [Test] public void Classify_Bool_IsToggle() { Assert.That(Kind(typeof(bool)), Is.EqualTo("Toggle")); }
         [Test] public void Classify_Bool_IgnoresRangeAndList() { Assert.That(Kind(typeof(bool), true, true), Is.EqualTo("Toggle")); }
+        [Test] public void Classify_KeyCode_IsKey_NotDropdown() { Assert.That(Kind(typeof(UnityEngine.KeyCode)), Is.EqualTo("Key")); }
+        [Test] public void Classify_KeyCode_WithListOrRange_IsStillKey() { Assert.That(Kind(typeof(UnityEngine.KeyCode), true, true), Is.EqualTo("Key")); }
+        [Test] public void Classify_KeyboardShortcut_IsShortcut()
+        {
+            var shortcut = Type.GetType("BepInEx.Configuration.KeyboardShortcut, BepInEx", true);
+            Assert.That(Kind(shortcut), Is.EqualTo("Shortcut"));
+        }
         [Test] public void Classify_Enum_IsDropdown() { Assert.That(Kind(typeof(DayOfWeek)), Is.EqualTo("Dropdown")); }
         [Test] public void Classify_Enum_WithRange_IsStillDropdown() { Assert.That(Kind(typeof(DayOfWeek), true), Is.EqualTo("Dropdown")); }
         [Test] public void Classify_String_IsText() { Assert.That(Kind(typeof(string)), Is.EqualTo("Text")); }
@@ -59,7 +66,7 @@ namespace KydlCore.Tests.Unit
 
         [Test] public void Classify_UnityEngineColor_IsColor() { Assert.That(Kind(FakeUnityColor), Is.EqualTo("Color")); }
         [Test] public void Classify_AnotherColorType_IsUnsupported() { Assert.That(Kind(typeof(Color)), Is.EqualTo("Unsupported")); }
-        [Test] public void ControlKind_HasTheSevenKinds() { Assert.That(Enum.GetNames(KindType), Is.EquivalentTo(new[] { "Unsupported", "Toggle", "Slider", "Number", "Text", "Dropdown", "Color" })); }
+        [Test] public void ControlKind_HasTheNineKinds() { Assert.That(Enum.GetNames(KindType), Is.EquivalentTo(new[] { "Unsupported", "Toggle", "Slider", "Number", "Text", "Dropdown", "Color", "Key", "Shortcut" })); }
 
         // --- IsNumber / Format ------------------------------------------------------------------------------------------------
         [Test]

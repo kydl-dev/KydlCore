@@ -27,6 +27,7 @@ namespace KydlCore
         /// <summary>Every frame (Plugin.Update): the hub key opens / closes the hub, Escape closes the top window. Returns whether the hub is open.</summary>
         internal static bool Tick()
         {
+            if (KeyCapture.Blocks) return IsOpen;          // a key is being chosen for a setting (maybe this very key): it must not toggle the hub
             KeyCode key = ModSettings.HubKey != null ? ModSettings.HubKey.Value : KeyCode.None;
             if (!IsOpen)
             {

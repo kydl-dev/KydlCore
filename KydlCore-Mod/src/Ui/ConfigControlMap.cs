@@ -18,10 +18,14 @@ namespace KydlCore.Ui
         Number,
         /// <summary>string: a text box.</summary>
         Text,
-        /// <summary>An enum (KeyCode, ...) or a string with an AcceptableValueList: a drop-down.</summary>
+        /// <summary>An enum (not KeyCode) or a string with an AcceptableValueList: a drop-down.</summary>
         Dropdown,
         /// <summary>UnityEngine.Color: the colour editor.</summary>
-        Color
+        Color,
+        /// <summary>UnityEngine.KeyCode: a press-to-rebind button (one key).</summary>
+        Key,
+        /// <summary>BepInEx KeyboardShortcut: a press-to-rebind button (a key with the Shift / Ctrl / Alt held with it).</summary>
+        Shortcut
     }
 
     /// <summary>
@@ -33,12 +37,15 @@ namespace KydlCore.Ui
     internal static class ConfigControlMap
     {
         const string BrowsableName = "Browsable", AdminOnlyName = "IsAdminOnly", ColorTypeName = "UnityEngine.Color";
+        const string KeyCodeTypeName = "UnityEngine.KeyCode", ShortcutTypeName = "BepInEx.Configuration.KeyboardShortcut";
 
         /// <summary>The control for a value type. `hasRange` = the entry has an AcceptableValueRange, `hasList` = an AcceptableValueList.</summary>
         public static ControlKind Classify(Type valueType, bool hasRange, bool hasList)
         {
             if (valueType == null) return ControlKind.Unsupported;
             if (valueType == typeof(bool)) return ControlKind.Toggle;
+            if (valueType.FullName == KeyCodeTypeName) return ControlKind.Key;            // before the enums: a key is pressed, not picked from ~300 names
+            if (valueType.FullName == ShortcutTypeName) return ControlKind.Shortcut;
             if (valueType.IsEnum) return ControlKind.Dropdown;
             if (valueType == typeof(string)) return hasList ? ControlKind.Dropdown : ControlKind.Text;
             if (valueType == typeof(long)) return ControlKind.Number;

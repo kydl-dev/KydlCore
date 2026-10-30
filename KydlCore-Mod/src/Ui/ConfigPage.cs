@@ -48,6 +48,7 @@ namespace KydlCore.Ui
         public void Dispose()
         {
             _file.SettingChanged -= OnSettingChanged;
+            KeyCapture.Cancel("page closed");
             if (_poll != null) _poll.Pause();
             ModLog.Verbose("ConfigPage: disposed");
         }
@@ -69,6 +70,7 @@ namespace KydlCore.Ui
         // --- drawing -------------------------------------------------------------------------------------------------------
         void Fill()
         {
+            KeyCapture.Cancel("page redrawn");
             _root.Clear();
             var shown = new List<ConfigEntryBase>();
             foreach (ConfigDefinition def in _file.Keys)
@@ -182,6 +184,8 @@ namespace KydlCore.Ui
                 case ControlKind.Text: return Sized(UiControls.TextField((string)entry.BoxedValue, TextMax, t => Write(entry, t)), 360f);
                 case ControlKind.Dropdown: return Dropdown(entry, list);
                 case ControlKind.Color: return ColorEditor(entry);
+                case ControlKind.Key: return RebindButton(entry, false);
+                case ControlKind.Shortcut: return RebindButton(entry, true);
                 default: return UiControls.Note(entry.GetSerializedValue());
             }
         }
@@ -223,6 +227,30 @@ namespace KydlCore.Ui
             string current = type.IsEnum ? Enum.GetName(type, entry.BoxedValue) : (string)entry.BoxedValue;
             return UiControls.Dropdown(options, current ?? options.FirstOrDefault() ?? "", s => s,
                 chosen => Write(entry, type.IsEnum ? Enum.Parse(type, chosen) : chosen));
+        }
+
+        // Press-to-rebind (user 2026-10-30, D-075): the button shows the key; a click makes it wait ("Press a key..."), the next key pressed is saved
+        // (a shortcut takes the Shift / Ctrl / Alt held with it), Escape leaves the setting as it is. KeyCapture does the waiting.
+        VisualElement RebindButton(ConfigEntryBase entry, bool shortcut)
+        {
+            Func<string> shown = () => shortcut ? ShortcutLabel((KeyboardShortcut)entry.BoxedValue) : KeyCaptureRules.KeyName((KeyCode)entry.BoxedValue);
+            Button button = null;
+            button = UiControls.Button(shown(), () =>
+            {
+                button.text = "Press a key...  (Esc cancels)";
+                KeyCapture.Begin(shortcut, (main, mods) =>
+                {
+                    Write(entry, shortcut ? (object)new KeyboardShortcut(main, mods.ToArray()) : main);
+                    button.text = shown();
+                }, () => button.text = shown());
+            }, false);
+            button.name = "kydl-key";
+            return button;
+        }
+
+        static string ShortcutLabel(KeyboardShortcut s)
+        {
+            return KeyCaptureRules.ShortcutText(s.MainKey, new List<KeyCode>(s.Modifiers));
         }
 
         VisualElement ColorEditor(ConfigEntryBase entry)

@@ -83,6 +83,7 @@ namespace KydlCore
         /// <summary>Every frame (Plugin.Update): Escape closes ONLY the front window (the hub or a mod's). Returns whether a window was closed.</summary>
         internal static bool Tick()
         {
+            if (KeyCapture.Blocks) return false;           // Escape that cancels a key capture does not also close the window
             if (!Stack.AnyOpen || !ZInput.GetKeyDown(KeyCode.Escape, true)) return false;
             string top = Stack.Top;
             if (top == KyWindowId.Hub) HubHost.Close("Escape");
