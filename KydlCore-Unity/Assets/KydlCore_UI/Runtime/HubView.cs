@@ -43,6 +43,7 @@ namespace KydlCore.Ui
         {
             _model = model; _text = text; _page = page;
             Root = UiKit.Window(text("kydlcore_hub_title"), "", onClose, out _body);
+            Root.style.backgroundColor = new Color(UiKit.Panel.r, UiKit.Panel.g, UiKit.Panel.b, 1f);   // D-076: fully opaque, other windows (the ChestDecor editor) ghosted through the 0.96 panel
             var head = Root[0];                                    // the title bar of UiKit.Window: slimmer, and its text on the same line as the tabs
             var titleLabel = head.Q<Label>();                      // the window title in the same colour as the tab names
             if (titleLabel != null) titleLabel.style.color = NameGold;
