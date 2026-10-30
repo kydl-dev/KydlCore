@@ -661,7 +661,7 @@ PlayerSettings:
   webGLCloseOnQuit: 0
   webWasm2023: 0
   scriptingDefineSymbols:
-    Standalone: SENTIS_ANALYTICS_ENABLED
+    Standalone: SENTIS_ANALYTICS_ENABLED;KYDL_CORE_PUBLIC
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
