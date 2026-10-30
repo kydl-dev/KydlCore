@@ -38,6 +38,7 @@ namespace KydlCore.Ui
 
             _view.style.flexGrow = 1; _view.style.flexShrink = 1; _view.style.overflow = Overflow.Hidden;
             _content.style.flexDirection = FlexDirection.Row; _content.style.flexWrap = Wrap.Wrap; _content.style.alignItems = Align.FlexStart;
+            _content.style.flexShrink = 0;      // else the content shrinks to the (smaller) view on the last page, its height is wrong and the page is blank (D-062)
             _view.Add(_content);
 
             _bar.style.width = BarW; _bar.style.marginLeft = Gap; _bar.style.marginTop = 2; _bar.style.display = DisplayStyle.None; _bar.style.flexShrink = 0;

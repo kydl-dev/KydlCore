@@ -124,7 +124,7 @@ namespace KydlCore.Ui
             bool stretch = control.name == "kydl-slider" || control.name == "kydl-color";
             control.style.flexGrow = stretch ? 1f : 0f;
             control.style.flexShrink = stretch ? 1f : 0f;
-            if (!stretch) control.style.alignSelf = Align.FlexStart;
+            if (!stretch) { control.style.alignSelf = Align.FlexStart; control.style.marginLeft = StyleKeyword.Auto; }   // value fields sit at the right edge (D-062)
             r.Add(control);
             return r;
         }
