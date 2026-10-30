@@ -20,6 +20,8 @@ namespace KydlCore.Ui
     {
         const long PollMs = 250;                  // the config event can come from the file watcher thread: the page redraws on the UI thread
         const int TextMax = 256;
+        const float FontScale = 0.8f;             // every text of the page is this much smaller than the kit's size (user 2026-10-30, D-060)
+        const float LabelWidth = 230f;            // the setting-name column (before the scale does not apply to widths)
 
         readonly ConfigFile _file;
         readonly string[] _sections;              // null / empty = every section
@@ -80,6 +82,7 @@ namespace KydlCore.Ui
                 foreach (ConfigEntryBase entry in section) _root.Add(Control(entry));
             }
             if (shown.Count == 0) _root.Add(UiControls.Note("This mod has no settings."));
+            ScaleFonts(_root);
             ModLog.Verbose("ConfigPage: " + shown.Count + " setting(s) shown");
         }
 
@@ -100,12 +103,40 @@ namespace KydlCore.Ui
             box.style.flexShrink = 0;
             bool locked = ConfigControlMap.IsAdminOnly(Tags(entry)) && !MayEditAdminOnly();
             VisualElement control = locked ? LockedValue(entry) : Make(entry, key);
-            box.Add(control.name == "kydl-toggle" ? control : UiControls.Row(key, control));
+            box.Add(control.name == "kydl-toggle" ? control : Row(key, control));
             if (locked) box.Add(UiControls.Note("Admin only: only the host / an admin can change this."));
             string text = entry.Description == null ? null : entry.Description.Description;
             if (!string.IsNullOrEmpty(text)) box.Add(UiControls.Note(text));
             ModLog.Verbose("ConfigPage: control for " + entry.Definition.Section + " / " + key + " (" + entry.SettingType.Name + ")" + (locked ? " locked" : ""));
             return box;
+        }
+
+        // One line: the name on the left, the control right of it at the size of its content (a drop-down is only as wide as its text); only a
+        // slider / colour editor stretches. The name does not wrap.
+        static VisualElement Row(string label, VisualElement control)
+        {
+            var r = new VisualElement();
+            r.style.flexDirection = FlexDirection.Row; r.style.alignItems = Align.Center; r.style.flexShrink = 0;
+            r.style.marginTop = 4; r.style.marginBottom = 4;
+            var l = UiKit.Label(label, UiKit.NameSize, UiKit.NameColor);
+            l.style.width = LabelWidth; l.style.flexShrink = 0; l.style.whiteSpace = WhiteSpace.NoWrap;
+            r.Add(l);
+            bool stretch = control.name == "kydl-slider" || control.name == "kydl-color";
+            control.style.flexGrow = stretch ? 1f : 0f;
+            control.style.flexShrink = stretch ? 1f : 0f;
+            if (!stretch) control.style.alignSelf = Align.FlexStart;
+            r.Add(control);
+            return r;
+        }
+
+        // Makes every text of the page smaller by FontScale (the kit's controls set their sizes inline, so the inline value is scaled).
+        static void ScaleFonts(VisualElement root)
+        {
+            root.Query<VisualElement>().ForEach(e =>
+            {
+                StyleLength fs = e.style.fontSize;
+                if (fs.keyword == StyleKeyword.Undefined && fs.value.value > 0f) e.style.fontSize = fs.value.value * FontScale;
+            });
         }
 
         // A client of someone else's server may not change an admin-only entry (the server owns it); in single player and on the host everything is open.
@@ -129,18 +160,26 @@ namespace KydlCore.Ui
             {
                 case ControlKind.Toggle: return Toggle(entry, key);
                 case ControlKind.Slider: return Slider(entry, min, max);
-                case ControlKind.Number: return UiControls.TextField(ConfigControlMap.Format(type, entry.BoxedValue), TextMax, t => Write(entry, ConfigControlMap.Parse(type, t)));
-                case ControlKind.Text: return UiControls.TextField((string)entry.BoxedValue, TextMax, t => Write(entry, t));
+                case ControlKind.Number: return Sized(UiControls.TextField(ConfigControlMap.Format(type, entry.BoxedValue), TextMax, t => Write(entry, ConfigControlMap.Parse(type, t))), 160f);
+                case ControlKind.Text: return Sized(UiControls.TextField((string)entry.BoxedValue, TextMax, t => Write(entry, t)), 360f);
                 case ControlKind.Dropdown: return Dropdown(entry, list);
                 case ControlKind.Color: return ColorEditor(entry);
                 default: return UiControls.Note(entry.GetSerializedValue());
             }
         }
 
+        static VisualElement Sized(VisualElement box, float width)
+        {
+            box.style.width = width;
+            return box;
+        }
+
         VisualElement Slider(ConfigEntryBase entry, double min, double max)
         {
             Type type = entry.SettingType;
-            return UiControls.Slider((float)min, (float)max, Convert.ToSingle(entry.BoxedValue), ConfigControlMap.SliderFormat(type), v => Write(entry, ConfigControlMap.Clamp(type, v, min, max)));
+            var slider = UiControls.Slider((float)min, (float)max, Convert.ToSingle(entry.BoxedValue), ConfigControlMap.SliderFormat(type), v => Write(entry, ConfigControlMap.Clamp(type, v, min, max)));
+            slider.name = "kydl-slider";
+            return slider;
         }
 
         VisualElement Toggle(ConfigEntryBase entry, string key)
@@ -170,6 +209,7 @@ namespace KydlCore.Ui
                 c.a = ((Color)entry.BoxedValue).a;                                  // the picker has no alpha: keep the entry's
                 Write(entry, c);
             }, out set);
+            picker.name = "kydl-color";
             return picker;
         }
 
