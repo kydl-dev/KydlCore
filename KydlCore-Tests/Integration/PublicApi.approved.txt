@@ -109,6 +109,17 @@ sealed class KydlCore.KyTab
   method System.String KydlCore.KyTab::get_Title()
   method System.Void KydlCore.KyTab::.ctor()
   method System.Void KydlCore.KyTab::Refresh()
+static class KydlCore.KyUi
+  method KydlCore.KyWindow KydlCore.KyUi::Open(System.String,System.String,UnityEngine.UIElements.VisualElement,System.Action)
+  method System.Boolean KydlCore.KyUi::Close(System.String,System.String)
+  method System.Boolean KydlCore.KyUi::IsOpen(System.String,System.String)
+  method System.Boolean KydlCore.KyUi::get_AnyOpen()
+  method UnityEngine.UIElements.VisualElement KydlCore.KyUi::get_Root()
+sealed class KydlCore.KyWindow
+  method System.String KydlCore.KyWindow::get_Id()
+  method System.String KydlCore.KyWindow::get_ModGuid()
+  method System.Void KydlCore.KyWindow::BringToFront()
+  method System.Void KydlCore.KyWindow::Close()
 class KydlCore.Plugin
   field KydlCore.Plugin::BundleName : System.String = kydlcore
   field KydlCore.Plugin::ModGuid : System.String = com.kydldev.KydlCore

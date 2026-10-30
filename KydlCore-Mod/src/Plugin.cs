@@ -82,12 +82,14 @@ namespace KydlCore
         {
             if (_cfgWatcher != null) _cfgWatcher.Tick();
             HubHost.Tick();
+            KyWindows.Tick();                  // Escape closes the front window: the hub or a KyUi window
         }
 
         void OnDestroy()
         {
             if (_cfgWatcher != null) { _cfgWatcher.Dispose(); _cfgWatcher = null; }
             HubHost.Close("plugin destroyed");
+            KyWindows.CloseAll("plugin destroyed");
             ModLog.Verbose("Plugin: destroyed");
         }
     }

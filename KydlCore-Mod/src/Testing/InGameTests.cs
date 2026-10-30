@@ -103,6 +103,27 @@ namespace KydlCore.Testing
             return "PASS: " + have + " entr" + (have == 1 ? "y" : "ies") + " (" + names.Count + " from Jotunn); " + CountNoIcon() + " without an icon";
         }
 
+        /// KC-05: KyUi opens and closes a window of a mod (D-072): IsOpen / AnyOpen follow, onClosed runs once, a same-id window replaces the old one.
+        static string World_KC05_KyUiWindow()
+        {
+            const string guid = "com.kydldev.kydlcore.test", id = "kc05";
+            if (KyUi.Root == null) return "SKIP: the UI root does not exist yet (open the hub once with F6, then PageDown)";
+            bool wasOpen = KyUi.AnyOpen;
+            int closed = 0;
+            var first = KyUi.Open(guid, id, new UnityEngine.UIElements.VisualElement(), () => closed++);
+            if (first == null) return "FAIL: KyUi.Open returned null";
+            bool openAfter = KyUi.IsOpen(guid, id) && KyUi.AnyOpen;
+            var second = KyUi.Open(guid, id, new UnityEngine.UIElements.VisualElement(), () => closed++);
+            bool replaced = closed == 1 && KyUi.IsOpen(guid, id);
+            bool refused = KyUi.Open(guid, " ", new UnityEngine.UIElements.VisualElement()) == null;
+            second.Close();
+            second.Close();
+            bool done = !KyUi.IsOpen(guid, id) && closed == 2 && KyUi.AnyOpen == wasOpen;
+            ModLog.Check("KC-05 KyUi window", closed, 2, 0, "onClosed calls");
+            if (openAfter && replaced && refused && done) return "PASS: window opened, replaced by the same id, closed once; onClosed ran 2 times, any-open back to " + wasOpen;
+            return "FAIL: openAfter " + openAfter + ", replaced " + replaced + ", blankIdRefused " + refused + ", closedClean " + done + " (onClosed " + closed + ")";
+        }
+
         static string CountNoIcon()
         {
             int none = 0;

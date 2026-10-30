@@ -16,12 +16,11 @@ namespace KydlCore
     /// </summary>
     internal static class HubHost
     {
-        const string LockName = "KydlCore.Hub", WindowId = "hub";
+        const string WindowId = KyWindowId.Hub;
 
-        static readonly WindowStack Stack = new WindowStack();
+        static WindowStack Stack { get { return KyWindows.Stack; } }       // the one stack of the hub and the KyUi windows
         static HubView _view;
         static ConfigPage _config;                // the auto Settings page that is on screen (disposed when another page replaces it)
-        static bool _wired;
 
         internal static bool IsOpen { get { return _view != null; } }
 
@@ -40,8 +39,7 @@ namespace KydlCore
                 Open(null, null);
                 return IsOpen;
             }
-            if (key != KeyCode.None && ZInput.GetKeyDown(key, true)) Close("key");
-            else if (ZInput.GetKeyDown(KeyCode.Escape, true) && Stack.CloseTop() == WindowId) Close("Escape");
+            if (key != KeyCode.None && ZInput.GetKeyDown(key, true)) Close("key");      // Escape: KyWindows.Tick closes the front window
             return IsOpen;
         }
 
@@ -54,7 +52,7 @@ namespace KydlCore
             if (IsOpen) { Stack.BringToFront(WindowId); ModLog.Verbose("HubHost: already open, selection changed"); return; }
             var root = UiKit.Root;
             if (root == null) { ModLog.Warn("HubHost: UI Toolkit is not available, the hub cannot open"); return; }
-            Wire();
+            KyWindows.EnsureWired();
             _view = new HubView(KyHub.Model, k => Loc.T(k), Page, () => Close("X"));
             root.Add(_view.Root);
             Stack.Open(WindowId);
@@ -76,18 +74,6 @@ namespace KydlCore
         internal static void Refresh(string mod, string tab)
         {
             if (_view != null && KyHub.Model.SelectedMod == mod && KyHub.Model.SelectedTab == tab) _view.Refresh();
-        }
-
-        // The window stack holds / releases the one input lock: the first window opening takes it, the last one closing gives it back.
-        static void Wire()
-        {
-            if (_wired) return;
-            _wired = true;
-            Stack.AnyOpenChanged += open =>
-            {
-                if (open) UiInputLock.Hold(LockName);
-                else UiInputLock.Release(LockName);
-            };
         }
 
         // Row 1 = every loaded plugin whose GUID starts "com.kydldev." (BepInEx Chainloader); a SetModTitle name wins over the plugin's own name.
