@@ -30,6 +30,9 @@ namespace KydlCore.Tests.Integration
             { Common + "UiInputLock", new[] { "Count", "Install", "Hold", "Release" } },
             { "KydlCore.KyHub", new[] { "AddTab", "RemoveTab", "SetModTitle", "ConfigEntries", "Open", "Close", "IsOpen", "add_TabShown", "remove_TabShown" } },       // T-034: the hub API of every mod
             { "KydlCore.KyTab", new[] { "ModGuid", "Id", "Title", "Order", "Refresh" } },
+            { "KydlCore.KyItems", new[] { "CategoryName", "Ready", "add_Changed", "remove_Changed", "All", "Find", "ByMod", "IsUserGuid", "Register", "Category" } },       // T-040
+            { "KydlCore.KyEntry", new[] { "Prefab", "PrefabObject", "ModGuid", "ModName", "Kind", "NameToken", "Icon", "Tags", "Source", "DisplayName" } },
+            { "KydlCore.KyKind", new[] { "Item", "Piece" } },
             { Ui + "UiSlider", new string[0] },         // returned by UiControls.Slider as a plain VisualElement: the type is public, no member is needed
             { Ui + "UiColorPicker", new string[0] }
         };
