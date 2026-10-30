@@ -12,7 +12,7 @@ namespace Kydl.Ui
     /// One runtime UI Toolkit panel holds every window of the mod (at most 70% of the screen high and 60% wide, movable, the character does
     /// not move while it is open - UiInputLock in Kydl.Common).
     /// Look (user, DrainTarPit T-58: "similar to" the FollowPlayer mod's menu, bigger text): the FollowPlayer look - flat dark
-    /// panels, a gold accent line on top, Norse everywhere (Norsebold for titles), upper-case gold section titles with a line, pill switches,
+    /// panels, a gold accent line on top, Norse everywhere (Norsebold for titles; the KydlCore build, KYDL_CORE_PUBLIC, uses NotoSansSC-Regular, D-043), upper-case gold section titles with a line, pill switches,
     /// thin sliders with a typed number box, a slim gold scrollbar. Every font falls back to the game's NotoEmoji font (emoji in any font).
     /// All looks are inline styles: a game build has no USS importer / default theme. The panel scales with the screen height (1080p ref).
     /// </summary>
@@ -100,6 +100,33 @@ namespace Kydl.Ui
         }
 
         // --- fonts --------------------------------------------------------------------------------------------------------------
+#if KYDL_CORE_PUBLIC
+        // KydlCore look (D-043): NotoSansSC-Regular, the font Valheim itself ships, for text AND titles (it has no Bold weight: titles are only bigger).
+        // Not loaded (a game update renamed it): any loaded font and ONE warning (D-044). Mods that are not moved to KydlCore keep the old Norse look.
+        const string TextFontName = "NotoSansSC-Regular";
+
+        static string LoadFonts()
+        {
+            Font emoji = null, norse = null, any = null;
+            _bodyFont = null;
+            foreach (var f in Resources.FindObjectsOfTypeAll<Font>())
+            {
+                if (f == null) continue;
+                string n = f.name;
+                if (n == TextFontName) _bodyFont = f;
+                else if (n == "NotoEmoji-Regular") emoji = f;
+                else if (n == "Norse") norse = f;
+                else if (any == null) any = f;
+            }
+            if (_bodyFont == null)
+            {
+                _bodyFont = norse != null ? norse : any;
+                UiLog.Warn("UiKit: font '" + TextFontName + "' is not loaded; using " + (_bodyFont != null ? "'" + _bodyFont.name + "'" : "no font (engine default)"));
+            }
+            _titleFont = _bodyFont;
+            return MakeAssets(emoji);
+        }
+#else
         static string LoadFonts()
         {
             Font emoji = null;
@@ -113,6 +140,13 @@ namespace Kydl.Ui
             }
             if (_titleFont == null) _titleFont = _bodyFont;
             if (_bodyFont == null) _bodyFont = _titleFont;
+            return MakeAssets(emoji);
+        }
+#endif
+
+        /// Font assets for the chosen text / title fonts, each with the emoji font as fallback; returns a log description.
+        static string MakeAssets(Font emoji)
+        {
             if (emoji == null) emoji = UnityEngine.Font.CreateDynamicFontFromOSFont(new[] { "Segoe UI Emoji", "Segoe UI Symbol", "Noto Emoji" }, 32);
             var emojiAsset = MakeAsset(emoji, null);
             _bodyAsset = MakeAsset(_bodyFont, emojiAsset);
@@ -179,7 +213,7 @@ namespace Kydl.Ui
             e.style.transitionDuration = new List<TimeValue> { new TimeValue(0.12f, TimeUnit.Second) };
         }
 
-        /// <summary>A text label (not clickable) with a size and colour; 	itle = the title font.</summary>
+        /// <summary>A text label (not clickable) with a size and colour; title = the title font.</summary>
         public static Label Label(string text, float size, Color color, bool title = false)
         {
             var l = new Label(text);
