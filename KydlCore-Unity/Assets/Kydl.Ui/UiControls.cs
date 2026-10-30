@@ -26,7 +26,7 @@ namespace Kydl.Ui
         /// A gold (primary) or dark push button; logs every press. The KydlCore build also dims it while it is pressed and draws a thin red border while the pointer is over it (D-048).
         public static Button Button(string text, Action onClick, bool primary = false)
         {
-            var b = new Button(() => { UiLog.Verbose("Ui: button '" + text + "' pressed"); onClick?.Invoke(); }) { text = text };
+            var b = new Button(UiLog.Wrap(() => { UiLog.Verbose("Ui: button '" + text + "' pressed"); onClick?.Invoke(); })) { text = text };
             Color bg = primary ? UiKit.GoldDim : UiKit.PanelLight, hot = primary ? UiKit.Gold : UiKit.PanelHover;
             b.style.backgroundColor = bg;
             b.style.color = primary ? UiKit.OnDark : UiKit.Text;
@@ -56,7 +56,7 @@ namespace Kydl.Ui
         /// A button that looks like an input field (dark, text on the left): the closed drop-down.
         public static Button Field(string text, Action onClick)
         {
-            var b = new Button(() => { UiLog.Verbose("Ui: field '" + text + "' opened"); onClick?.Invoke(); }) { text = text };
+            var b = new Button(UiLog.Wrap(() => { UiLog.Verbose("Ui: field '" + text + "' opened"); onClick?.Invoke(); })) { text = text };
             b.style.backgroundColor = UiKit.Track; b.style.color = UiKit.ValueColor; b.style.fontSize = UiKit.FontSize;
             UiKit.Borders(b, 1, UiKit.Border); UiKit.Radius(b, 4); UiKit.Pad(b, 5, 10);
             b.style.unityTextAlign = TextAnchor.MiddleLeft;
@@ -118,6 +118,7 @@ namespace Kydl.Ui
         /// A dark single-line text input; `changed` gets the new text on every edit.
         public static TextField TextField(string value, int maxLength, Action<string> changed)
         {
+            changed = UiLog.Wrap(changed);       // log lines of the callback belong to the mod whose tab built this control (UiLog.Owner)
             var f = new TextField { value = value ?? "", maxLength = maxLength };
             f.style.marginLeft = 0; f.style.marginRight = 0; f.style.marginTop = 0; f.style.marginBottom = 0; f.style.flexShrink = 0;
             StyleInput(f, UiKit.FontSize);
@@ -139,6 +140,7 @@ namespace Kydl.Ui
         /// A pill switch with its label (FollowPlayer's toggle); click anywhere on it.
         public static VisualElement Toggle(string text, bool on, Action<bool> changed)
         {
+            changed = UiLog.Wrap(changed);
             bool state = on;
             var row = new VisualElement();
             row.style.flexDirection = FlexDirection.Row; row.style.alignItems = Align.Center; row.style.flexShrink = 0;
@@ -178,6 +180,7 @@ namespace Kydl.Ui
         /// A thin slider with a round handle and a number box (type a value, Enter or click elsewhere applies it). `format` formats the value.
         public static VisualElement Slider(float min, float max, float value, string format, Action<float> changed)
         {
+            changed = UiLog.Wrap(changed);
             var box = new VisualElement();
             box.style.flexDirection = FlexDirection.Row; box.style.alignItems = Align.Center; box.style.flexShrink = 0; box.style.minHeight = 34;
 
@@ -239,6 +242,7 @@ namespace Kydl.Ui
         /// A field that opens a scrolling list of `options` under it. `label` turns an option into its shown text.
         public static Button Dropdown(IList<string> options, string current, Func<string, string> label, Action<string> chosen)
         {
+            chosen = UiLog.Wrap(chosen);
             Button b = null;
             string cur = current;
             VisualElement openList = null;   // the list of this field while it is open
@@ -305,6 +309,7 @@ namespace Kydl.Ui
         /// FollowPlayer's colour editor: preview bar, preset swatches, Red / Green / Blue sliders, hex box. `changed` gets "#RRGGBB".
         public static VisualElement ColorPicker(string hex, Action<string> changed, out Action<string> set)
         {
+            changed = UiLog.Wrap(changed);
             var box = new VisualElement(); box.style.flexShrink = 0;
             Color c;
             if (!ColorUtility.TryParseHtmlString(hex ?? "#FFFFFF", out c)) c = Color.white;

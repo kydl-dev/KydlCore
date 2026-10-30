@@ -38,9 +38,7 @@ namespace KydlCore
 
             // The shared UI kit (Kydl.Ui) lives in this DLL only (D-040): Core sets its log sinks, its panel owner and the input lock ONCE.
             // A mod moved onto Core never sets them itself (the last writer would take over). Debug lines only with the debug switch on.
-            Kydl.Ui.UiLog.VerboseSink = s => ModLog.Verbose(s);
-            Kydl.Ui.UiLog.WarnSink = s => ModLog.Warn(s);
-            Kydl.Ui.UiLog.ErrorSink = s => ModLog.Error(s);
+            Ui.UiLogSinks.Install();                     // UI lines get the owning mod's name and follow its debug switch (D-071)
             Kydl.Ui.UiKit.Owner = UiOwner;               // the one UI panel object is called Kydl_UI_Root
 
             ModSettings.Bind(Config);

@@ -137,6 +137,27 @@ namespace KydlCore.Tests.Unit
             Assert.That(TabIds(g), Is.EqualTo(new[] { "t" }));
         }
 
+        // a page builder that records which mod the shared UI log says is drawing (Kydl.Ui.UiLog.Owner, D-071)
+        static Delegate OwnerRecorder(string[] seen)
+        {
+            Expression read = Expression.Assign(Expression.ArrayAccess(Expression.Constant(seen), Expression.Constant(0)),
+                Expression.Field(null, ModAssembly.Type("Kydl.Ui.UiLog").GetField("Owner")));
+            var body = Expression.Block(read, Expression.Constant(null, BuildType.GetGenericArguments()[0]));
+            return Expression.Lambda(BuildType, body).Compile();
+        }
+
+        [Test]
+        public void BuildPage_RunsTheBuilder_WithTheModAsLogOwner_AndRestoresIt()
+        {
+            string g = Guid("Owner");
+            var seen = new string[1];
+            AddTab(g, "p", "P", OwnerRecorder(seen));
+            var build = Hub.GetMethod("BuildPage", BindingFlags.Static | BindingFlags.NonPublic);
+            build.Invoke(null, new object[] { g, "p" });
+            Assert.That(seen[0], Is.EqualTo(g));
+            Assert.That(ModAssembly.GetStatic("Kydl.Ui.UiLog", "Owner"), Is.Null, "the owner is back to none after the page is built");
+        }
+
         [Test]
         public void BuildPage_CallsTheBuilderEveryTime()
         {

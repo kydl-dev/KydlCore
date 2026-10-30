@@ -28,9 +28,9 @@ namespace KydlCore.Tests.Integration
             {
                 lines.Add(Kind(type) + " " + type.FullName);
                 var members = new List<string>();
-                foreach (var f in type.Fields.Where(f => f.IsPublic || f.IsFamily || f.IsFamilyOrAssembly)) members.Add("  field " + f.Name + " : " + f.FieldType.FullName + ConstantOf(f));
+                foreach (var f in type.Fields.Where(f => f.IsPublic || f.IsFamily || f.IsFamilyOrAssembly)) members.Add("  field " + type.FullName + "::" + f.Name + " : " + f.FieldType.FullName + ConstantOf(f));
                 foreach (var m in type.Methods.Where(Exposed)) members.Add("  method " + m.FullName);
-                foreach (var e in type.Events.Where(e => Exposed(e.AddMethod) || Exposed(e.RemoveMethod))) members.Add("  event " + e.Name + " : " + e.EventType.FullName);
+                foreach (var e in type.Events.Where(e => Exposed(e.AddMethod) || Exposed(e.RemoveMethod))) members.Add("  event " + type.FullName + "::" + e.Name + " : " + e.EventType.FullName);
                 lines.AddRange(members.OrderBy(x => x, StringComparer.Ordinal));
             }
             return string.Join("\n", lines) + "\n";
@@ -112,7 +112,7 @@ namespace KydlCore.Tests.Integration
         {
             // D-042: used only inside the kit, so never part of the approved API.
             var approved = File.ReadAllText(Path.Combine(Dir, ApprovedName));
-            foreach (var member in new[] { " Kydl.Ui.UiKit::Reset(", " Kydl.Ui.UiKit::Font(", " Kydl.Ui.UiKit::get_TitleSize(", "  field TitleSize " })
+            foreach (var member in new[] { " Kydl.Ui.UiKit::Reset(", " Kydl.Ui.UiKit::Font(", " Kydl.Ui.UiKit::get_TitleSize(", "  field Kydl.Ui.UiKit::TitleSize " })
                 Assert.That(approved, Does.Not.Contain(member), member + " is internal by D-042");
         }
     }

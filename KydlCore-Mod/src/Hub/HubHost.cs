@@ -108,7 +108,7 @@ namespace KydlCore
         {
             DisposeConfig();
             VisualElement page = null;
-            if (KyHub.Model.IsAutoTab(mod)) page = AutoPage(mod);
+            if (KyHub.Model.IsAutoTab(mod)) page = Kydl.Ui.UiLog.Within(mod, () => AutoPage(mod));
             else page = KyHub.BuildPage(mod, tab);
             KyHub.RaiseTabShown(mod, tab);
             return page;

@@ -135,7 +135,7 @@ namespace KydlCore
         {
             Func<VisualElement> build;
             if (!Builders.TryGetValue(Key(modGuid, id), out build)) return null;
-            try { return build(); }
+            try { return Kydl.Ui.UiLog.Within(modGuid, build); }     // the kit's log lines of this page belong to the mod (UiLog.Owner, D-071)
             // Stryker disable once all : the only effect of the handler is the error line (the null result is tested)
             catch (Exception e) { ModLog.Error("KyHub: the page of " + modGuid + " / " + id + " failed: " + e); return null; }
         }

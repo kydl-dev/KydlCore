@@ -17,25 +17,25 @@ static class Kydl.Ui.UiControls
   method UnityEngine.UIElements.VisualElement Kydl.Ui.UiControls::Slider(System.Single,System.Single,System.Single,System.String,System.Action`1<System.Single>)
   method UnityEngine.UIElements.VisualElement Kydl.Ui.UiControls::Toggle(System.String,System.Boolean,System.Action`1<System.Boolean>)
 static class Kydl.Ui.UiKit
-  field Border : UnityEngine.Color
-  field ButtonSize : System.Int32 = 21
-  field FontSize : System.Int32 = 22
-  field Gold : UnityEngine.Color
-  field GoldDim : UnityEngine.Color
-  field NameColor : UnityEngine.Color
-  field NameSize : System.Int32 = 24
-  field OnDark : UnityEngine.Color
-  field Owner : System.String
-  field Panel : UnityEngine.Color
-  field PanelHover : UnityEngine.Color
-  field PanelLight : UnityEngine.Color
-  field SectionSize : System.Int32 = 24
-  field SmallSize : System.Int32 = 18
-  field TabColor : UnityEngine.Color
-  field Text : UnityEngine.Color
-  field TextDim : UnityEngine.Color
-  field Track : UnityEngine.Color
-  field ValueColor : UnityEngine.Color
+  field Kydl.Ui.UiKit::Border : UnityEngine.Color
+  field Kydl.Ui.UiKit::ButtonSize : System.Int32 = 21
+  field Kydl.Ui.UiKit::FontSize : System.Int32 = 22
+  field Kydl.Ui.UiKit::Gold : UnityEngine.Color
+  field Kydl.Ui.UiKit::GoldDim : UnityEngine.Color
+  field Kydl.Ui.UiKit::NameColor : UnityEngine.Color
+  field Kydl.Ui.UiKit::NameSize : System.Int32 = 24
+  field Kydl.Ui.UiKit::OnDark : UnityEngine.Color
+  field Kydl.Ui.UiKit::Owner : System.String
+  field Kydl.Ui.UiKit::Panel : UnityEngine.Color
+  field Kydl.Ui.UiKit::PanelHover : UnityEngine.Color
+  field Kydl.Ui.UiKit::PanelLight : UnityEngine.Color
+  field Kydl.Ui.UiKit::SectionSize : System.Int32 = 24
+  field Kydl.Ui.UiKit::SmallSize : System.Int32 = 18
+  field Kydl.Ui.UiKit::TabColor : UnityEngine.Color
+  field Kydl.Ui.UiKit::Text : UnityEngine.Color
+  field Kydl.Ui.UiKit::TextDim : UnityEngine.Color
+  field Kydl.Ui.UiKit::Track : UnityEngine.Color
+  field Kydl.Ui.UiKit::ValueColor : UnityEngine.Color
   method System.Void Kydl.Ui.UiKit::Borders(UnityEngine.UIElements.VisualElement,System.Single,UnityEngine.Color)
   method System.Void Kydl.Ui.UiKit::Fade(UnityEngine.UIElements.VisualElement,System.String[])
   method System.Void Kydl.Ui.UiKit::Pad(UnityEngine.UIElements.VisualElement,System.Single,System.Single)
@@ -45,34 +45,38 @@ static class Kydl.Ui.UiKit
   method UnityEngine.UIElements.VisualElement Kydl.Ui.UiKit::Window(System.String,System.String,System.Action,Kydl.Ui.UiScroll&)
   method UnityEngine.UIElements.VisualElement Kydl.Ui.UiKit::get_Root()
 static class Kydl.Ui.UiLog
-  field ErrorSink : System.Action`1<System.String>
-  field VerboseSink : System.Action`1<System.String>
-  field WarnSink : System.Action`1<System.String>
+  field Kydl.Ui.UiLog::ErrorSink : System.Action`1<System.String>
+  field Kydl.Ui.UiLog::Owner : System.String
+  field Kydl.Ui.UiLog::VerboseSink : System.Action`1<System.String>
+  field Kydl.Ui.UiLog::WarnSink : System.Action`1<System.String>
+  method System.Action Kydl.Ui.UiLog::Wrap(System.Action)
+  method System.Action`1<T> Kydl.Ui.UiLog::Wrap(System.Action`1<T>)
   method System.Void Kydl.Ui.UiLog::Error(System.String)
   method System.Void Kydl.Ui.UiLog::Verbose(System.String)
   method System.Void Kydl.Ui.UiLog::Warn(System.String)
+  method T Kydl.Ui.UiLog::Within(System.String,System.Func`1<T>)
 sealed class Kydl.Ui.UiScroll
-  field Content : UnityEngine.UIElements.VisualElement
-  field Root : UnityEngine.UIElements.VisualElement
+  field Kydl.Ui.UiScroll::Content : UnityEngine.UIElements.VisualElement
+  field Kydl.Ui.UiScroll::Root : UnityEngine.UIElements.VisualElement
   method System.Void Kydl.Ui.UiScroll::.ctor(System.String)
   method System.Void Kydl.Ui.UiScroll::ScrollBy(System.Single)
   method System.Void Kydl.Ui.UiScroll::ScrollTo(System.Single)
 sealed class Kydl.Ui.UiSlider
 sealed class KydlCore.KyEntry
-  field Kind : KydlCore.KyKind
-  field ModGuid : System.String
-  field ModName : System.String
-  field NameToken : System.String
-  field Prefab : System.String
-  field PrefabObject : UnityEngine.GameObject
-  field Source : System.String
-  field Tags : System.Collections.Generic.IReadOnlyList`1<System.String>
+  field KydlCore.KyEntry::Kind : KydlCore.KyKind
+  field KydlCore.KyEntry::ModGuid : System.String
+  field KydlCore.KyEntry::ModName : System.String
+  field KydlCore.KyEntry::NameToken : System.String
+  field KydlCore.KyEntry::Prefab : System.String
+  field KydlCore.KyEntry::PrefabObject : UnityEngine.GameObject
+  field KydlCore.KyEntry::Source : System.String
+  field KydlCore.KyEntry::Tags : System.Collections.Generic.IReadOnlyList`1<System.String>
   method System.String KydlCore.KyEntry::get_DisplayName()
   method System.Void KydlCore.KyEntry::.ctor()
   method System.Void KydlCore.KyEntry::set_Icon(UnityEngine.Sprite)
   method UnityEngine.Sprite KydlCore.KyEntry::get_Icon()
 static class KydlCore.KyHub
-  event TabShown : System.Action`2<System.String,System.String>
+  event KydlCore.KyHub::TabShown : System.Action`2<System.String,System.String>
   method KydlCore.KyTab KydlCore.KyHub::AddTab(System.String,System.String,System.String,System.Func`1<UnityEngine.UIElements.VisualElement>,System.Int32)
   method System.Boolean KydlCore.KyHub::RemoveTab(System.String,System.String)
   method System.Boolean KydlCore.KyHub::get_IsOpen()
@@ -83,8 +87,8 @@ static class KydlCore.KyHub
   method System.Void KydlCore.KyHub::remove_TabShown(System.Action`2<System.String,System.String>)
   method UnityEngine.UIElements.VisualElement KydlCore.KyHub::ConfigEntries(BepInEx.Configuration.ConfigFile,System.String[])
 static class KydlCore.KyItems
-  event Changed : System.Action
-  field CategoryName : System.String = KY-Items
+  event KydlCore.KyItems::Changed : System.Action
+  field KydlCore.KyItems::CategoryName : System.String = KY-Items
   method KydlCore.KyEntry KydlCore.KyItems::Find(System.String)
   method System.Boolean KydlCore.KyItems::IsUserGuid(System.String)
   method System.Boolean KydlCore.KyItems::Register(UnityEngine.GameObject,System.String,KydlCore.KyKind,System.String[])
@@ -95,9 +99,9 @@ static class KydlCore.KyItems
   method System.Void KydlCore.KyItems::add_Changed(System.Action)
   method System.Void KydlCore.KyItems::remove_Changed(System.Action)
 enum KydlCore.KyKind
-  field Item : KydlCore.KyKind = 0
-  field Piece : KydlCore.KyKind = 1
-  field value__ : System.Int32
+  field KydlCore.KyKind::Item : KydlCore.KyKind = 0
+  field KydlCore.KyKind::Piece : KydlCore.KyKind = 1
+  field KydlCore.KyKind::value__ : System.Int32
 sealed class KydlCore.KyTab
   method System.Int32 KydlCore.KyTab::get_Order()
   method System.String KydlCore.KyTab::get_Id()
@@ -106,8 +110,8 @@ sealed class KydlCore.KyTab
   method System.Void KydlCore.KyTab::.ctor()
   method System.Void KydlCore.KyTab::Refresh()
 class KydlCore.Plugin
-  field BundleName : System.String = kydlcore
-  field ModGuid : System.String = com.kydldev.KydlCore
-  field ModName : System.String = KydlCore
-  field ModVersion : System.String
+  field KydlCore.Plugin::BundleName : System.String = kydlcore
+  field KydlCore.Plugin::ModGuid : System.String = com.kydldev.KydlCore
+  field KydlCore.Plugin::ModName : System.String = KydlCore
+  field KydlCore.Plugin::ModVersion : System.String
   method System.Void KydlCore.Plugin::.ctor()
