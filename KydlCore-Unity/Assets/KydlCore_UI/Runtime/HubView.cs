@@ -13,8 +13,8 @@ namespace KydlCore.Ui
     /// Look (D-048, user feedback 2026-10-30, D-055): tabs are as big as the buttons (same padding); mod names (row 1) are red text, settings tabs
     /// (row 2) have a red button border and gold text; the selected tab has a rounded gold border, a faint gold halo around it (UI Toolkit has no
     /// drop shadow) and sits 3 px higher; a thin red border while the pointer is over a tab. The title, the tab names and the page start on one
-    /// vertical line (TextX). Under the settings tabs the same gold line as under the mod names (same element, Rule()), then every page starts with a line saying which page it is. Rows wrap onto further lines; scroll bar + paging for more
-    /// than 2 rows is T-035.
+    /// vertical line (TextX). Under the settings tabs the same gold line as under the mod names (same element, Rule()), then every page starts with a line saying which page it is. Rows wrap onto further lines (up to 2 shown;
+    /// scroll bar + arrows for more: TabRows / TabPaging, T-035); a title wider than the window gets an ellipsis.
     /// The view redraws when the model fires Changed; Dispose unhooks it.
     /// </summary>
     internal sealed class HubView : IDisposable
@@ -29,7 +29,7 @@ namespace KydlCore.Ui
         readonly Func<string, string> _text;
         readonly Func<string, string, VisualElement> _page;
         readonly UiScroll _body;
-        readonly VisualElement _row1, _row2;
+        readonly TabRows _row1, _row2;
         readonly Action _onChanged;
         string _shownMod, _shownTab;
         bool _built;
@@ -48,9 +48,9 @@ namespace KydlCore.Ui
 
             var rows = new VisualElement { name = "kydl-hub-rows" };
             rows.style.flexShrink = 0; rows.style.marginLeft = TabEdge; rows.style.marginRight = TabEdge; rows.style.marginTop = 8;
-            _row1 = Row("kydl-hub-row1");
-            _row2 = Row("kydl-hub-row2");
-            rows.Add(_row1); rows.Add(Rule("kydl-hub-line")); rows.Add(_row2); rows.Add(Rule("kydl-hub-page-line"));   // both lines are the same element: gold, 2 px, full width
+            _row1 = new TabRows("kydl-hub-row1");
+            _row2 = new TabRows("kydl-hub-row2");
+            rows.Add(_row1.Root); rows.Add(Rule("kydl-hub-line")); rows.Add(_row2.Root); rows.Add(Rule("kydl-hub-page-line"));   // both lines are the same element: gold, 2 px, full width
             Root.Insert(1, rows);                                  // between the title bar and the page area
 
             _onChanged = Rebuild;
@@ -81,13 +81,6 @@ namespace KydlCore.Ui
             return l;
         }
 
-        static VisualElement Row(string name)
-        {
-            var r = new VisualElement { name = name };
-            r.style.flexDirection = FlexDirection.Row; r.style.flexWrap = Wrap.Wrap; r.style.alignItems = Align.FlexStart;
-            return r;
-        }
-
         // Redraws both rows and, when the selected mod / tab changed, the page.
         void Rebuild()
         {
@@ -96,14 +89,14 @@ namespace KydlCore.Ui
             foreach (string guid in _model.ModGuids())
             {
                 string g = guid;
-                _row1.Add(Tab(_model.ModTitle(g), g == mod, UiKit.SectionSize, false, () => _model.SelectMod(g)));
+                _row1.Add(Tab(_model.ModTitle(g), g == mod, UiKit.SectionSize, false, () => _model.SelectMod(g)), g == mod);
             }
             _row2.Clear();
             if (mod != null)
                 foreach (string id in _model.TabIds(mod))
                 {
                     string t = id;
-                    _row2.Add(Tab(_model.TabTitle(mod, t), t == tab, UiKit.ButtonSize, true, () => _model.SelectTab(t)));
+                    _row2.Add(Tab(_model.TabTitle(mod, t), t == tab, UiKit.ButtonSize, true, () => _model.SelectTab(t)), t == tab);
                 }
             if (_built && mod == _shownMod && tab == _shownTab) { UiLog.Verbose("HubView: rows redrawn, page stays " + mod + " / " + tab); return; }
             _built = true; _shownMod = mod; _shownTab = tab;
@@ -129,11 +122,13 @@ namespace KydlCore.Ui
             var halo = new VisualElement();
             halo.style.paddingLeft = HaloPad; halo.style.paddingRight = HaloPad; halo.style.paddingTop = HaloPad; halo.style.paddingBottom = HaloPad;
             halo.style.marginRight = 3; halo.style.marginTop = selected ? 0 : Lift; halo.style.marginBottom = selected ? Lift : 0;
+            halo.style.maxWidth = Length.Percent(100f); halo.style.flexShrink = 1;
             UiKit.Radius(halo, 10);
             halo.style.backgroundColor = selected ? new Color(UiKit.Gold.r, UiKit.Gold.g, UiKit.Gold.b, HaloAlpha) : Color.clear;
 
             var b = new Button(pick) { text = title };
-            b.style.fontSize = size; b.style.color = boxed ? UiKit.Gold : UiKit.TabColor; b.style.flexShrink = 0;
+            b.style.fontSize = size; b.style.color = boxed ? UiKit.Gold : UiKit.TabColor; b.style.flexShrink = 1; b.style.minWidth = 0;
+            b.style.overflow = Overflow.Hidden; b.style.textOverflow = TextOverflow.Ellipsis; b.style.whiteSpace = WhiteSpace.NoWrap;
             b.style.marginLeft = 0; b.style.marginRight = 0; b.style.marginTop = 0; b.style.marginBottom = 0;
             Color fill = selected ? UiKit.PanelLight : Color.clear;
             b.style.backgroundColor = fill;

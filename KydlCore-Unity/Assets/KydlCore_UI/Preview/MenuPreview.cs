@@ -15,7 +15,7 @@ namespace KydlCore.Ui
     public sealed class MenuPreview : MonoBehaviour
     {
         /// <summary>What the preview shows: the KY hub (fake mods with 1, 3 and 4 tabs) or the example menu.</summary>
-        public enum PreviewKind { Hub, MainMenu }
+        public enum PreviewKind { Hub, HubManyTabs, MainMenu }
 
         public PreviewKind kind = PreviewKind.Hub;
         HubView _hub;
@@ -30,9 +30,9 @@ namespace KydlCore.Ui
             UiKit.Reset();
             var root = UiKit.Root;
             if (root == null) { Debug.LogError("[MenuPreview] UI Toolkit panel could not be made"); return; }
-            if (kind == PreviewKind.Hub)
+            if (kind == PreviewKind.Hub || kind == PreviewKind.HubManyTabs)
             {
-                var model = FakeHub();
+                var model = kind == PreviewKind.Hub ? FakeHub() : FakeHubMany();
                 _hub = new HubView(model, UiText.English, (mod, tab) => FakePage(), () => Debug.Log("[MenuPreview] close pressed"));
                 root.Add(_hub.Root);
                 Debug.Log("[MenuPreview] KY hub shown (fake mods)");
@@ -46,6 +46,19 @@ namespace KydlCore.Ui
         {
             if (_hub != null) { _hub.Dispose(); _hub = null; }
             UiKit.Reset();
+        }
+
+        // Many mods and many tabs (T-035): row 1 and row 2 fill more than 2 lines, one title is longer than the window.
+        static HubModel FakeHubMany()
+        {
+            var m = new HubModel();
+            foreach (string n in new[] { "ChestDecor", "DrainTarPit", "KydlCore", "RearViewCamera", "SteveTheTroll", "ValheimDiscordRelay", "WhipItUp", "WaterAndTarPools", "FollowPlayer", "RidingCrop", "SpareMod", "AnotherSpareMod", "TheModWithAnExtremelyLongNameThatDoesNotFitInOneLineOfTheWindowAtAll" })
+                m.AddMod("com.kydldev." + n, n);
+            string g = "com.kydldev.ChestDecor";
+            string[] tabs = { "Look", "Placement", "Camera", "General", "Appearance", "Advanced", "Keys", "Colours", "Storage", "Sorting", "Sounds", "Effects", "Language", "About" };
+            for (int i = 0; i < tabs.Length; i++) m.AddTab(g, tabs[i].ToLowerInvariant(), tabs[i], i);
+            m.Select(g, "placement");
+            return m;
         }
 
         // Fake mods for the hub: 4 tabs, 1 tab, no registered tab (= the automatic "Settings" tab), 3 tabs. Names are PascalCase, as in game.
