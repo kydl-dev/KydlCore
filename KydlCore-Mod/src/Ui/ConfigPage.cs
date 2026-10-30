@@ -130,19 +130,19 @@ namespace KydlCore.Ui
             return r;
         }
 
-        // The text in the value fields (number / text box, drop-down, colour editor) has the size of the tips under the settings, with a small margin
-        // inside the box (user 2026-10-30, D-063). The page scale is applied afterwards, so SmallSize here = the tips' size.
+        // The text in the value fields (number / text box, drop-down, colour editor) has the size of the drop-down text (the "F9" of PoolMenuKey, the
+        // kit's FontSize), with a small margin inside the box (user 2026-10-30, D-063). The page scale is applied afterwards.
         static void Compact(VisualElement control)
         {
             control.Query<VisualElement>().ForEach(e =>
             {
-                if (e.style.fontSize.keyword == StyleKeyword.Undefined && e.style.fontSize.value.value > 0f) e.style.fontSize = UiKit.SmallSize;
+                if (e.style.fontSize.keyword == StyleKeyword.Undefined && e.style.fontSize.value.value > 0f) e.style.fontSize = UiKit.FontSize;
             });
             control.Query<TextField>().ForEach(f =>
             {
                 VisualElement input = f.Q(className: TextField.inputUssClassName) ?? f;
                 UiKit.Pad(input, 1, 5);
-                input.style.fontSize = UiKit.SmallSize;
+                input.style.fontSize = UiKit.FontSize;
             });
             control.Query<Button>().ForEach(b => UiKit.Pad(b, 1, 5));
         }
