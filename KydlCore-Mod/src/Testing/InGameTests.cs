@@ -49,6 +49,67 @@ namespace KydlCore.Testing
 
         static string Has(HashSet<string> names, string name) { return names.Contains(name) ? "yes" : "NO"; }
 
+        /// KC-01 (DESIGN 10): at most one UI root object "Kydl_UI_Root" (two would mean two copies of the kit are running). 0 is fine before the first window.
+        static string Startup_KC01_OneUiRoot() { return CheckUiRoot(); }
+
+        static string CheckUiRoot()
+        {
+            int n = 0;
+            foreach (var doc in Object.FindObjectsByType<UnityEngine.UIElements.UIDocument>(FindObjectsSortMode.None))
+                if (doc != null && doc.gameObject.name == "Kydl_UI_" + Plugin.UiOwner) n++;
+            ModLog.Verbose("InGameTests: KC-01 " + n + " Kydl_UI_" + Plugin.UiOwner + " UIDocument(s)");
+            return n <= 1 ? "PASS: " + n + " Kydl_UI_" + Plugin.UiOwner + " UIDocument(s)" : "FAIL: " + n + " Kydl_UI_" + Plugin.UiOwner + " UIDocuments, expected at most 1";
+        }
+
+        /// KC-02: row 1 of the hub = every loaded plugin whose GUID starts with com.kydldev. (read from the hub model; SKIP while the hub was never opened).
+        static string World_KC02_HubRowOne()
+        {
+            int shown = KyHub.Model.ModCount;
+            if (shown == 0) return "SKIP: the hub was not opened yet (its mod list is read when it opens): press F6 once, then PageDown";
+            int loaded = 0;
+            foreach (var info in BepInEx.Bootstrap.Chainloader.PluginInfos.Values)
+                if (info != null && info.Metadata != null && Ui.HubModel.IsHubGuid(info.Metadata.GUID)) loaded++;
+            ModLog.Check("KC-02 row-1 tabs", shown, loaded, 0, "mods");
+            return shown == loaded ? "PASS: " + shown + " mod(s) in row 1 = " + loaded + " loaded com.kydldev.* plugin(s)" : "FAIL: " + shown + " mod(s) in row 1, " + loaded + " loaded com.kydldev.* plugin(s)";
+        }
+
+        /// KC-03: every mod in the hub has at least one tab (its own, or the automatic Settings); KydlCore has "settings" and has "ky-items" exactly when the registry has entries.
+        static string World_KC03_HubTabs()
+        {
+            var model = KyHub.Model;
+            if (model.ModCount == 0) return "SKIP: the hub was not opened yet: press F6 once, then PageDown";
+            foreach (string mod in model.ModGuids())
+                if (model.TabIds(mod).Length == 0) return "FAIL: " + mod + " has no tab in row 2";
+            var core = new List<string>(model.TabIds(Plugin.ModGuid));
+            bool hasItems = core.Contains(KyItemsTab.ItemsId), wantItems = KyItems.All.Count > 0;
+            ModLog.Verbose("InGameTests: KC-03 KydlCore tabs " + string.Join(", ", core.ToArray()) + ", registry " + KyItems.All.Count);
+            if (!core.Contains(KyItemsTab.SettingsId)) return "FAIL: KydlCore has no 'settings' tab (" + string.Join(", ", core.ToArray()) + ")";
+            return hasItems == wantItems ? "PASS: all " + model.ModCount + " mod(s) have a tab; KydlCore tabs " + string.Join(", ", core.ToArray())
+                                         : "FAIL: ky-items tab " + (hasItems ? "shown" : "missing") + " but the registry has " + KyItems.All.Count + " entr" + (KyItems.All.Count == 1 ? "y" : "ies");
+        }
+
+        /// KC-04: the KY-Items registry has read the game and found at least every prefab Jotunn registered for a com.kydldev.* mod (one per prefab name).
+        static string World_KC04_KyItemsCount()
+        {
+            var names = new HashSet<string>(System.StringComparer.OrdinalIgnoreCase);
+            foreach (var ci in Jotunn.Utils.ModRegistry.GetItems())
+                if (ci != null && ci.ItemPrefab != null && ci.SourceMod != null && KyItems.IsUserGuid(ci.SourceMod.GUID)) names.Add(ci.ItemPrefab.name);
+            foreach (var cp in Jotunn.Utils.ModRegistry.GetPieces())
+                if (cp != null && cp.PiecePrefab != null && cp.SourceMod != null && KyItems.IsUserGuid(cp.SourceMod.GUID)) names.Add(cp.PiecePrefab.name);
+            int have = KyItems.All.Count;
+            ModLog.Check("KC-04 KY-Items entries (at least the Jotunn ones)", have, names.Count, 0, "prefabs");
+            if (!KyItems.Ready) return "FAIL: the registry is not Ready 5 s after the world loaded";
+            foreach (string n in names) if (KyItems.Find(n) == null) return "FAIL: '" + n + "' is registered by Jotunn for a com.kydldev.* mod but is not in the registry";
+            return "PASS: " + have + " entr" + (have == 1 ? "y" : "ies") + " (" + names.Count + " from Jotunn); " + CountNoIcon() + " without an icon";
+        }
+
+        static string CountNoIcon()
+        {
+            int none = 0;
+            foreach (var e in KyItems.All) if (e.Icon == null) none++;
+            return none.ToString();
+        }
+
         /// The local player exists once a world is loaded (example of a World_ test; replace with the mod's own checks).
         static string World_PlayerPresent()
         {
