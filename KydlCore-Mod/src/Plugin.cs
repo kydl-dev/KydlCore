@@ -22,6 +22,8 @@ namespace KydlCore
         public const string ModName = "KydlCore";
         public const string ModVersion = "0.1.0";
         public const string BundleName = "kydlcore";
+        /// UiKit.Owner: the name part of the one UI root object ("Kydl_UI_" + owner).
+        internal const string UiOwner = "Root";
 
         internal static Plugin Instance;
         /// This mod's AssetBundle (null while the mod has none yet: Unity has not built one).
@@ -34,18 +36,19 @@ namespace KydlCore
             ModLog.Init(Logger, ModName, () => ModSettings.DebugLog != null && ModSettings.DebugLog.Value);
             ModLog.Info(ModName + " " + ModVersion + " loaded (dll built " + File.GetLastWriteTime(Assembly.GetExecutingAssembly().Location).ToString("yyyy-MM-dd HH:mm:ss") + ")");
 
-            // the shared UI kit (Kydl.Ui) logs through the mod's log: debug lines only with the debug switch on
+            // The shared UI kit (Kydl.Ui) lives in this DLL only (D-040): Core sets its log sinks, its panel owner and the input lock ONCE.
+            // A mod moved onto Core never sets them itself (the last writer would take over). Debug lines only with the debug switch on.
             Kydl.Ui.UiLog.VerboseSink = s => ModLog.Verbose(s);
             Kydl.Ui.UiLog.WarnSink = s => ModLog.Warn(s);
             Kydl.Ui.UiLog.ErrorSink = s => ModLog.Error(s);
-            Kydl.Ui.UiKit.Owner = ModName;
+            Kydl.Ui.UiKit.Owner = UiOwner;               // the one UI panel object is called Kydl_UI_Root
 
             ModSettings.Bind(Config);
             _cfgWatcher = new ConfigReloader(Config);
             Loc.Register(Ui.UiText.En);       // Ui. = KydlCore.Ui (no using: its sort position depends on the mod name, dotnet format IMPORTS)
 
             Bundle = LoadBundle();
-            UiInputLock.Install(ModGuid);           // the character does not move while one of the mod's menus is open
+            ModLog.Verbose("Plugin: UI owner '" + Kydl.Ui.UiKit.Owner + "' (root object Kydl_UI_" + Kydl.Ui.UiKit.Owner + "), input lock " + (UiInputLock.Install(ModGuid) ? "installed" : "NOT installed") + " (the character does not move while a Core window is open)");
             new Harmony(ModGuid).PatchAll(Assembly.GetExecutingAssembly());
             ModLog.Verbose("Plugin: Awake finished (Harmony patches applied, mod " + (ModSettings.On ? "on" : "inert: EnableAll is false") + ", bundle " + (Bundle != null ? "loaded" : "none") + ")");
         }
