@@ -50,6 +50,17 @@ namespace KydlCore.Tests.Integration
         }
 
         [Test]
+        public void PlayerConfig_HubKeyIsGeneralF6WithADescription()
+        {
+            var src = File.ReadAllText(Path.Combine(TestPaths.ModDir, "src", "ModSettings.cs"));
+
+            // D-015: the KY hub opens on F6, a drop-down of KeyCode values (the range), a player can change it, None switches it off
+            var m = Regex.Match(src, @"HubKey\s*=\s*c\.Bind\(\s*""General""\s*,\s*""HubKey""\s*,\s*KeyCode\.F6\s*,\s*""(?<d>[^""]{20,})""");
+            Assert.That(m.Success, Is.True, "[General] HubKey must be bound as a KeyCode entry with the default F6 and a description");
+            Assert.That(m.Groups["d"].Value, Does.Contain("None"), "the description must say that None = no key");
+        }
+
+        [Test]
         public void ConfigDescriptions_DoNotTalkAboutOldVersions()
         {
             var src = File.ReadAllText(Path.Combine(TestPaths.ModDir, "src", "ModSettings.cs"));

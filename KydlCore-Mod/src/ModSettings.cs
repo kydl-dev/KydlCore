@@ -1,5 +1,6 @@
 using BepInEx.Configuration;
 using Kydl.Common;
+using UnityEngine;
 
 namespace KydlCore
 {
@@ -15,6 +16,10 @@ namespace KydlCore
     {
         // [General]
         public static ConfigEntry<bool> EnableAll;
+        /// Opens / closes the KY hub (D-015, PLAN T-030). F6 is not bound by the game: a scan of the game assemblies for KeyCode.F6 (287) finds it
+        /// only in ZInput's KeyCode -> InputSystem.Key conversion table, never as a button or a Input.GetKey call (2026-10-30). Read where it is
+        /// used (PROJECT_RULES 17), never cached.
+        public static ConfigEntry<KeyCode> HubKey;
         // [DebugLog]
         public static ConfigEntry<bool> DebugLog;
 
@@ -32,6 +37,8 @@ namespace KydlCore
 
             EnableAll = c.Bind("General", "EnableAll", true,
                 "Switches the whole mod on / off while playing. Off: no effects and no menus from this mod; things already built stay in the world.");
+            HubKey = c.Bind("General", "HubKey", KeyCode.F6,
+                "Opens / closes the KY hub, the one menu of every KydlDev mod. Pick any key from the list; None = the hub has no key. Takes effect at once.");
             DebugLog = c.Bind("DebugLog", "Enable", false,
                 "Writes detailed lines about everything the mod does to the BepInEx log (for bug reports). Leave off while playing normally.");
 
@@ -39,8 +46,9 @@ namespace KydlCore
             ConfigTools.DropRemoved(c);
 
             EnableAll.SettingChanged += (s, e) => ModLog.Info("Config: EnableAll = " + EnableAll.Value + (EnableAll.Value ? ", the mod is on" : ", the mod is inert (no effects or menus)"));
-            ModLog.Verbose("Config: bound (EnableAll " + EnableAll.Value + ", debug log " + DebugLog.Value + ")");
-            return EnableAll != null && DebugLog != null;
+            HubKey.SettingChanged += (s, e) => ModLog.Info("Config: HubKey = " + HubKey.Value + " (read on every key check, so the change applies at once)");
+            ModLog.Verbose("Config: bound (EnableAll " + EnableAll.Value + ", hub key " + HubKey.Value + ", debug log " + DebugLog.Value + ")");
+            return EnableAll != null && HubKey != null && DebugLog != null;
         }
     }
 }
