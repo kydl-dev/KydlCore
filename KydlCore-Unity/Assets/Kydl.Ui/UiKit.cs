@@ -23,27 +23,34 @@ namespace Kydl.Ui
 #endif
     {
         // palette (from FollowPlayer's Theme; dim text a little brighter: the user found grey notes hard to read)
-        internal static readonly Color Panel = new(0.075f, 0.058f, 0.043f, 0.96f), PanelLight = new(0.125f, 0.098f, 0.072f, 0.96f);
-        internal static readonly Color PanelHover = new(0.190f, 0.145f, 0.098f, 0.96f), Border = new(0.45f, 0.33f, 0.17f, 0.95f);
-        internal static readonly Color Gold = new(1.00f, 0.72f, 0.36f, 1f), GoldDim = new(0.72f, 0.52f, 0.26f, 1f);
-        internal static readonly Color Text = new(0.92f, 0.87f, 0.77f, 1f), TextDim = new(0.70f, 0.64f, 0.55f, 1f);
-        internal static readonly Color Track = new(0.03f, 0.025f, 0.02f, 1f), OnDark = new(0.10f, 0.07f, 0.03f, 1f);
+        /// <summary>Window / panel background (Panel) and the lighter row and button background (PanelLight).</summary>
+        public static readonly Color Panel = new(0.075f, 0.058f, 0.043f, 0.96f), PanelLight = new(0.125f, 0.098f, 0.072f, 0.96f);
+        /// <summary>Hovered row or button background (PanelHover) and the brown line colour of frames and separators (Border).</summary>
+        public static readonly Color PanelHover = new(0.190f, 0.145f, 0.098f, 0.96f), Border = new(0.45f, 0.33f, 0.17f, 0.95f);
+        /// <summary>The gold accent (titles, values, active parts) and its darker form (primary button, thumbs).</summary>
+        public static readonly Color Gold = new(1.00f, 0.72f, 0.36f, 1f), GoldDim = new(0.72f, 0.52f, 0.26f, 1f);
+        /// <summary>Normal text and the dimmer text of notes and hints.</summary>
+        public static readonly Color Text = new(0.92f, 0.87f, 0.77f, 1f), TextDim = new(0.70f, 0.64f, 0.55f, 1f);
+        /// <summary>The very dark background of input fields and slider tracks (Track) and dark text on gold (OnDark).</summary>
+        public static readonly Color Track = new(0.03f, 0.025f, 0.02f, 1f), OnDark = new(0.10f, 0.07f, 0.03f, 1f);
 
         // sizes (FollowPlayer: 12 - 26; user: "a bit bigger")
-        internal const int TitleSize = 34, SectionSize = 24, FontSize = 22, ButtonSize = 21, SmallSize = 18;
+        internal const int TitleSize = 34;
+        /// <summary>Text sizes in px at the 1080p reference: section titles, normal text, button text, small text and notes.</summary>
+        public const int SectionSize = 24, FontSize = 22, ButtonSize = 21, SmallSize = 18;
 
         /// Who owns this panel (the mod's name: GameObject name and log lines). Set it before the first window (Plugin.Awake); default = the DLL name.
-        internal static string Owner = typeof(UiKit).Assembly.GetName().Name;
+        public static string Owner = typeof(UiKit).Assembly.GetName().Name;
 
         static UIDocument _doc;
         static Font _bodyFont, _titleFont;
         static FontAsset _bodyAsset, _titleAsset;
 
         /// The panel's settings (the Unity preview renders the panel into a texture through them).
-        internal static PanelSettings Settings { get; private set; }
+        public static PanelSettings Settings { get; private set; }
 
         /// The full-screen layer every window is added to (picking ignored). null when UI Toolkit failed.
-        internal static VisualElement Root
+        public static VisualElement Root
         {
             get
             {
@@ -144,24 +151,27 @@ namespace Kydl.Ui
         }
 
         // --- style helpers ------------------------------------------------------------------------------------------------------
-        internal static void Radius(VisualElement e, float r)
+        /// <summary>Rounds all four corners of an element with radius r (px).</summary>
+        public static void Radius(VisualElement e, float r)
         {
             e.style.borderTopLeftRadius = r; e.style.borderTopRightRadius = r; e.style.borderBottomLeftRadius = r; e.style.borderBottomRightRadius = r;
         }
 
-        internal static void Borders(VisualElement e, float w, Color c)
+        /// <summary>Gives an element a border of width w (px) and colour c on all four sides.</summary>
+        public static void Borders(VisualElement e, float w, Color c)
         {
             e.style.borderTopWidth = w; e.style.borderRightWidth = w; e.style.borderBottomWidth = w; e.style.borderLeftWidth = w;
             e.style.borderTopColor = c; e.style.borderRightColor = c; e.style.borderBottomColor = c; e.style.borderLeftColor = c;
         }
 
-        internal static void Pad(VisualElement e, float v, float h)
+        /// <summary>Pads an element: v px above and below, h px left and right.</summary>
+        public static void Pad(VisualElement e, float v, float h)
         {
             e.style.paddingTop = v; e.style.paddingBottom = v; e.style.paddingLeft = h; e.style.paddingRight = h;
         }
 
-        /// A short colour / position fade, like FollowPlayer's buttons and switches.
-        internal static void Fade(VisualElement e, params string[] props)
+        /// <summary>A short colour / position fade (0.12 s) on the named style properties, like FollowPlayer's buttons and switches.</summary>
+        public static void Fade(VisualElement e, params string[] props)
         {
             var names = new List<StylePropertyName>();
             foreach (var p in props) names.Add(new StylePropertyName(p));
@@ -169,7 +179,8 @@ namespace Kydl.Ui
             e.style.transitionDuration = new List<TimeValue> { new TimeValue(0.12f, TimeUnit.Second) };
         }
 
-        internal static Label Label(string text, float size, Color color, bool title = false)
+        /// <summary>A text label (not clickable) with a size and colour; 	itle = the title font.</summary>
+        public static Label Label(string text, float size, Color color, bool title = false)
         {
             var l = new Label(text);
             l.pickingMode = PickingMode.Ignore;
@@ -181,7 +192,7 @@ namespace Kydl.Ui
         // --- window ---------------------------------------------------------------------------------------------------------------
         /// A movable window (drag the title bar): fixed 70% of the screen high (taller content scrolls), 760 wide (at most 60%), its right side
         /// 5% from the right screen edge (user: so the sign stays visible while it is edited).
-        internal static VisualElement Window(string title, string footer, System.Action onClose, out UiScroll body)
+        public static VisualElement Window(string title, string footer, System.Action onClose, out UiScroll body)
         {
             var w = new VisualElement { name = "kydl-window" };
             w.style.position = Position.Absolute;
