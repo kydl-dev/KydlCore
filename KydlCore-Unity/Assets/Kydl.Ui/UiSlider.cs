@@ -59,7 +59,7 @@ namespace Kydl.Ui
             _input.style.width = 90; _input.style.flexShrink = 0;
             _input.style.marginLeft = 0; _input.style.marginRight = 0; _input.style.marginTop = 0; _input.style.marginBottom = 0;
             var inner = _input.Q(className: TextField.inputUssClassName) ?? _input;
-            inner.style.backgroundColor = UiKit.Track; inner.style.color = UiKit.Gold; inner.style.fontSize = UiKit.SmallSize + 1;
+            inner.style.backgroundColor = UiKit.Track; inner.style.color = UiKit.ValueColor; inner.style.fontSize = UiKit.SmallSize + 1;
             UiKit.Borders(inner, 1, UiKit.Border); UiKit.Radius(inner, 4); UiKit.Pad(inner, 5, 8);
             _input.RegisterCallback<FocusInEvent>(e => { _editing = true; UiKit.Borders(inner, 1, UiKit.Gold); });
             _input.RegisterCallback<FocusOutEvent>(e => { _editing = false; UiKit.Borders(inner, 1, UiKit.Border); Commit(); });

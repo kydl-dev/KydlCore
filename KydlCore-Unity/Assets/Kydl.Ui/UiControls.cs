@@ -39,7 +39,7 @@ namespace Kydl.Ui
         public static Button Field(string text, Action onClick)
         {
             var b = new Button(() => { UiLog.Verbose("Ui: field '" + text + "' opened"); onClick?.Invoke(); }) { text = text };
-            b.style.backgroundColor = UiKit.Track; b.style.color = UiKit.Gold; b.style.fontSize = UiKit.FontSize;
+            b.style.backgroundColor = UiKit.Track; b.style.color = UiKit.ValueColor; b.style.fontSize = UiKit.FontSize;
             UiKit.Borders(b, 1, UiKit.Border); UiKit.Radius(b, 4); UiKit.Pad(b, 5, 10);
             b.style.unityTextAlign = TextAnchor.MiddleLeft;
             b.style.flexShrink = 0; b.style.marginLeft = 0; b.style.marginRight = 0;
@@ -54,7 +54,7 @@ namespace Kydl.Ui
         public static VisualElement Heading(string text)
         {
             var s = new VisualElement(); s.style.flexShrink = 0; s.style.marginTop = 16; s.style.marginBottom = 6;
-            var head = UiKit.Label(text.ToUpperInvariant(), UiKit.SectionSize, UiKit.Gold, true);
+            var head = UiKit.Label(text.ToUpperInvariant(), UiKit.SectionSize, UiKit.NameColor, true);
             head.style.letterSpacing = 1.5f;
             s.Add(head);
             var line = new VisualElement(); line.style.height = 1; line.style.backgroundColor = UiKit.Border; line.style.marginTop = 4;
@@ -76,7 +76,7 @@ namespace Kydl.Ui
             var r = new VisualElement();
             r.style.flexDirection = FlexDirection.Row; r.style.alignItems = Align.Center; r.style.flexShrink = 0;
             r.style.marginTop = 4; r.style.marginBottom = 4;
-            var l = UiKit.Label(label, UiKit.FontSize, UiKit.Text); l.style.width = 170; l.style.flexShrink = 0;
+            var l = UiKit.Label(label, UiKit.NameSize, UiKit.NameColor); l.style.width = 170; l.style.flexShrink = 0;
             r.Add(l);
             control.style.flexGrow = 1; control.style.flexShrink = 1;
             r.Add(control);
@@ -106,7 +106,7 @@ namespace Kydl.Ui
         static void StyleInput(TextField f, int size)
         {
             var input = f.Q(className: UnityEngine.UIElements.TextField.inputUssClassName) ?? f;
-            input.style.backgroundColor = UiKit.Track; input.style.color = UiKit.Gold; input.style.fontSize = size;
+            input.style.backgroundColor = UiKit.Track; input.style.color = UiKit.ValueColor; input.style.fontSize = size;
             UiKit.Borders(input, 1, UiKit.Border); UiKit.Radius(input, 4); UiKit.Pad(input, 5, 8);
             input.style.unityTextAlign = TextAnchor.MiddleLeft;
             f.RegisterCallback<FocusInEvent>(e => UiKit.Borders(input, 1, UiKit.Gold));
@@ -131,7 +131,7 @@ namespace Kydl.Ui
             UiKit.Radius(knob, 8); UiKit.Fade(knob, "left", "background-color");
             sw.Add(knob);
             row.Add(sw);
-            row.Add(UiKit.Label(text, UiKit.FontSize, UiKit.Text));
+            row.Add(UiKit.Label(text, UiKit.NameSize, UiKit.NameColor));
 
             void Show()
             {
@@ -241,7 +241,7 @@ namespace Kydl.Ui
                 foreach (var o in options)
                 {
                     string opt = o;
-                    var item = UiKit.Label(label(opt), UiKit.FontSize, opt == cur ? UiKit.Gold : UiKit.Text);
+                    var item = UiKit.Label(label(opt), UiKit.FontSize, opt == cur ? UiKit.ValueColor : UiKit.Text);
                     item.pickingMode = PickingMode.Position;
                     item.style.height = ItemHeight - 4f; item.style.unityTextAlign = TextAnchor.MiddleLeft; item.style.flexShrink = 0;
                     UiKit.Pad(item, 0, 10); UiKit.Radius(item, 4); UiKit.Fade(item, "background-color");

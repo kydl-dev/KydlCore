@@ -21,8 +21,8 @@ namespace KydlCore.Tests.Integration
             { Ui + "UiControls", new[] { "Button", "Field", "Heading", "Note", "Row", "Line", "TextField", "Toggle", "Slider", "Dropdown", "ColorPicker" } },
             { Ui + "UiKit", new[]
                 {
-                    "Panel", "PanelLight", "PanelHover", "Border", "Gold", "GoldDim", "Text", "TextDim", "Track", "OnDark",
-                    "SectionSize", "FontSize", "ButtonSize", "SmallSize", "Owner", "Settings", "Root",
+                    "Panel", "PanelLight", "PanelHover", "Border", "Gold", "GoldDim", "Text", "TextDim", "Track", "OnDark", "NameColor", "ValueColor",
+                    "SectionSize", "FontSize", "ButtonSize", "SmallSize", "NameSize", "Owner", "Settings", "Root",
                     "Radius", "Borders", "Pad", "Fade", "Label", "Window"
                 } },
             { Ui + "UiScroll", new[] { ".ctor", "Root", "Content", "ScrollBy", "ScrollTo" } },

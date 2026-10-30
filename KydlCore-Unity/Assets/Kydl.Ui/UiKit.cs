@@ -27,17 +27,33 @@ namespace Kydl.Ui
         public static readonly Color Panel = new(0.075f, 0.058f, 0.043f, 0.96f), PanelLight = new(0.125f, 0.098f, 0.072f, 0.96f);
         /// <summary>Hovered row or button background (PanelHover) and the brown line colour of frames and separators (Border).</summary>
         public static readonly Color PanelHover = new(0.190f, 0.145f, 0.098f, 0.96f), Border = new(0.45f, 0.33f, 0.17f, 0.95f);
-        /// <summary>The gold accent (titles, values, active parts) and its darker form (primary button, thumbs).</summary>
+        /// <summary>The gold accent (values, active parts) and its darker form (primary button, thumbs). KydlCore build: #DAA520 (D-030 / D-032), the others keep the old orange-gold.</summary>
+#if KYDL_CORE_PUBLIC
+        public static readonly Color Gold = new(218 / 255f, 165 / 255f, 32 / 255f, 1f), GoldDim = new(157 / 255f, 119 / 255f, 23 / 255f, 1f);
+#else
         public static readonly Color Gold = new(1.00f, 0.72f, 0.36f, 1f), GoldDim = new(0.72f, 0.52f, 0.26f, 1f);
+#endif
         /// <summary>Normal text and the dimmer text of notes and hints.</summary>
         public static readonly Color Text = new(0.92f, 0.87f, 0.77f, 1f), TextDim = new(0.70f, 0.64f, 0.55f, 1f);
         /// <summary>The very dark background of input fields and slider tracks (Track) and dark text on gold (OnDark).</summary>
         public static readonly Color Track = new(0.03f, 0.025f, 0.02f, 1f), OnDark = new(0.10f, 0.07f, 0.03f, 1f);
+        /// <summary>Colour of the NAMES (tabs, mods, settings, section titles) and of the VALUES (numbers, switches, fields) - D-032: a clear split between names and values with few colours. KydlCore build: names #F17778, values = Gold (#DAA520); the others keep Text / Gold as before.</summary>
+#if KYDL_CORE_PUBLIC
+        public static readonly Color NameColor = new(241 / 255f, 119 / 255f, 120 / 255f, 1f), ValueColor = Gold;
+#else
+        public static readonly Color NameColor = Text, ValueColor = Gold;
+#endif
 
         // sizes (FollowPlayer: 12 - 26; user: "a bit bigger")
         internal const int TitleSize = 34;
         /// <summary>Text sizes in px at the 1080p reference: section titles, normal text, button text, small text and notes.</summary>
         public const int SectionSize = 24, FontSize = 22, ButtonSize = 21, SmallSize = 18;
+        /// <summary>Text size of the NAMES (setting and switch names). KydlCore build: a little bigger than normal text instead of bold (D-043); the others = FontSize.</summary>
+#if KYDL_CORE_PUBLIC
+        public const int NameSize = FontSize + 2;
+#else
+        public const int NameSize = FontSize;
+#endif
 
         /// Who owns this panel (the mod's name: GameObject name and log lines). Set it before the first window (Plugin.Awake); default = the DLL name.
         public static string Owner = typeof(UiKit).Assembly.GetName().Name;
