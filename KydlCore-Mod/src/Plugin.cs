@@ -48,6 +48,7 @@ namespace KydlCore
             Loc.Register(Ui.UiText.En);       // Ui. = KydlCore.Ui (no using: its sort position depends on the mod name, dotnet format IMPORTS)
 
             KyItems.Init();                    // the user's items / pieces registry reads the game when Jotunn has registered them (T-040)
+            KyItemsTab.Init();                 // KydlCore's own hub tabs: Settings, and KY-Items while the registry has entries (T-041)
             Bundle = LoadBundle();
             ModLog.Verbose("Plugin: UI owner '" + Kydl.Ui.UiKit.Owner + "' (root object Kydl_UI_" + Kydl.Ui.UiKit.Owner + "), input lock " + (UiInputLock.Install(ModGuid) ? "installed" : "NOT installed") + " (the character does not move while a Core window is open)");
             new Harmony(ModGuid).PatchAll(Assembly.GetExecutingAssembly());

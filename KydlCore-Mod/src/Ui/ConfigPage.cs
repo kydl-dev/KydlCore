@@ -148,7 +148,7 @@ namespace KydlCore.Ui
         }
 
         // Makes every text of the page smaller by FontScale (the kit's controls set their sizes inline, so the inline value is scaled).
-        static void ScaleFonts(VisualElement root)
+        internal static void ScaleFonts(VisualElement root)
         {
             root.Query<VisualElement>().ForEach(e =>
             {
