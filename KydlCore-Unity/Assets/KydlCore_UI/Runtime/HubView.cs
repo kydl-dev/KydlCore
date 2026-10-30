@@ -19,10 +19,11 @@ namespace KydlCore.Ui
     /// </summary>
     internal sealed class HubView : IDisposable
     {
-        const float HaloAlpha = 0.22f;        // opacity of the gold halo around the selected tab
-        const float Lift = 3f;                // how much higher the selected tab stands
+        static readonly Color NameGold = new Color32(0xF3, 0xAD, 0x54, 0xFF);        // #F3AD54: title, mod names, settings names
+        static readonly Color SelectedFill = new Color32(0x0F, 0x2C, 0x5E, 0xFF); // #0F2C5E: background of the selected tab
+        const float UnderW = 3f;              // the bottom border of a selected / hovered tab
         const float TabEdge = 6f;             // space between the window edge and the first tab
-        const float HaloPad = 2f, BorderW = 2f, PadH = 14f;     // halo ring, tab border, side padding (the buttons' 14)
+        const float HaloPad = 2f, BorderW = 2f, PadH = 14f;     // space kept for the tab edge (the names start at TextX), side padding (the buttons' 14)
         const float TextX = TabEdge + HaloPad + BorderW + PadH; // where the first tab name starts = where the title and the page start
 
         readonly HubModel _model;
@@ -43,6 +44,8 @@ namespace KydlCore.Ui
             _model = model; _text = text; _page = page;
             Root = UiKit.Window(text("kydlcore_hub_title"), "", onClose, out _body);
             var head = Root[0];                                    // the title bar of UiKit.Window: slimmer, and its text on the same line as the tabs
+            var titleLabel = head.Q<Label>();                      // the window title in the same colour as the tab names
+            if (titleLabel != null) titleLabel.style.color = NameGold;
             head.style.paddingTop = 6; head.style.paddingBottom = 6; head.style.paddingLeft = TextX;
             _body.Content.style.paddingLeft = TextX;
 
@@ -115,33 +118,24 @@ namespace KydlCore.Ui
             UiLog.Verbose("HubView: page " + (mod ?? "(no mod)") + " / " + (tab ?? "-") + (page != null ? " built" : " empty"));
         }
 
-        // One tab: a halo ring (selected only) around a button. The unselected ones are lowered by `Lift`, so the selected one stands out.
-        // `boxed` = a settings tab (row 2): gold name, red button border. Not boxed = a mod name (row 1): red name, no border until hovered.
+        // One tab (user 2026-10-30, D-059): no border at rest, names in NameGold; the selected tab has a red bottom border and the blue fill; a hovered
+        // tab shows only the red bottom border. Row 1 and row 2 look alike, only the size differs.
         static VisualElement Tab(string title, bool selected, int size, bool boxed, Action pick)
         {
-            var halo = new VisualElement();
-            halo.style.paddingLeft = HaloPad; halo.style.paddingRight = HaloPad; halo.style.paddingTop = HaloPad; halo.style.paddingBottom = HaloPad;
-            halo.style.marginRight = 3; halo.style.marginTop = selected ? 0 : Lift; halo.style.marginBottom = selected ? Lift : 0;
-            halo.style.maxWidth = Length.Percent(100f); halo.style.flexShrink = 1;
-            UiKit.Radius(halo, 10);
-            halo.style.backgroundColor = selected ? new Color(UiKit.Gold.r, UiKit.Gold.g, UiKit.Gold.b, HaloAlpha) : Color.clear;
-
             var b = new Button(pick) { text = title };
-            b.style.fontSize = size; b.style.color = boxed ? UiKit.Gold : UiKit.TabColor; b.style.flexShrink = 1; b.style.minWidth = 0;
+            b.style.fontSize = size; b.style.color = NameGold; b.style.flexShrink = 1; b.style.minWidth = 0; b.style.maxWidth = Length.Percent(100f);
             b.style.overflow = Overflow.Hidden; b.style.textOverflow = TextOverflow.Ellipsis; b.style.whiteSpace = WhiteSpace.NoWrap;
-            b.style.marginLeft = 0; b.style.marginRight = 0; b.style.marginTop = 0; b.style.marginBottom = 0;
-            Color fill = selected ? UiKit.PanelLight : Color.clear;
-            b.style.backgroundColor = fill;
-            UiKit.Pad(b, 6, PadH); UiKit.Radius(b, 7);
-            Color rest = selected ? UiKit.Gold : boxed ? UiKit.TabColor : Color.clear;
-            UiKit.Borders(b, BorderW, rest);
+            b.style.marginLeft = 0; b.style.marginRight = 6; b.style.marginTop = 3; b.style.marginBottom = 3;
+            b.style.backgroundColor = selected ? SelectedFill : Color.clear;
+            UiKit.Pad(b, 6, PadH); UiKit.Radius(b, 0);
+            UiKit.Borders(b, 0, Color.clear);
+            b.style.borderBottomWidth = UnderW;
+            b.style.borderBottomColor = selected ? UiKit.TabColor : Color.clear;
             if (!selected)
             {
-                b.RegisterCallback<PointerEnterEvent>(e => { UiKit.Borders(b, BorderW, UiKit.TabColor); b.style.backgroundColor = UiKit.PanelHover; });
-                b.RegisterCallback<PointerLeaveEvent>(e => { UiKit.Borders(b, BorderW, rest); b.style.backgroundColor = fill; });
+                b.RegisterCallback<PointerEnterEvent>(e => b.style.borderBottomColor = UiKit.TabColor);
+                b.RegisterCallback<PointerLeaveEvent>(e => b.style.borderBottomColor = Color.clear);
             }
-            halo.Add(b);
-            return halo;
-        }
-    }
+            return b;
+        }    }
 }

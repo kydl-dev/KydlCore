@@ -16,7 +16,7 @@ namespace KydlCore.Ui
     internal sealed class TabRows
     {
         const float RowTolerance = 6f;        // tabs on one line differ by the lift of the selected one (3 px)
-        const float BarW = 4f, PagerW = 28f, Gap = 6f;
+        const float BarW = 4f, PagerW = 28f, Gap = 6f, Square = 26f;
 
         readonly VisualElement _view = new VisualElement { name = "kydl-tabrows-view" };
         readonly VisualElement _content = new VisualElement { name = "kydl-tabrows-content" };
@@ -51,9 +51,9 @@ namespace KydlCore.Ui
             _pager.style.width = PagerW; _pager.style.marginLeft = Gap; _pager.style.alignItems = Align.Center; _pager.style.display = DisplayStyle.None; _pager.style.flexShrink = 0;
             _number = UiKit.Label("1", UiKit.SmallSize, UiKit.TextDim);
             _number.style.unityTextAlign = TextAnchor.MiddleCenter;
-            _pager.Add(Arrow("▲", -1));
+            _pager.Add(Arrow(-1));
             _pager.Add(_number);
-            _pager.Add(Arrow("▼", 1));
+            _pager.Add(Arrow(1));
 
             Root.Add(_view); Root.Add(_bar); Root.Add(_pager);
             _content.RegisterCallback<GeometryChangedEvent>(e => Reflow());
@@ -134,12 +134,31 @@ namespace KydlCore.Ui
             e.StopPropagation();
         }
 
-        VisualElement Arrow(string glyph, int delta)
+        static void DrawTriangle(MeshGenerationContext ctx, Rect r, bool up)
         {
-            var b = new Button(() => Move(delta)) { text = glyph };
+            if (r.width < 1f || r.height < 1f) return;
+            float w = 12f, h = 8f, cx = r.width * 0.5f, cy = r.height * 0.5f;
+            var p = ctx.painter2D;
+            p.fillColor = UiKit.Gold;
+            p.BeginPath();
+            if (up) { p.MoveTo(new Vector2(cx - w / 2f, cy + h / 2f)); p.LineTo(new Vector2(cx + w / 2f, cy + h / 2f)); p.LineTo(new Vector2(cx, cy - h / 2f)); }
+            else { p.MoveTo(new Vector2(cx - w / 2f, cy - h / 2f)); p.LineTo(new Vector2(cx + w / 2f, cy - h / 2f)); p.LineTo(new Vector2(cx, cy + h / 2f)); }
+            p.ClosePath();
+            p.Fill();
+        }
+
+        VisualElement Arrow(int delta)
+        {
+            var b = new Button(() => Move(delta));
             b.style.fontSize = UiKit.SmallSize; b.style.color = UiKit.Gold; b.style.backgroundColor = Color.clear; b.style.flexShrink = 0;
             b.style.marginLeft = 0; b.style.marginRight = 0; b.style.marginTop = 0; b.style.marginBottom = 0;
-            UiKit.Pad(b, 1, 6); UiKit.Radius(b, 4); UiKit.Borders(b, 1, UiKit.Border);
+            b.style.width = Square; b.style.height = Square;                  // a square, the glyph exactly in its middle
+            b.style.justifyContent = Justify.Center; b.style.alignItems = Align.Center;
+            var tri = new VisualElement { pickingMode = PickingMode.Ignore };           // a drawn triangle: exactly in the middle, whatever the font does
+            tri.style.position = Position.Absolute; tri.style.left = 0; tri.style.right = 0; tri.style.top = 0; tri.style.bottom = 0;
+            tri.generateVisualContent += ctx => DrawTriangle(ctx, tri.contentRect, delta < 0);
+            b.Add(tri);
+            UiKit.Pad(b, 0, 0); UiKit.Radius(b, 4); UiKit.Borders(b, 1, UiKit.Border);
             b.RegisterCallback<PointerEnterEvent>(e => { UiKit.Borders(b, 1, UiKit.TabColor); b.style.backgroundColor = UiKit.PanelHover; });
             b.RegisterCallback<PointerLeaveEvent>(e => { UiKit.Borders(b, 1, UiKit.Border); b.style.backgroundColor = Color.clear; });
             return b;
