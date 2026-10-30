@@ -103,6 +103,7 @@ namespace KydlCore.Ui
             box.style.flexShrink = 0;
             bool locked = ConfigControlMap.IsAdminOnly(Tags(entry)) && !MayEditAdminOnly();
             VisualElement control = locked ? LockedValue(entry) : Make(entry, key);
+            if (control.name != "kydl-toggle") Compact(control);
             box.Add(control.name == "kydl-toggle" ? control : Row(key, control));
             if (locked) box.Add(UiControls.Note("Admin only: only the host / an admin can change this."));
             string text = entry.Description == null ? null : entry.Description.Description;
@@ -127,6 +128,23 @@ namespace KydlCore.Ui
             if (!stretch) { control.style.alignSelf = Align.FlexStart; control.style.marginLeft = StyleKeyword.Auto; }   // value fields sit at the right edge (D-062)
             r.Add(control);
             return r;
+        }
+
+        // The text in the value fields (number / text box, drop-down, colour editor) has the size of the tips under the settings, with a small margin
+        // inside the box (user 2026-10-30, D-063). The page scale is applied afterwards, so SmallSize here = the tips' size.
+        static void Compact(VisualElement control)
+        {
+            control.Query<VisualElement>().ForEach(e =>
+            {
+                if (e.style.fontSize.keyword == StyleKeyword.Undefined && e.style.fontSize.value.value > 0f) e.style.fontSize = UiKit.SmallSize;
+            });
+            control.Query<TextField>().ForEach(f =>
+            {
+                VisualElement input = f.Q(className: TextField.inputUssClassName) ?? f;
+                UiKit.Pad(input, 1, 5);
+                input.style.fontSize = UiKit.SmallSize;
+            });
+            control.Query<Button>().ForEach(b => UiKit.Pad(b, 1, 5));
         }
 
         // Makes every text of the page smaller by FontScale (the kit's controls set their sizes inline, so the inline value is scaled).
@@ -181,7 +199,7 @@ namespace KydlCore.Ui
             slider.name = "kydl-slider";
             slider.style.minHeight = 24;
             var input = slider.Q<TextField>();                                      // the number box: narrower and lower (user 2026-10-30, D-061)
-            if (input != null) { input.style.width = 46; input.style.height = 20; }
+            if (input != null) input.style.width = 46;
             return slider;
         }
 
