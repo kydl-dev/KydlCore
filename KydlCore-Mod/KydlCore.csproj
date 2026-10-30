@@ -13,6 +13,8 @@
     <PackageId>KydlCore</PackageId>
     <!-- AssetBundle built by the Unity project (Valheim > Build AssetBundles); embedded into the DLL when Assets\kydlcore exists -->
     <BundleName>kydlcore</BundleName>
+    <!-- D-040: KydlCore is the home of the UI kit; its Kydl.Ui types (and the members mods use) are public. The same shared source is internal in every mod that still compiles its own copy (D-005) -->
+    <DefineConstants>$(DefineConstants);KYDL_CORE_PUBLIC</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
