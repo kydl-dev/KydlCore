@@ -18,7 +18,12 @@ namespace Kydl.Ui
 #endif
     {
         // --- button ---------------------------------------------------------------------------------------------------------
-        /// A gold (primary) or dark push button; logs every press.
+#if KYDL_CORE_PUBLIC
+        const float PressDim = 0.35f;          // share of black mixed in while the button is pressed (D-048)
+        const long PressFeedbackMs = 120;      // the dimmed look stays this long after the release, so a quick click is still seen
+#endif
+
+        /// A gold (primary) or dark push button; logs every press. The KydlCore build also dims it while it is pressed and draws a thin red border while the pointer is over it (D-048).
         public static Button Button(string text, Action onClick, bool primary = false)
         {
             var b = new Button(() => { UiLog.Verbose("Ui: button '" + text + "' pressed"); onClick?.Invoke(); }) { text = text };
@@ -30,8 +35,21 @@ namespace Kydl.Ui
             b.style.flexShrink = 0;
             b.style.marginLeft = 3; b.style.marginRight = 3; b.style.marginTop = 3; b.style.marginBottom = 3;
             UiKit.Fade(b, "background-color");
+#if KYDL_CORE_PUBLIC
+            bool hovered = false, pressed = false;
+            Action show = () =>
+            {
+                b.style.backgroundColor = pressed ? Color.Lerp(hot, Color.black, PressDim) : hovered ? hot : bg;
+                UiKit.Borders(b, 1, hovered ? UiKit.TabColor : UiKit.Border);
+            };
+            b.RegisterCallback<PointerEnterEvent>(e => { hovered = true; show(); });
+            b.RegisterCallback<PointerLeaveEvent>(e => { hovered = false; pressed = false; show(); });
+            b.RegisterCallback<PointerDownEvent>(e => { pressed = true; show(); UiLog.Verbose("Ui: button '" + text + "' down, dimmed " + (PressDim * 100f).ToString("0") + "% for at least " + PressFeedbackMs + " ms"); });
+            b.RegisterCallback<PointerUpEvent>(e => b.schedule.Execute(() => { pressed = false; show(); }).StartingIn(PressFeedbackMs));
+#else
             b.RegisterCallback<PointerEnterEvent>(e => b.style.backgroundColor = hot);
             b.RegisterCallback<PointerLeaveEvent>(e => b.style.backgroundColor = bg);
+#endif
             return b;
         }
 

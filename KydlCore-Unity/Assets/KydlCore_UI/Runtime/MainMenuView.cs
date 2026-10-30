@@ -23,7 +23,6 @@ namespace KydlCore.Ui
             c.Add(UiControls.Note(text("kydlcore_menu_note")));
             c.Add(UiControls.Toggle(text("kydlcore_menu_example_switch"), true, on => UiLog.Verbose("MainMenuView: example switch " + (on ? "on" : "off"))));
             c.Add(UiControls.Row(text("kydlcore_menu_example_slider"), UiControls.Slider(0f, 10f, 5f, "0.0", v => UiLog.Verbose("MainMenuView: example slider " + v))));
-            c.Add(UiControls.Line(UiControls.Button(text("kydlcore_menu_close"), onClose, true)));
             UiLog.Verbose("MainMenuView: built");
             return w;
         }

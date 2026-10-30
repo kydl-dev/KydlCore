@@ -37,11 +37,17 @@ namespace Kydl.Ui
         public static readonly Color Text = new(0.92f, 0.87f, 0.77f, 1f), TextDim = new(0.70f, 0.64f, 0.55f, 1f);
         /// <summary>The very dark background of input fields and slider tracks (Track) and dark text on gold (OnDark).</summary>
         public static readonly Color Track = new(0.03f, 0.025f, 0.02f, 1f), OnDark = new(0.10f, 0.07f, 0.03f, 1f);
-        /// <summary>Colour of the NAMES (tabs, mods, settings, section titles) and of the VALUES (numbers, switches, fields) - D-032: a clear split between names and values with few colours. KydlCore build: names #F17778, values = Gold (#DAA520); the others keep Text / Gold as before.</summary>
+        /// <summary>Colour of the NAMES (tabs, mods, settings, section titles) and of the VALUES (numbers, switches, fields) - D-032: a clear split between names and values with few colours. KydlCore build: setting names #FCF5ED (D-048), values = Gold (#DAA520); the others keep Text / Gold as before.</summary>
 #if KYDL_CORE_PUBLIC
-        public static readonly Color NameColor = new(241 / 255f, 119 / 255f, 120 / 255f, 1f), ValueColor = Gold;
+        public static readonly Color NameColor = new(252 / 255f, 245 / 255f, 237 / 255f, 1f), ValueColor = Gold;
 #else
         public static readonly Color NameColor = Text, ValueColor = Gold;
+#endif
+        /// <summary>Colour of mod names (the window title, later the hub's mod tabs) and of settings-tab names; also the thin border of a hovered button. KydlCore build: red #DB2121 (D-048); the others keep Gold.</summary>
+#if KYDL_CORE_PUBLIC
+        public static readonly Color TabColor = new(219 / 255f, 33 / 255f, 33 / 255f, 1f);
+#else
+        public static readonly Color TabColor = Gold;
 #endif
 
         // sizes (FollowPlayer: 12 - 26; user: "a bit bigger")
@@ -53,6 +59,13 @@ namespace Kydl.Ui
         public const int NameSize = FontSize + 2;
 #else
         public const int NameSize = FontSize;
+#endif
+
+        // window height and top edge in % of the screen (the window is centred up and down); KydlCore build: 80% high (D-048), the others 70%
+#if KYDL_CORE_PUBLIC
+        const float WindowHeight = 80f, WindowTop = 10f;
+#else
+        const float WindowHeight = 70f, WindowTop = 15f;
 #endif
 
         /// Who owns this panel (the mod's name: GameObject name and log lines). Set it before the first window (Plugin.Awake); default = the DLL name.
@@ -240,16 +253,16 @@ namespace Kydl.Ui
         }
 
         // --- window ---------------------------------------------------------------------------------------------------------------
-        /// A movable window (drag the title bar): fixed 70% of the screen high (taller content scrolls), 760 wide (at most 60%), its right side
+        /// A movable window (drag the title bar): fixed 70% of the screen high (the KydlCore build: 80%, D-048; taller content scrolls), 760 wide (at most 60%), its right side
         /// 5% from the right screen edge (user: so the sign stays visible while it is edited).
         public static VisualElement Window(string title, string footer, System.Action onClose, out UiScroll body)
         {
             var w = new VisualElement { name = "kydl-window" };
             w.style.position = Position.Absolute;
             w.style.width = 760; w.style.maxWidth = Length.Percent(60);
-            w.style.height = Length.Percent(70);
-            w.style.right = Length.Percent(5); w.style.left = StyleKeyword.Auto; w.style.top = Length.Percent(15);
-            UiLog.Verbose("UiKit: window '" + title + "' opened 5% from the right edge, 15% from the top");
+            w.style.height = Length.Percent(WindowHeight);
+            w.style.right = Length.Percent(5); w.style.left = StyleKeyword.Auto; w.style.top = Length.Percent(WindowTop);
+            UiLog.Verbose("UiKit: window '" + title + "' opened 5% from the right edge, " + WindowTop.ToString("0") + "% from the top, " + WindowHeight.ToString("0") + "% of the screen high");
             w.style.backgroundColor = Panel;
             Radius(w, 8);
             Borders(w, 2, Border);
@@ -263,7 +276,11 @@ namespace Kydl.Ui
             head.style.flexShrink = 0;
             Pad(head, 12, 18);
             head.style.borderBottomWidth = 1; head.style.borderBottomColor = Border;
+#if KYDL_CORE_PUBLIC
+            var t = Label(title, TitleSize, TabColor, true);                    // the mod name as written (PascalCase), red (D-048)
+#else
             var t = Label(title.ToUpperInvariant(), TitleSize, Gold, true);
+#endif
             t.style.letterSpacing = 2f;
             head.Add(t);
             head.Add(UiControls.Button("X", onClose));
