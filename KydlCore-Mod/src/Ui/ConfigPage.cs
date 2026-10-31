@@ -59,8 +59,26 @@ namespace KydlCore.Ui
             _dirty = true;
         }
 
+        // ServerSync flips the ReadOnly tag of its entries when this player's admin state arrives or changes, without a SettingChanged event:
+        // the page notices by comparing which entries are locked now with what it drew.
+        string _lockSignature = "";
+
+        string LockSignature()
+        {
+            var sb = new System.Text.StringBuilder();
+            foreach (ConfigDefinition def in _file.Keys)
+                if (InSections(def.Section))
+                {
+                    IEnumerable<object> tags = Tags(_file[def]);
+                    sb.Append(ConfigControlMap.IsReadOnly(tags) ? '1' : '0').Append(ConfigControlMap.IsHidden(tags) ? 'h' : 's');   // a tag may change a flag while the game runs
+                }
+            return sb.ToString();
+        }
+
         void Poll()
         {
+            string sig = LockSignature();
+            if (sig != _lockSignature) _dirty = true;
             if (!_dirty) return;
             _dirty = false;
             ModLog.Verbose("ConfigPage: a setting changed outside the page, redrawing");
@@ -71,6 +89,7 @@ namespace KydlCore.Ui
         void Fill()
         {
             KeyCapture.Cancel("page redrawn");
+            _lockSignature = LockSignature();
             _root.Clear();
             var shown = new List<ConfigEntryBase>();
             foreach (ConfigDefinition def in _file.Keys)
@@ -103,11 +122,13 @@ namespace KydlCore.Ui
             string key = entry.Definition.Key;
             var box = new VisualElement();
             box.style.flexShrink = 0;
-            bool locked = ConfigControlMap.IsAdminOnly(Tags(entry)) && !MayEditAdminOnly();
+            IEnumerable<object> tags = Tags(entry);
+            bool serverLocked = ConfigControlMap.IsReadOnly(tags);              // ServerSync: this player may not change the server's value
+            bool locked = serverLocked || (ConfigControlMap.IsAdminOnly(tags) && !MayEditAdminOnly());
             VisualElement control = locked ? LockedValue(entry) : Make(entry, key);
             if (control.name != "kydl-toggle") Compact(control);
             box.Add(control.name == "kydl-toggle" ? control : Row(key, control));
-            if (locked) box.Add(UiControls.Note("Admin only: only the host / an admin can change this."));
+            if (locked) box.Add(UiControls.Note(serverLocked ? "Set by the server: only an admin can change this." : "Admin only: only the host / an admin can change this."));
             string text = entry.Description == null ? null : entry.Description.Description;
             if (!string.IsNullOrEmpty(text)) box.Add(UiControls.Note(text));
             ModLog.Verbose("ConfigPage: control for " + entry.Definition.Section + " / " + key + " (" + entry.SettingType.Name + ")" + (locked ? " locked" : ""));
