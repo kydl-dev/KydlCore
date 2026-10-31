@@ -26,7 +26,7 @@ namespace KydlCore.Tests
         public static string ProjectRoot { get { return Directory.GetParent(TestsRoot).FullName; } }
         public static string ModDir { get { return Path.Combine(ProjectRoot, "KydlCore-Mod"); } }
 
-        /// Game / BepInEx / Jotunn DLLs: the central E:\Projects\Valheim\Claude\ref. KYDL_REF_DIR overrides (e.g. the installed game's Managed folder).
+        /// Game / BepInEx / Jotunn DLLs: the central the shared reference folder. KYDL_REF_DIR overrides (e.g. the installed game's Managed folder).
         public static string RefDir { get { return Env("KYDL_REF_DIR") ?? Path.GetFullPath(Path.Combine(ProjectRoot, "..", "Claude", "ref")); } }
 
         /// The built mod (the copy in build\ is the real one). KYDL_MOD_DLL overrides.

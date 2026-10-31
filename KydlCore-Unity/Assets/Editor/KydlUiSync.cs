@@ -1,5 +1,5 @@
 // Editor-only. Keeps Assets/Kydl.Ui an exact copy of the shared UI kit of all the user's mods
-// (E:\Projects\Valheim\Claude\shared\Kydl.Ui), so the Unity preview shows the same look the mod gets when it is built
+// (the shared Kydl.Ui folder), so the Unity preview shows the same look the mod gets when it is built
 // (the mod compiles the shared files directly from Claude\shared).
 //
 //  * Runs when the Editor loads / recompiles and from the menu "Kydl > Sync shared UI kit".
@@ -13,7 +13,7 @@ namespace KydlCore.EditorTools
     [InitializeOnLoad]
     public static class KydlUiSync
     {
-        // <Main>/<Project>-Unity -> <Main> -> E:\Projects\Valheim -> Claude\shared\Kydl.Ui
+        // <Main>/<Project>-Unity -> <Main> -> the projects root -> shared Kydl.Ui
         private const string SharedRelative = "../../Claude/shared/Kydl.Ui";
         private const string TargetRelative = "Assets/Kydl.Ui";
 
