@@ -20,6 +20,7 @@ namespace KydlCore
 
         static WindowStack Stack { get { return KyWindows.Stack; } }       // the one stack of the hub and the KyUi windows
         static HubView _view;
+        static float _openedAt;                   // Time.time of the open (the close line says how long: two closes within 2.5 s are no longer 'identical' for the log's repeat filter)
         static ConfigPage _config;                // the auto Settings page that is on screen (disposed when another page replaces it)
 
         internal static bool IsOpen { get { return _view != null; } }
@@ -57,8 +58,11 @@ namespace KydlCore
             _view = new HubView(KyHub.Model, k => Loc.T(k), Page, () => Close("X"));
             root.Add(_view.Root);
             Stack.Open(WindowId);
+            _openedAt = Time.time;
             ModLog.Verbose("HubHost: opened, " + KyHub.Model.ModCount + " mod(s), page " + KyHub.Model.SelectedMod + " / " + KyHub.Model.SelectedTab);
         }
+
+        static string OpenFor() { return (Time.time - _openedAt).ToString("F1"); }      // own method: Time.time cannot be compiled outside Unity, so Close() with nothing open stays unit-testable
 
         internal static void Close(string why)
         {
@@ -68,7 +72,7 @@ namespace KydlCore
             _view = null;
             DisposeConfig();
             Stack.Close(WindowId);
-            ModLog.Verbose("HubHost: closed (" + why + ")");
+            ModLog.Verbose("HubHost: closed (" + why + ") after " + OpenFor() + " s open");
         }
 
         /// <summary>KyTab.Refresh: build the page again when it is the one on screen.</summary>

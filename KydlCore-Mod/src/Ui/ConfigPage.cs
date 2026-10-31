@@ -150,12 +150,18 @@ namespace KydlCore.Ui
         }
 
         // Makes every text of the page smaller by FontScale (the kit's controls set their sizes inline, so the inline value is scaled).
+        // D-078 (user 2026-10-30 23:39: the SteveTheTroll Trolls page "autoresizes to a bigger font-size"): a page that builds more of itself later (a new troll chosen in
+        // its drop-down) added elements with the kit's full inline sizes after the one-off scaling. Every element is scaled ONCE (marked with ScaledClass), so the scaling
+        // can be repeated - KyHub.KeepScaled does that while the page is shown.
+        internal const string ScaledClass = "kydl-font-scaled";
+
         internal static void ScaleFonts(VisualElement root)
         {
             root.Query<VisualElement>().ForEach(e =>
             {
+                if (e.ClassListContains(ScaledClass)) return;
                 StyleLength fs = e.style.fontSize;
-                if (fs.keyword == StyleKeyword.Undefined && fs.value.value > 0f) e.style.fontSize = fs.value.value * FontScale;
+                if (fs.keyword == StyleKeyword.Undefined && fs.value.value > 0f) { e.style.fontSize = fs.value.value * FontScale; e.AddToClassList(ScaledClass); }
             });
         }
 

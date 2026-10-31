@@ -43,6 +43,7 @@ namespace KydlCore.Ui
         {
             _model = model; _text = text; _page = page;
             Root = UiKit.Window(text("kydlcore_hub_title"), "", onClose, out _body);
+            Widen();
             Root.style.backgroundColor = new Color(UiKit.Panel.r, UiKit.Panel.g, UiKit.Panel.b, 1f);   // D-076: fully opaque, other windows (the ChestDecor editor) ghosted through the 0.96 panel
             var head = Root[0];                                    // the title bar of UiKit.Window: slimmer, and its text on the same line as the tabs
             var titleLabel = head.Q<Label>();                      // the window title in the same colour as the tab names
@@ -61,6 +62,28 @@ namespace KydlCore.Ui
             _model.Changed += _onChanged;
             Rebuild();
             UiLog.Verbose("HubView: built, " + _model.ModCount + " mod(s), selected " + _model.SelectedMod + " / " + _model.SelectedTab);
+        }
+
+        /// <summary>The hub is 15% wider than the shared window (user 2026-10-30): the right side moves 10% of the old width further right, the left side 5% further left.</summary>
+        internal const float WindowWidth = 874f;            // 760 x 1.15
+        internal const float ShiftRight = 76f;              // 10% of 760
+        internal const float WindowMaxPercent = 69f;        // 60% x 1.15
+
+        /// <summary>Where the hub's right side sits: UiKit.Window puts it 5% of the screen from the edge, the hub moves it ShiftRight further right (never off the screen).</summary>
+        internal static float RightOffset(float screenWidth)
+        {
+            float right = screenWidth * 0.05f - ShiftRight;
+            return right > 0f ? right : 0f;
+        }
+
+        void Widen()
+        {
+            float screen = UiKit.Root != null ? UiKit.Root.resolvedStyle.width : 0f;
+            if (float.IsNaN(screen) || screen < 100f) screen = Screen.width;
+            Root.style.width = WindowWidth;
+            Root.style.maxWidth = Length.Percent(WindowMaxPercent);
+            Root.style.right = RightOffset(screen);
+            UiLog.Verbose("HubView: window " + WindowWidth.ToString("0") + " px wide (15% more), right side " + RightOffset(screen).ToString("0") + " px from the screen edge (screen " + screen.ToString("0") + " px)");
         }
 
         /// <summary>Builds the shown page again (KyTab.Refresh): the page factory is asked once more.</summary>

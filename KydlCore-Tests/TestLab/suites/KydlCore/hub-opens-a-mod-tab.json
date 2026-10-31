@@ -1,0 +1,35 @@
+{
+  "name": "hub-opens-a-mod-tab",
+  "description": "Open(mod, tab) goes straight to that mod's tab",
+  "timeout": 60,
+  "steps": [
+    {
+      "do": "hook",
+      "name": "kc.hubOpen",
+      "args": {
+        "mod": "com.kydldev.WhipItUp"
+      },
+      "expect": true
+    },
+    {
+      "do": "wait",
+      "seconds": 1
+    },
+    {
+      "do": "check",
+      "check": "uiVisible",
+      "text": "WhipItUp",
+      "label": "the mod's name is on screen"
+    },
+    {
+      "do": "hook",
+      "name": "kc.hubClose"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "KydlCore"
+    }
+  ]
+}

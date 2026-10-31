@@ -1,0 +1,51 @@
+{
+  "name": "hub-open-close",
+  "description": "The KY hub opens and closes through the public API",
+  "timeout": 60,
+  "steps": [
+    {
+      "do": "hook",
+      "name": "kc.hubIsOpen",
+      "expect": false,
+      "label": "closed at the start"
+    },
+    {
+      "do": "hook",
+      "name": "kc.hubOpen",
+      "expect": true,
+      "label": "Open() opens it"
+    },
+    {
+      "do": "wait",
+      "until": {
+        "check": "hook",
+        "name": "kc.hubIsOpen",
+        "args": {},
+        "expect": true
+      },
+      "timeout": 5
+    },
+    {
+      "do": "hook",
+      "name": "kc.hubClose",
+      "expect": false,
+      "label": "Close() closes it"
+    },
+    {
+      "do": "wait",
+      "until": {
+        "check": "hook",
+        "name": "kc.hubIsOpen",
+        "args": {},
+        "expect": false
+      },
+      "timeout": 5
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "KydlCore"
+    }
+  ]
+}

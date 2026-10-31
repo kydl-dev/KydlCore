@@ -76,6 +76,34 @@ sealed class Kydl.Ui.UiSlider
   method System.Single Kydl.Ui.UiSlider::get_Value()
   method System.Void Kydl.Ui.UiSlider::.ctor(System.Single,System.Single,System.Single,System.String,System.Action`1<System.Single>,System.Collections.Generic.IList`1<System.Single>)
   method System.Void Kydl.Ui.UiSlider::set_Enabled(System.Boolean)
+sealed class KydlCore.KyButtonRow
+  method System.Action KydlCore.KyButtonRow::get_Clicked()
+sealed class KydlCore.KyCell
+  method KydlCore.KyCell KydlCore.KyCell::Button(System.String,System.Action)
+  method KydlCore.KyCell KydlCore.KyCell::Confirm(System.String,System.String,System.String)
+  method KydlCore.KyCell KydlCore.KyCell::Drop(System.Collections.Generic.IList`1<KydlCore.KyChoice>,System.String,System.Action`1<System.String>)
+  method KydlCore.KyCell KydlCore.KyCell::Label(System.String)
+  method KydlCore.KyCell KydlCore.KyCell::Rich(System.String)
+  method System.Action KydlCore.KyCell::get_Clicked()
+  method System.Action`1<System.String> KydlCore.KyCell::get_Chosen()
+  method System.Boolean KydlCore.KyCell::get_IsRich()
+  method System.Collections.Generic.IList`1<KydlCore.KyChoice> KydlCore.KyCell::get_Choices()
+  method System.String KydlCore.KyCell::get_ConfirmText()
+  method System.String KydlCore.KyCell::get_NoText()
+  method System.String KydlCore.KyCell::get_Selected()
+  method System.String KydlCore.KyCell::get_Text()
+  method System.String KydlCore.KyCell::get_YesText()
+sealed class KydlCore.KyChoice
+  method System.String KydlCore.KyChoice::get_Id()
+  method System.String KydlCore.KyChoice::get_Text()
+  method System.Void KydlCore.KyChoice::.ctor(System.String,System.String)
+sealed class KydlCore.KyChoiceRow
+  method System.Action`1<System.String> KydlCore.KyChoiceRow::get_Chosen()
+  method System.Collections.Generic.IList`1<KydlCore.KyChoice> KydlCore.KyChoiceRow::get_Choices()
+  method System.String KydlCore.KyChoiceRow::get_Selected()
+sealed class KydlCore.KyColumnsRow
+  method System.String KydlCore.KyColumnsRow::get_MaxValue()
+  method System.String KydlCore.KyColumnsRow::get_Value()
 sealed class KydlCore.KyEntry
   field KydlCore.KyEntry::Kind : KydlCore.KyKind
   field KydlCore.KyEntry::ModGuid : System.String
@@ -89,8 +117,11 @@ sealed class KydlCore.KyEntry
   method System.Void KydlCore.KyEntry::.ctor()
   method System.Void KydlCore.KyEntry::set_Icon(UnityEngine.Sprite)
   method UnityEngine.Sprite KydlCore.KyEntry::get_Icon()
+sealed class KydlCore.KyHostedRow
+  method System.Func`1<UnityEngine.UIElements.VisualElement> KydlCore.KyHostedRow::get_Build()
 static class KydlCore.KyHub
   event KydlCore.KyHub::TabShown : System.Action`2<System.String,System.String>
+  method KydlCore.KyTab KydlCore.KyHub::AddPage(System.String,System.String,System.String,System.Func`1<KydlCore.KyPage>,System.Int32,System.Int32)
   method KydlCore.KyTab KydlCore.KyHub::AddTab(System.String,System.String,System.String,System.Func`1<UnityEngine.UIElements.VisualElement>,System.Int32)
   method System.Boolean KydlCore.KyHub::RemoveTab(System.String,System.String)
   method System.Boolean KydlCore.KyHub::get_IsOpen()
@@ -116,6 +147,36 @@ enum KydlCore.KyKind
   field KydlCore.KyKind::Item : KydlCore.KyKind = 0
   field KydlCore.KyKind::Piece : KydlCore.KyKind = 1
   field KydlCore.KyKind::value__ : System.Int32
+sealed class KydlCore.KyListRow
+  method System.Collections.Generic.IList`1<System.String> KydlCore.KyListRow::get_Items()
+sealed class KydlCore.KyNoteRow
+sealed class KydlCore.KyPage
+  field KydlCore.KyPage::State : System.String
+  method KydlCore.KySection KydlCore.KyPage::Section(System.String)
+  method System.Collections.Generic.List`1<KydlCore.KySection> KydlCore.KyPage::get_Sections()
+  method System.Void KydlCore.KyPage::.ctor()
+abstract class KydlCore.KyRow
+  method System.String KydlCore.KyRow::get_Label()
+sealed class KydlCore.KySection
+  method KydlCore.KySection KydlCore.KySection::Button(System.String,System.Action)
+  method KydlCore.KySection KydlCore.KySection::Choice(System.String,System.Collections.Generic.IList`1<KydlCore.KyChoice>,System.String,System.Action`1<System.String>)
+  method KydlCore.KySection KydlCore.KySection::Columns(System.String,System.String)
+  method KydlCore.KySection KydlCore.KySection::Hosted(System.Func`1<UnityEngine.UIElements.VisualElement>)
+  method KydlCore.KySection KydlCore.KySection::List(System.String,System.Collections.Generic.IList`1<System.String>)
+  method KydlCore.KySection KydlCore.KySection::Note(System.String)
+  method KydlCore.KySection KydlCore.KySection::Slider(System.String,System.Single,System.Single,System.Single,System.String,System.Action`1<System.Single>)
+  method KydlCore.KySection KydlCore.KySection::Table(System.Collections.Generic.IList`1<System.String>,System.Collections.Generic.IList`1<System.Collections.Generic.IList`1<KydlCore.KyCell>>)
+  method KydlCore.KySection KydlCore.KySection::TextBox(System.String,System.String,System.Int32,System.Action`1<System.String>)
+  method KydlCore.KySection KydlCore.KySection::Toggle(System.String,System.Boolean,System.Action`1<System.Boolean>)
+  method KydlCore.KySection KydlCore.KySection::Value(System.String,System.String,System.String)
+  method System.Collections.Generic.List`1<KydlCore.KyRow> KydlCore.KySection::get_Rows()
+  method System.String KydlCore.KySection::get_Title()
+sealed class KydlCore.KySliderRow
+  method System.Action`1<System.Single> KydlCore.KySliderRow::get_Changed()
+  method System.Single KydlCore.KySliderRow::get_Max()
+  method System.Single KydlCore.KySliderRow::get_Min()
+  method System.Single KydlCore.KySliderRow::get_Value()
+  method System.String KydlCore.KySliderRow::get_Format()
 sealed class KydlCore.KyTab
   method System.Int32 KydlCore.KyTab::get_Order()
   method System.String KydlCore.KyTab::get_Id()
@@ -123,12 +184,25 @@ sealed class KydlCore.KyTab
   method System.String KydlCore.KyTab::get_Title()
   method System.Void KydlCore.KyTab::.ctor()
   method System.Void KydlCore.KyTab::Refresh()
+sealed class KydlCore.KyTableRow
+  method System.Collections.Generic.IList`1<System.Collections.Generic.IList`1<KydlCore.KyCell>> KydlCore.KyTableRow::get_Cells()
+  method System.Collections.Generic.IList`1<System.String> KydlCore.KyTableRow::get_Headers()
+sealed class KydlCore.KyTextRow
+  method System.Action`1<System.String> KydlCore.KyTextRow::get_Changed()
+  method System.Int32 KydlCore.KyTextRow::get_MaxLength()
+  method System.String KydlCore.KyTextRow::get_Value()
+sealed class KydlCore.KyToggleRow
+  method System.Action`1<System.Boolean> KydlCore.KyToggleRow::get_Changed()
+  method System.Boolean KydlCore.KyToggleRow::get_On()
 static class KydlCore.KyUi
   method KydlCore.KyWindow KydlCore.KyUi::Open(System.String,System.String,UnityEngine.UIElements.VisualElement,System.Action)
   method System.Boolean KydlCore.KyUi::Close(System.String,System.String)
   method System.Boolean KydlCore.KyUi::IsOpen(System.String,System.String)
   method System.Boolean KydlCore.KyUi::get_AnyOpen()
   method UnityEngine.UIElements.VisualElement KydlCore.KyUi::get_Root()
+sealed class KydlCore.KyValueRow
+  method System.String KydlCore.KyValueRow::get_MaxValue()
+  method System.String KydlCore.KyValueRow::get_Value()
 sealed class KydlCore.KyWindow
   method System.String KydlCore.KyWindow::get_Id()
   method System.String KydlCore.KyWindow::get_ModGuid()

@@ -71,6 +71,17 @@ namespace KydlCore
             return tab;
         }
 
+        /// <summary>
+        /// T-098: adds a row-2 tab whose page is DESCRIBED, not built: `build` returns a <see cref="KyPage"/> (sections of rows) and KydlCore draws it with its theme and its text size - the mod
+        /// sets no font, colour or size. `build` is called when the tab is shown and again every `refreshSeconds`; the content is replaced only when the page's State changed.
+        /// Returns null for a blank GUID or id or a null `build`.
+        /// </summary>
+        public static KyTab AddPage(string modGuid, string id, string title, Func<KyPage> build, int order = 0, int refreshSeconds = 2)
+        {
+            if (build == null) { ModLog.Warn("KyHub.AddPage: needs a page builder (mod '" + modGuid + "', tab '" + id + "')"); return null; }
+            return AddTab(modGuid, id, title, () => KyPageView.Host(build, refreshSeconds * 1000), order);
+        }
+
         /// <summary>Removes a tab of a mod. False when it was not there. A mod left with no tab shows the automatic "Settings" tab again.</summary>
         public static bool RemoveTab(string modGuid, string id)
         {

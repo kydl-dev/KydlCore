@@ -99,6 +99,24 @@ namespace KydlCore.Tests.Integration
                         string.Join("\n", added.Concat(removed)));
         }
 
+        // T-098 (f): the described-page API lets a mod say WHAT to show, never how it looks: no public member of the page types may talk about font, size, colour or style.
+        [Test]
+        public void PageApi_HasNoLookMembers()
+        {
+            using (var module = Read())
+            {
+                var bad = new System.Collections.Generic.List<string>();
+                foreach (var t in module.Types)
+                {
+                    if (!t.IsPublic || t.Namespace != "KydlCore" || !(t.Name == "KyPage" || t.Name == "KySection" || t.Name == "KyCell" || (t.Name.StartsWith("Ky") && t.Name.EndsWith("Row")))) continue;
+                    foreach (var m in t.Methods.Where(x => x.IsPublic).Cast<IMemberDefinition>().Concat(t.Properties).Concat(t.Fields.Where(f => f.IsPublic)))
+                        foreach (var word in new[] { "Font", "Size", "Color", "Colour", "Style", "Width", "Height" })
+                            if (m.Name.IndexOf(word, System.StringComparison.OrdinalIgnoreCase) >= 0) bad.Add(t.Name + "." + m.Name);
+                }
+                Assert.That(bad, Is.Empty, "the page API must not let a mod set how it looks");
+            }
+        }
+
         [Test]
         public void ApprovedFile_ContainsTheKitTypes()
         {
