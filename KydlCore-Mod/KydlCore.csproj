@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    KydlCore mod. Everything shared by the user's mods (references from the shared reference folder, net48, no debug symbols,
+    the shared code Kydl.Common / Kydl.Ui, copy to Assets + build, embedded bundle) comes from Claude\shared\Kydl.Mod.props / .targets.
+    Add here only what is special about this mod (an extra reference: put the DLL into Claude\ref and add a line below).
+    Build: dotnet build "KydlCore-Mod\KydlCore.csproj" -c Release
+  -->
+  <Import Project="..\..\Claude\shared\Kydl.Mod.props" />
+
+  <PropertyGroup>
+    <AssemblyName>KydlCore</AssemblyName>
+    <RootNamespace>KydlCore</RootNamespace>
+    <PackageId>KydlCore</PackageId>
+    <!-- AssetBundle built by the Unity project (Valheim > Build AssetBundles); embedded into the DLL when Assets\kydlcore exists -->
+    <BundleName>kydlcore</BundleName>
+    <!-- D-040: KydlCore is the home of the UI kit; its Kydl.Ui types (and the members mods use) are public. The same shared source is internal in every mod that still compiles its own copy (D-005) -->
+    <DefineConstants>$(DefineConstants);KYDL_CORE_PUBLIC</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- the mod's menu views live in the Unity project (previewed there) and are compiled into the mod from there -->
+    <Compile Include="..\KydlCore-Unity\Assets\KydlCore_UI\Runtime\*.cs" Link="UiViews\%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <Import Project="..\..\Claude\shared\Kydl.Mod.targets" />
+</Project>

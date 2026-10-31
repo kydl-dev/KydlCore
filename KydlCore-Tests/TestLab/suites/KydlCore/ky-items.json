@@ -1,0 +1,38 @@
+{
+  "name": "ky-items",
+  "description": "The KY-Items registry is ready and holds the items of the installed KydlDev mods",
+  "timeout": 60,
+  "steps": [
+    {
+      "do": "wait",
+      "until": {
+        "check": "hook",
+        "name": "kc.itemsReady",
+        "args": {},
+        "expect": true
+      },
+      "timeout": 15
+    },
+    {
+      "do": "hook",
+      "name": "kc.itemsCount",
+      "args": {
+        "mod": "com.kydldev.WhipItUp"
+      },
+      "min": 21,
+      "label": "21 weapons"
+    },
+    {
+      "do": "hook",
+      "name": "kc.itemsCount",
+      "min": 21,
+      "label": "all mods"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "KydlCore"
+    }
+  ]
+}
