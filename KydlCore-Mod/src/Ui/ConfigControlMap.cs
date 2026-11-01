@@ -36,7 +36,7 @@ namespace KydlCore.Ui
     /// </summary>
     internal static class ConfigControlMap
     {
-        const string BrowsableName = "Browsable", AdminOnlyName = "IsAdminOnly", ColorTypeName = "UnityEngine.Color";
+        const string BrowsableName = "Browsable", AdminOnlyName = "IsAdminOnly", ReadOnlyName = "ReadOnly", ColorTypeName = "UnityEngine.Color";
         const string KeyCodeTypeName = "UnityEngine.KeyCode", ShortcutTypeName = "BepInEx.Configuration.KeyboardShortcut";
 
         /// <summary>The control for a value type. `hasRange` = the entry has an AcceptableValueRange, `hasList` = an AcceptableValueList.</summary>
@@ -109,6 +109,16 @@ namespace KydlCore.Ui
         public static bool IsAdminOnly(IEnumerable<object> tags)
         {
             return Flag(tags, AdminOnlyName) == true;
+        }
+
+        /// <summary>
+        /// True when a tag says ReadOnly = true. ServerSync (the library most server-synced mods carry) sets and keeps this flag itself: true on a
+        /// client that may not change the server's values, false for an admin, the host and single player. So a synced entry is editable on the page
+        /// exactly when ServerSync lets this player change it.
+        /// </summary>
+        public static bool IsReadOnly(IEnumerable<object> tags)
+        {
+            return Flag(tags, ReadOnlyName) == true;
         }
 
         /// <summary>The first tag member called `name` (public or not, field or property) of type bool / bool?; null when no tag has one or it is null.</summary>

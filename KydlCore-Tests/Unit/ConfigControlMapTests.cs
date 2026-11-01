@@ -24,6 +24,17 @@ namespace KydlCore.Tests.Unit
         static object Clamp(Type t, double v, double min, double max) { return Call("Clamp", t, v, min, max); }
         static bool Hidden(params object[] tags) { return (bool)Call("IsHidden", new List<object>(tags)); }
         static bool Admin(params object[] tags) { return (bool)Call("IsAdminOnly", new List<object>(tags)); }
+        static bool ReadOnly(params object[] tags) { return (bool)Call("IsReadOnly", new List<object>(tags)); }
+        sealed class ReadOnlyFieldTag { public bool? ReadOnly = false; }       // like ServerSync's ConfigurationManagerAttributes
+        sealed class ReadOnlyPropertyTag { public bool ReadOnly { get; set; } }
+
+        [Test] public void ReadOnly_NoTags_IsFalse() { Assert.That(ReadOnly(), Is.False); Assert.That(Call("IsReadOnly", new object[] { null }), Is.False); }
+        [Test] public void ReadOnly_TrueField_IsTrue() { Assert.That(ReadOnly(new ReadOnlyFieldTag { ReadOnly = true }), Is.True); }
+        [Test] public void ReadOnly_FalseField_IsFalse() { Assert.That(ReadOnly(new ReadOnlyFieldTag { ReadOnly = false }), Is.False); }
+        [Test] public void ReadOnly_NullField_IsFalse() { Assert.That(ReadOnly(new ReadOnlyFieldTag { ReadOnly = null }), Is.False); }
+        [Test] public void ReadOnly_TrueProperty_IsTrue() { Assert.That(ReadOnly(new ReadOnlyPropertyTag { ReadOnly = true }), Is.True); }
+        [Test] public void ReadOnly_UnrelatedAndNullTags_AreIgnored() { Assert.That(ReadOnly(null, new UnrelatedTag(), new ReadOnlyFieldTag { ReadOnly = true }), Is.True); }
+        [Test] public void ReadOnly_IsNotHiddenNorAdminOnly() { var t = new ReadOnlyFieldTag { ReadOnly = true }; Assert.That(Hidden(t), Is.False); Assert.That(Admin(t), Is.False); }
 
         // fake ConfigurationManagerAttributes classes: a public field, a public property, a private field, a bool? field, a wrong-typed member
         sealed class FieldTag { public bool Browsable = true; public bool IsAdminOnly = false; }
