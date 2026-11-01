@@ -195,6 +195,7 @@ sealed class KydlCore.KyToggleRow
   method System.Action`1<System.Boolean> KydlCore.KyToggleRow::get_Changed()
   method System.Boolean KydlCore.KyToggleRow::get_On()
 static class KydlCore.KyUi
+  method KydlCore.KyWindow KydlCore.KyUi::Open(System.String,System.String,System.Func`1<UnityEngine.UIElements.VisualElement>,System.Action)
   method KydlCore.KyWindow KydlCore.KyUi::Open(System.String,System.String,UnityEngine.UIElements.VisualElement,System.Action)
   method System.Boolean KydlCore.KyUi::Close(System.String,System.String)
   method System.Boolean KydlCore.KyUi::IsOpen(System.String,System.String)

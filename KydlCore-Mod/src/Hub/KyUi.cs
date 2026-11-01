@@ -1,4 +1,5 @@
 using System;
+using Kydl.Common;
 using UnityEngine.UIElements;
 
 namespace KydlCore
@@ -24,6 +25,22 @@ namespace KydlCore
         /// </summary>
         public static KyWindow Open(string modGuid, string id, VisualElement window, Action onClosed = null)
         {
+            return KyWindows.Add(modGuid, id, window, onClosed);
+        }
+
+        /// <summary>
+        /// The same, but Core runs `build` itself, as the mod (D-086): the shared kit's log lines of every control in the window (buttons, switches,
+        /// sliders, drop-downs) then carry the mod's tag and follow the mod's [DebugLog] Enable, like a hub tab. Prefer this overload. A null or
+        /// throwing `build` is logged and gives null.
+        /// </summary>
+        public static KyWindow Open(string modGuid, string id, Func<VisualElement> build, Action onClosed = null)
+        {
+            if (build == null) { ModLog.Warn("KyUi.Open: refused (guid '" + modGuid + "', id '" + id + "', no window builder)"); return null; }
+            VisualElement window;
+            try { window = Kydl.Ui.UiLog.Within(modGuid, build); }
+            // Stryker disable once all : the only effect of the handler is the warning (the null result is tested)
+            catch (Exception e) { ModLog.Warn("KyUi.Open: the window builder of '" + modGuid + "' / '" + id + "' threw " + e.GetType().Name + ": " + e.Message); return null; }
+            ModLog.Verbose("KyUi.Open: built '" + id + "' of '" + modGuid + "' as that mod (window " + (window == null ? "null" : "given") + ")");
             return KyWindows.Add(modGuid, id, window, onClosed);
         }
 
