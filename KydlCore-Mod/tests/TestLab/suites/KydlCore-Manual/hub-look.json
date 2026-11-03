@@ -4,8 +4,25 @@
   "manualOnly": true,
   "timeout": 300,
   "steps": [
-    { "do": "checkpoint", "message": "Press F6, pick KydlCore. Does the page use the shared look (dark panel, gold accents, readable text, nothing cut off)?" },
-    { "do": "checkpoint", "message": "Press Esc. Is the hub closed and can you move / look around again (input released)?" }
+    {
+      "do": "hook",
+      "name": "kc.arena",
+      "contains": "arena at",
+      "label": "start on the arena spot"
+    },
+    {
+      "do": "checkpoint",
+      "message": "Press F6, pick KydlCore. Does the page use the shared look (dark panel, gold accents, readable text, nothing cut off)?"
+    },
+    {
+      "do": "checkpoint",
+      "message": "Press Esc. Is the hub closed and can you move / look around again (input released)?"
+    }
   ],
-  "asserts": [ { "check": "noErrors", "source": "KydlCore" } ]
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "KydlCore"
+    }
+  ]
 }

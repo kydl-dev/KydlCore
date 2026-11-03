@@ -4,6 +4,12 @@
   "timeout": 60,
   "steps": [
     {
+      "do": "hook",
+      "name": "kc.arena",
+      "contains": "arena at",
+      "label": "start on the arena spot"
+    },
+    {
       "do": "pressKey",
       "key": "F6",
       "frames": 3

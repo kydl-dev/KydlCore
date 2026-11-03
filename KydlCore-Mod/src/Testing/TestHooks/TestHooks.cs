@@ -8,6 +8,10 @@ namespace KydlCore.Testing
     /// </summary>
     internal static class TestHooks
     {
+        /// Every test starts here (MIGRATION_DECISIONS C26, lessons TESTLAB_PLAYBOOK): the player on the open arena spot 70 m from the lab start, facing +z, god mode on.
+        [TestHook("kc.arena")]
+        static string Arena() { return TestArena.MovePlayer(); }
+
         /// <summary>All Startup_* / World_* checks of InGameTests (the ones Kydl.GameProbe runs): "PASS: ..." or "FAIL: ...".</summary>
         [TestHook("kc.selftest")]
         static string SelfTest() { return TestLabSupport.RunInGameTests(typeof(InGameTests)); }

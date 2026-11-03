@@ -5,6 +5,12 @@
   "steps": [
     {
       "do": "hook",
+      "name": "kc.arena",
+      "contains": "arena at",
+      "label": "start on the arena spot"
+    },
+    {
+      "do": "hook",
       "name": "kc.hubIsOpen",
       "expect": false,
       "label": "closed at the start"

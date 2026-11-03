@@ -54,6 +54,24 @@ namespace KydlCore.Tests.Integration
             Assert.That(bound.Except(fixedOnes), Is.Empty, "MIGRATION_DECISIONS C14: the suite sets every player setting (the user's manual config must not change a result)");
         }
 
+        [Test] public void EveryTest_StartsInTheArena()
+        {
+            foreach (var f in TestFiles())
+            {
+                var test = Json.Deserialize<Dictionary<string, object>>(File.ReadAllText(f));
+                var steps = test.ContainsKey("steps") ? ((System.Collections.ArrayList)test["steps"]).Cast<object>().ToList() : new List<object>();
+                var first = steps.Count > 0 ? steps[0] as Dictionary<string, object> : null;
+                Assert.That(first != null && Equals(first["do"], "hook") && Equals(first["name"], "kc.arena"), Is.True,
+                    Path.GetFileName(f) + ": the first step must be the kc.arena hook (MIGRATION_DECISIONS C26: every test starts on the arena spot, away from the lab start)");
+            }
+        }
+
+        [Test] public void NoTestLabScreenshots()
+        {
+            foreach (var f in TestFiles())
+                Assert.That(Regex.IsMatch(File.ReadAllText(f), @"""do""\s*:\s*""screenshot"""), Is.False, Path.GetFileName(f) + ": no TestLab screen capture (user 2026-11-03) - use Kydl.GameProbe.ProbeApi.Screenshot");
+        }
+
         [Test] public void EveryHookUsed_Exists()
         {
             var declared = new HashSet<string>(Directory.GetFiles(TestPaths.Src, "*.cs", SearchOption.AllDirectories)
