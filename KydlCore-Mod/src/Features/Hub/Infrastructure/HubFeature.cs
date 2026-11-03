@@ -1,5 +1,7 @@
-using Kydl.Common;
-using Kydl.Core.Features;
+using KydlCore.Common;
+using KydlCore.Features.Hub.Contracts;
+using KydlCore.Core;
+using KydlCore.Presentation.Hub.Registration;
 
 namespace KydlCore.Features.Hub.Infrastructure
 {

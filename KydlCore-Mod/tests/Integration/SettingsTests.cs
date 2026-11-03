@@ -18,7 +18,7 @@ namespace KydlCore.Tests.Integration
         static List<object> Tunables()
         {
             var list = new List<object>();
-            foreach (var f in ModAssembly.Type("KydlCore.ModSettings").GetFields(Static))
+            foreach (var f in ModAssembly.Type("KydlCore.Configuration.ModSettings").GetFields(Static))
                 if (f.FieldType.IsGenericType && f.FieldType.GetGenericTypeDefinition().Name == "Tunable`1") list.Add(f.GetValue(null));
             return list;
         }

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace KydlCore.Ui
+namespace KydlCore.Features.Hub.Infrastructure
 {
     /// <summary>What a press-to-rebind capture does with one frame of key presses.</summary>
     internal enum CaptureStep

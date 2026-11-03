@@ -9,7 +9,7 @@ namespace KydlCore.Tests.Unit
     [TestFixture]
     public class PageRowsTests
     {
-        static readonly Type PageT = ModAssembly.Type("KydlCore.KyPage");
+        static readonly Type PageT = ModAssembly.Type("KydlCore.Features.Hub.Contracts.KyPage");
 
         static object Section(out object page)
         {

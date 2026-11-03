@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Kydl.Ui;
+using KydlCore.Ui;
 using UnityEngine;
 using UnityEngine.UIElements;
 

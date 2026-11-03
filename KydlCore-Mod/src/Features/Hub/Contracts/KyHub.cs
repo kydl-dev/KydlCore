@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
-using Kydl.Common;
+using KydlCore.Common;
+using KydlCore.Features.Hub.Infrastructure;
+using KydlCore.Presentation.Hub.Pages;
 using KydlCore.Ui;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace KydlCore
+namespace KydlCore.Features.Hub.Contracts
 {
     /// <summary>A row-2 tab of the KY hub, made by <see cref="KyHub.AddTab"/>.</summary>
     public sealed class KyTab
@@ -153,7 +155,7 @@ namespace KydlCore
         {
             Func<VisualElement> build;
             if (!Builders.TryGetValue(Key(modGuid, id), out build)) return null;
-            try { return Kydl.Ui.UiLog.Within(modGuid, build); }     // the kit's log lines of this page belong to the mod (UiLog.Owner, D-071)
+            try { return global::KydlCore.Ui.UiLog.Within(modGuid, build); }     // the kit's log lines of this page belong to the mod (UiLog.Owner, D-071)
             // Stryker disable once all : the only effect of the handler is the error line (the null result is tested)
             catch (Exception e) { ModLog.Error("KyHub: the page of " + modGuid + " / " + id + " failed: " + e); return null; }
         }

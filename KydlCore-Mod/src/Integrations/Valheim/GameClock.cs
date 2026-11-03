@@ -1,4 +1,4 @@
-using Kydl.Core.Time;
+using KydlCore.Core;
 
 namespace KydlCore.Integrations.Valheim
 {

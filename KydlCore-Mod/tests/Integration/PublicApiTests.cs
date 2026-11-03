@@ -121,7 +121,7 @@ namespace KydlCore.Tests.Integration
         public void ApprovedFile_ContainsTheKitTypes()
         {
             var approved = File.ReadAllText(Path.Combine(Dir, ApprovedName)).Replace("\r\n", "\n");
-            foreach (var type in new[] { "Kydl.Ui.UiKit", "Kydl.Ui.UiControls", "Kydl.Ui.UiScroll", "Kydl.Ui.UiLog", "Kydl.Common.UiInputLock", "KydlCore.KyHub", "KydlCore.KyItems", "KydlCore.KyEntry" })
+            foreach (var type in new[] { "KydlCore.Ui.UiKit", "KydlCore.Ui.UiControls", "KydlCore.Ui.UiScroll", "KydlCore.Ui.UiLog", "KydlCore.Common.UiInputLock", "KydlCore.Features.Hub.Contracts.KyHub", "KydlCore.Features.Items.Contracts.KyItems", "KydlCore.Features.Items.Contracts.KyEntry" })
                 Assert.That(approved, Does.Contain(" " + type + "\n"), type + " must be public API");
         }
 
@@ -130,7 +130,7 @@ namespace KydlCore.Tests.Integration
         {
             // D-042: used only inside the kit, so never part of the approved API.
             var approved = File.ReadAllText(Path.Combine(Dir, ApprovedName));
-            foreach (var member in new[] { " Kydl.Ui.UiKit::Reset(", " Kydl.Ui.UiKit::Font(", " Kydl.Ui.UiKit::get_TitleSize(", "  field Kydl.Ui.UiKit::TitleSize " })
+            foreach (var member in new[] { " KydlCore.Ui.UiKit::Reset(", " KydlCore.Ui.UiKit::Font(", " KydlCore.Ui.UiKit::get_TitleSize(", "  field KydlCore.Ui.UiKit::TitleSize " })
                 Assert.That(approved, Does.Not.Contain(member), member + " is internal by D-042");
         }
     }

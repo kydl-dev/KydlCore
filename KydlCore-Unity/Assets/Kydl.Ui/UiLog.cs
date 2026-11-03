@@ -1,6 +1,6 @@
 using System;
 
-namespace Kydl.Ui
+namespace KydlCore.Ui
 {
     /// <summary>
     /// The shared UI code (Kydl.Ui) logs through these hooks: in Unity they write to the console, in the game the sinks are set ONCE by the
@@ -9,11 +9,7 @@ namespace Kydl.Ui
     /// (<see cref="Within{T}"/>) and every control remembers it for its callbacks (<see cref="Wrap"/>), so a sink can tag the line with the mod
     /// and use that mod's own debug switch. Null = no mod (the kit itself, KydlCore's own pages, Unity).
     /// </summary>
-#if KYDL_CORE_PUBLIC
     public static class UiLog
-#else
-    internal static class UiLog
-#endif
     {
         // Stryker disable once all : the default sink only writes to the Unity console (Unity itself, not reachable from the unit tests)
         public static Action<string> VerboseSink = s => UnityEngine.Debug.Log("[Kydl UI] " + s);

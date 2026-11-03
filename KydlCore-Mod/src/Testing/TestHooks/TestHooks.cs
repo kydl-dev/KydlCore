@@ -1,7 +1,9 @@
 using System.Linq;
-using Kydl.Common;
+using KydlCore.Common;
+using KydlCore.Features.Hub.Contracts;
+using KydlCore.Features.Items.Contracts;
 
-namespace KydlCore.Testing
+namespace KydlCore.Testing.TestHooks
 {
     /// <summary>
     /// KydlCore D-084: hooks for DrakesTestLab (KydlCore-Mod/tests/TestLab/suites/KydlCore). They call the REAL hub / registry code; reads return short values a suite can compare.

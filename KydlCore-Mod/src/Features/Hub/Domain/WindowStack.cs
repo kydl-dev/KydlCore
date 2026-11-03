@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace KydlCore.Ui
+namespace KydlCore.Features.Hub.Domain
 {
     /// <summary>
     /// Which Core windows are open and in which order (DESIGN 4, PLAN T-021). Pure C#: no Unity, no game types, no logging, so it is unit tested.

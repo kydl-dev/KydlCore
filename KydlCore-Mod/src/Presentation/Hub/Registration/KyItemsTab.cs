@@ -1,11 +1,14 @@
 using System.Linq;
-using Kydl.Common;
-using Kydl.Ui;
+using KydlCore.Common;
 using KydlCore.Ui;
-using UnityEngine;
+using KydlCore.Bootstrap;
+using KydlCore.Features.Hub.Contracts;
+using KydlCore.Features.Hub.Infrastructure;
+using KydlCore.Features.Items.Contracts;
+using KydlCore.Presentation.Hub.Pages;
 using UnityEngine.UIElements;
 
-namespace KydlCore
+namespace KydlCore.Presentation.Hub.Registration
 {
     /// <summary>
     /// KydlCore's own tabs in the KY hub (PLAN T-041, DESIGN 6, open question U1): "Settings" (its own config, the same page as the automatic one, which a

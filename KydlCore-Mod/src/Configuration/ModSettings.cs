@@ -1,8 +1,8 @@
 using BepInEx.Configuration;
-using Kydl.Common;
+using KydlCore.Common;
 using UnityEngine;
 
-namespace KydlCore
+namespace KydlCore.Configuration
 {
     /// <summary>
     /// All settings in one place (user rule, every mod):

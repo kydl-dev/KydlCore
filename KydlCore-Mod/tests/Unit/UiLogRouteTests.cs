@@ -6,7 +6,7 @@ namespace KydlCore.Tests.Unit
     [TestFixture]
     public class UiLogRouteTests
     {
-        const string T = "KydlCore.Ui.UiLogRoute";
+        const string T = "KydlCore.Features.Hub.Domain.UiLogRoute";
 
         static bool Show(string owner, bool ownerOn, bool coreOn) { return (bool)ModAssembly.Call(T, "ShowVerbose", owner, ownerOn, coreOn); }
         static string Tag(string name, string message) { return (string)ModAssembly.Call(T, "Tag", name, message); }

@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Kydl.Common;
+using KydlCore.Common;
 using UnityEngine;
 
-namespace KydlCore.Ui
+namespace KydlCore.Features.Hub.Infrastructure
 {
     /// <summary>
     /// The GAME side of the press-to-rebind button (D-075): while a capture is on, it reads the keyboard every frame (Plugin.Update, before the hub key

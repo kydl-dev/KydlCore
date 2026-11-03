@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Kydl.Core.Results;
+using KydlCore.Core;
 
 namespace KydlCore.Features.Items.Domain
 {

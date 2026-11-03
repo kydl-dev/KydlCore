@@ -13,13 +13,13 @@ namespace KydlCore.Tests.Integration
     [TestFixture]
     public class ArchitectureRulesTests
     {
-        static readonly Regex ForbiddenUsing = new Regex(@"^\s*using\s+(UnityEngine|HarmonyLib|BepInEx|Jotunn|Kydl\.Common|KydlCore)\b", RegexOptions.Multiline);
+        static readonly Regex ForbiddenUsing = new Regex(@"^\s*using\s+(?:(?:UnityEngine|HarmonyLib|BepInEx|Jotunn)\b|KydlCore\.(?:Common|Ui|Integrations|Bootstrap|Presentation)\b|KydlCore\s*;)", RegexOptions.Multiline);
         static readonly Regex ForbiddenType = new Regex(@"\b(GameObject|Component|MonoBehaviour|Transform|Vector3|Quaternion|Character|Humanoid|MonsterAI|BaseAI|ZNetView|ZDO|ZNet|ZNetScene|Player|Time\.time|Physics|ModLog|KyHub)\b");
         static readonly Regex LineComment = new Regex(@"//.*$", RegexOptions.Multiline);
         static readonly Regex StringLiteral = new Regex(@"""([^""\\]|\\.)*""");
 
         static string Src { get { return TestPaths.Src; } }
-        static string SharedCore { get { return Path.GetFullPath(Path.Combine(TestPaths.ProjectRoot, "..", "Claude", "shared", "Kydl.Core")); } }
+        static string SharedCore { get { return Path.Combine(TestPaths.Src, "Shared", "Core"); } }
 
         static IEnumerable<string> PureFiles()
         {
@@ -57,7 +57,7 @@ namespace KydlCore.Tests.Integration
         [Test] public void KydlCoreContracts_ArePure()
         {
             Assert.That(Directory.Exists(SharedCore), Is.True, SharedCore);
-            Assert.That(Violations(Directory.GetFiles(SharedCore, "*.cs", SearchOption.AllDirectories)), Is.Empty, "Claude\\shared\\Kydl.Core must stay pure");
+            Assert.That(Violations(Directory.GetFiles(SharedCore, "*.cs", SearchOption.AllDirectories)), Is.Empty, "src\\Shared\\Core (KydlCore.Core) must stay pure");
         }
 
         [Test] public void HarmonyPatches_LiveOnlyIn_IntegrationsHarmony()
@@ -75,7 +75,8 @@ namespace KydlCore.Tests.Integration
             string plugin = File.ReadAllText(Path.Combine(Src, "Bootstrap", "Plugin.cs"));
             string proj = File.ReadAllText(Directory.GetFiles(TestPaths.ModDir, "*.csproj").Single());
             Assert.That(proj, Does.Not.Contain("<KydlUseCore>true</KydlUseCore>"));
-            Assert.That(proj, Does.Contain("KYDL_CORE_PUBLIC"));
+            Assert.That(Directory.Exists(Path.Combine(Src, "Shared", "Ui")), Is.True, "the UI kit is compiled from src/Shared/Ui (D-089)");
+            Assert.That(proj, Does.Not.Match(@"shared\\Kydl\.(Core|Common|Ui)\b"), "no shared source is linked from Claude\\shared any more");
             Assert.That(plugin, Does.Contain("[NetworkCompatibility(CompatibilityLevel.VersionCheckOnly, VersionStrictness.Patch)]"), "MIGRATION_DECISIONS: KydlCore = VersionCheckOnly + Patch");
             string settings = File.ReadAllText(Path.Combine(Src, "Configuration", "ModSettings.cs"));
             Assert.That(Regex.IsMatch(settings, @"Bind\(\s*""General""\s*,\s*""EnableAll"""), Is.False, "MIGRATION_DECISIONS B12: KydlCore can never be switched off");
@@ -96,11 +97,21 @@ namespace KydlCore.Tests.Integration
             Assert.That(File.ReadAllText(Path.Combine(Src, "Core", "Architecture.cs")), Does.Contain("Tag = \"KydlCore-KYDL-SPEC-V1\""));
         }
 
-        /// The public API keeps namespace KydlCore (every mod uses KydlCore.KyHub / KyItems / ...): a deliberate deviation from folder = namespace (docs/Architecture.md).
-        [Test] public void PublicApi_StaysInNamespaceKydlCore()
+        /// The public API sits in the namespace of its folder (the KydlCore code already moved there; this supersedes the D-087 "keep namespace KydlCore" deviation, see D-089).
+        [Test] public void PublicApi_UsesFolderNamespaces()
         {
-            foreach (var f in new[] { "Features/Hub/Contracts/KyHub.cs", "Features/Items/Contracts/KyItems.cs", "Features/Items/Contracts/KyContribution.cs", "Bootstrap/Plugin.cs" })
-                Assert.That(Regex.IsMatch(File.ReadAllText(Path.Combine(Src, f)), @"^namespace KydlCore\s*$", RegexOptions.Multiline), Is.True, f);
+            var expected = new System.Collections.Generic.Dictionary<string, string>
+            {
+                { "Features/Hub/Contracts/KyHub.cs", "KydlCore.Features.Hub.Contracts" },
+                { "Features/Items/Contracts/KyItems.cs", "KydlCore.Features.Items.Contracts" },
+                { "Features/Items/Contracts/KyContribution.cs", "KydlCore.Features.Items.Contracts" },
+                { "Bootstrap/Plugin.cs", "KydlCore.Bootstrap" },
+                { "Shared/Core/Results/OperationResponse.cs", "KydlCore.Core" },
+                { "Shared/Common/ModLog.cs", "KydlCore.Common" },
+                { "Shared/Ui/UiKit.cs", "KydlCore.Ui" },
+            };
+            foreach (var kv in expected)
+                Assert.That(Regex.IsMatch(File.ReadAllText(Path.Combine(Src, kv.Key)), @"^namespace " + Regex.Escape(kv.Value) + @"\s*;?\s*$", RegexOptions.Multiline), Is.True, kv.Key + " must declare namespace " + kv.Value);
         }
     }
 }

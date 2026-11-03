@@ -1,10 +1,11 @@
 using BepInEx;
 using BepInEx.Bootstrap;
 using BepInEx.Configuration;
-using Kydl.Common;
-using Kydl.Ui;
+using KydlCore.Common;
+using KydlCore.Ui;
+using KydlCore.Features.Hub.Domain;
 
-namespace KydlCore.Ui
+namespace KydlCore.Presentation.Hub
 {
     /// <summary>
     /// The log sinks of the shared UI kit (D-071). KydlCore draws every mod's tab, so the kit's lines would all be written by KydlCore; here they get

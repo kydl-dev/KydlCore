@@ -4,24 +4,18 @@ using System.Globalization;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Kydl.Ui
+namespace KydlCore.Ui
 {
     /// <summary>
     /// T-023 / T-58: the controls of the mod's menus in the FollowPlayer look (UiKit): flat buttons (primary = gold), upper-case section titles,
     /// pill switches, thin sliders with a round handle and a typed number box, drop-downs, text fields, a colour editor. Plain VisualElements
     /// with inline styles (no theme needed). Nothing shrinks (flexShrink 0): the window scrolls instead.
     /// </summary>
-#if KYDL_CORE_PUBLIC
     public static class UiControls
-#else
-    internal static class UiControls
-#endif
     {
         // --- button ---------------------------------------------------------------------------------------------------------
-#if KYDL_CORE_PUBLIC
         const float PressDim = 0.35f;          // share of black mixed in while the button is pressed (D-048)
         const long PressFeedbackMs = 120;      // the dimmed look stays this long after the release, so a quick click is still seen
-#endif
 
         /// A gold (primary) or dark push button; logs every press. The KydlCore build also dims it while it is pressed and draws a thin red border while the pointer is over it (D-048).
         public static Button Button(string text, Action onClick, bool primary = false)
@@ -35,7 +29,6 @@ namespace Kydl.Ui
             b.style.flexShrink = 0;
             b.style.marginLeft = 3; b.style.marginRight = 3; b.style.marginTop = 3; b.style.marginBottom = 3;
             UiKit.Fade(b, "background-color");
-#if KYDL_CORE_PUBLIC
             bool hovered = false, pressed = false;
             Action show = () =>
             {
@@ -46,10 +39,6 @@ namespace Kydl.Ui
             b.RegisterCallback<PointerLeaveEvent>(e => { hovered = false; pressed = false; show(); });
             b.RegisterCallback<PointerDownEvent>(e => { pressed = true; show(); UiLog.Verbose("Ui: button '" + text + "' down, dimmed " + (PressDim * 100f).ToString("0") + "% for at least " + PressFeedbackMs + " ms"); });
             b.RegisterCallback<PointerUpEvent>(e => b.schedule.Execute(() => { pressed = false; show(); }).StartingIn(PressFeedbackMs));
-#else
-            b.RegisterCallback<PointerEnterEvent>(e => b.style.backgroundColor = hot);
-            b.RegisterCallback<PointerLeaveEvent>(e => b.style.backgroundColor = bg);
-#endif
             return b;
         }
 
@@ -72,11 +61,7 @@ namespace Kydl.Ui
         public static VisualElement Heading(string text)
         {
             var s = new VisualElement(); s.style.flexShrink = 0; s.style.marginTop = 16; s.style.marginBottom = 6;
-#if KYDL_CORE_PUBLIC
             var head = UiKit.Label(text, UiKit.SectionSize, UiKit.TabColor, true);
-#else
-            var head = UiKit.Label(text.ToUpperInvariant(), UiKit.SectionSize, UiKit.NameColor, true);
-#endif
             head.style.letterSpacing = 1.5f;
             s.Add(head);
             var line = new VisualElement(); line.style.height = 1; line.style.backgroundColor = UiKit.Border; line.style.marginTop = 4;

@@ -16,10 +16,10 @@ namespace KydlCore.Tests.Unit
     [TestFixture]
     public class WindowStackTests
     {
-        /// <summary>The mod's internal KydlCore.Ui.WindowStack, called through reflection; same members, exceptions are not wrapped.</summary>
+        /// <summary>The mod's internal KydlCore.Features.Hub.Domain.WindowStack, called through reflection; same members, exceptions are not wrapped.</summary>
         sealed class WindowStack
         {
-            static readonly Type T = ModAssembly.Type("KydlCore.Ui.WindowStack");
+            static readonly Type T = ModAssembly.Type("KydlCore.Features.Hub.Domain.WindowStack");
             readonly object _o = Activator.CreateInstance(T);
 
             public int Count { get { return (int)T.GetProperty("Count").GetValue(_o); } }

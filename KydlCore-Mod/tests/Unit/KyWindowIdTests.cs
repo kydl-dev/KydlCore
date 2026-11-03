@@ -6,7 +6,7 @@ namespace KydlCore.Tests.Unit
     [TestFixture]
     public class KyWindowIdTests
     {
-        const string Type = "KydlCore.Ui.KyWindowId";
+        const string Type = "KydlCore.Features.Hub.Domain.KyWindowId";
 
         static string Make(string guid, string id) { return (string)ModAssembly.Call(Type, "Make", guid, id); }
 
@@ -33,7 +33,7 @@ namespace KydlCore.Tests.Unit
             Props.Check(Prop.ForAll(Arb.From<NonEmptyString>(), Arb.From<NonEmptyString>(), (g, i) =>
             {
                 string full = Make(g.Get, i.Get);
-                return full == null || full != (string)ModAssembly.GetStatic("KydlCore.Ui.KyWindowId", "Hub");
+                return full == null || full != (string)ModAssembly.GetStatic("KydlCore.Features.Hub.Domain.KyWindowId", "Hub");
             }));
         }
     }

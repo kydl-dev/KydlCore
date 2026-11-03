@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace KydlCore
+namespace KydlCore.Features.Hub.Contracts
 {
     /// <summary>
     /// T-098 (user 2026-10-31: "mods inform KydlCore about what they want displayed, and Core displays it based on its settings"): what a mod wants a hub tab to SHOW, as plain data.

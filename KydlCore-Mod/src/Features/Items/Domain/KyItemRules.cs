@@ -1,5 +1,5 @@
 using System;
-using Kydl.Core.Results;
+using KydlCore.Core;
 
 namespace KydlCore.Features.Items.Domain
 {

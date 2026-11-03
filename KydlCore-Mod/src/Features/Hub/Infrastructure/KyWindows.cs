@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using Kydl.Common;
-using Kydl.Ui;
+using KydlCore.Common;
 using KydlCore.Ui;
+using KydlCore.Features.Hub.Contracts;
+using KydlCore.Features.Hub.Domain;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace KydlCore
+namespace KydlCore.Features.Hub.Infrastructure
 {
     /// <summary>
     /// The GAME side of the window order (PLAN T-038): the ONE <see cref="WindowStack"/> of the hub and every <see cref="KyUi"/> window, the input lock

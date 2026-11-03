@@ -1,13 +1,16 @@
 using System;
 using BepInEx;
 using BepInEx.Bootstrap;
-using Kydl.Common;
-using Kydl.Ui;
+using KydlCore.Common;
 using KydlCore.Ui;
+using KydlCore.Configuration;
+using KydlCore.Features.Hub.Contracts;
+using KydlCore.Features.Hub.Domain;
+using KydlCore.Presentation.Hub.Pages;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace KydlCore
+namespace KydlCore.Features.Hub.Infrastructure
 {
     /// <summary>
     /// The GAME side of the KY hub (PLAN T-034): the key, the window, the input lock, the list of loaded KydlDev mods. What the window looks like is
@@ -99,7 +102,7 @@ namespace KydlCore
         {
             DisposeConfig();
             VisualElement page = null;
-            if (KyHub.Model.IsAutoTab(mod)) page = Kydl.Ui.UiLog.Within(mod, () => AutoPage(mod));
+            if (KyHub.Model.IsAutoTab(mod)) page = global::KydlCore.Ui.UiLog.Within(mod, () => AutoPage(mod));
             else page = KyHub.BuildPage(mod, tab);
             KyHub.RaiseTabShown(mod, tab);
             return page;

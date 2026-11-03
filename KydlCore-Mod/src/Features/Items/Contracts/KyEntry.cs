@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace KydlCore
+namespace KydlCore.Features.Items.Contracts
 {
     /// <summary>Whether a <see cref="KyEntry"/> is an inventory item or a build piece.</summary>
     public enum KyKind { Item, Piece }

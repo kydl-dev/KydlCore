@@ -6,7 +6,7 @@ using System.Reflection;
 namespace KydlCore.Tests.Unit
 {
     /// <summary>
-    /// KyUi.Open with a window BUILDER (D-086): Core runs the builder as the mod (Kydl.Ui.UiLog.Owner = the mod's GUID), so the kit's log lines of the
+    /// KyUi.Open with a window BUILDER (D-086): Core runs the builder as the mod (KydlCore.Ui.UiLog.Owner = the mod's GUID), so the kit's log lines of the
     /// window carry the mod's tag. Reached in the BUILT mod DLL by reflection; the test project has no UIElements reference, so the builder delegate is
     /// made with an expression tree. Only the paths that end before the UI root is touched run here (no engine in a unit test).
     /// </summary>
@@ -16,15 +16,15 @@ namespace KydlCore.Tests.Unit
         static string seenOwner;
         static int builds;
 
-        public static void Record() { builds++; seenOwner = (string)ModAssembly.GetStatic("Kydl.Ui.UiLog", "Owner"); }
+        public static void Record() { builds++; seenOwner = (string)ModAssembly.GetStatic("KydlCore.Ui.UiLog", "Owner"); }
         public static void Throw() { builds++; throw new InvalidOperationException("builder broke"); }
 
         [SetUp]
-        public void Reset() { seenOwner = null; builds = 0; ModAssembly.SetStatic("Kydl.Ui.UiLog", "Owner", null); }
+        public void Reset() { seenOwner = null; builds = 0; ModAssembly.SetStatic("KydlCore.Ui.UiLog", "Owner", null); }
 
         static MethodInfo BuilderOverload()
         {
-            return ModAssembly.Type("KydlCore.KyUi").GetMethods(BindingFlags.Public | BindingFlags.Static)
+            return ModAssembly.Type("KydlCore.Features.Hub.Contracts.KyUi").GetMethods(BindingFlags.Public | BindingFlags.Static)
                 .Single(m => m.Name == "Open" && m.GetParameters()[2].ParameterType.IsGenericType);
         }
 
@@ -60,7 +60,7 @@ namespace KydlCore.Tests.Unit
             var result = Open("com.kydldev.A", "w", Builder("Record"));
             Assert.That(builds, Is.EqualTo(1));
             Assert.That(seenOwner, Is.EqualTo("com.kydldev.A"));
-            Assert.That(ModAssembly.GetStatic("Kydl.Ui.UiLog", "Owner"), Is.Null);
+            Assert.That(ModAssembly.GetStatic("KydlCore.Ui.UiLog", "Owner"), Is.Null);
             Assert.That(result, Is.Null, "a builder that returns no window opens nothing");
         }
 
@@ -69,7 +69,7 @@ namespace KydlCore.Tests.Unit
         {
             Assert.That(Open("com.kydldev.A", "w", Builder("Throw")), Is.Null);
             Assert.That(builds, Is.EqualTo(1));
-            Assert.That(ModAssembly.GetStatic("Kydl.Ui.UiLog", "Owner"), Is.Null);
+            Assert.That(ModAssembly.GetStatic("KydlCore.Ui.UiLog", "Owner"), Is.Null);
         }
     }
 }

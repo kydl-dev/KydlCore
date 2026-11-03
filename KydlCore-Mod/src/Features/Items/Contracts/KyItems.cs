@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Kydl.Common;
-using KydlCore.Features.Items.Contracts;
+using KydlCore.Common;
 using KydlCore.Features.Items.Domain;
-using KydlCore.Integrations.JotunnAdapter;
+using KydlCore.Features.Items.Infrastructure;
+using KydlCore.Integrations.Jotunn;
 using UnityEngine;
 
-namespace KydlCore
+namespace KydlCore.Features.Items.Contracts
 {
     /// <summary>
     /// The KY-Items registry: the user's own items and pieces (spec 5, PLAN T-040). Public API of KydlCore. Each mod CONTRIBUTES its items with

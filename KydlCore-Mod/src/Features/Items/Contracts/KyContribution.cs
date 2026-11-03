@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace KydlCore
+namespace KydlCore.Features.Items.Contracts
 {
     /// <summary>
     /// What a mod contributes to KY-Items (spec 5, MIGRATION_DECISIONS B13): a namespaced id, the owning mod, a display name, the prefab, recipe information

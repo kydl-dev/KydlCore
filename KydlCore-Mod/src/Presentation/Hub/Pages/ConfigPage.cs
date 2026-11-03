@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BepInEx.Configuration;
-using Kydl.Common;
-using Kydl.Ui;
+using KydlCore.Common;
+using KydlCore.Ui;
+using KydlCore.Features.Hub.Infrastructure;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace KydlCore.Ui
+namespace KydlCore.Presentation.Hub.Pages
 {
     /// <summary>
     /// The page of the auto "Settings" tab (PLAN T-033, D-023): one control for EVERY config entry of a mod, grouped by section. A change in the page

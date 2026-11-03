@@ -1,8 +1,7 @@
-using Kydl.Common;
-using Kydl.Core.Features;
-using Kydl.Core.Results;
+using KydlCore.Common;
 using KydlCore.Features.Hub.Infrastructure;
 using KydlCore.Features.Items.Infrastructure;
+using KydlCore.Core;
 
 namespace KydlCore.Bootstrap
 {

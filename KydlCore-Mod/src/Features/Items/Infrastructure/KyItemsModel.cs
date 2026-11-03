@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using KydlCore.Features.Items.Contracts;
 
-namespace KydlCore
+namespace KydlCore.Features.Items.Infrastructure
 {
     /// <summary>
     /// The pure part of the KY-Items registry (PLAN T-040, DESIGN 6): the list of entries with one entry per prefab name, the lookups and the rule

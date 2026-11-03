@@ -1,251 +1,397 @@
-static class Kydl.Common.UiInputLock
-  method System.Boolean Kydl.Common.UiInputLock::Hold(System.String)
-  method System.Boolean Kydl.Common.UiInputLock::Install(System.String)
-  method System.Boolean Kydl.Common.UiInputLock::Release(System.String)
-  method System.Int32 Kydl.Common.UiInputLock::get_Count()
-sealed class Kydl.Ui.UiColorPicker
-  field Kydl.Ui.UiColorPicker::Root : UnityEngine.UIElements.VisualElement
-  method System.Boolean Kydl.Ui.UiColorPicker::Set(UnityEngine.Color)
-  method System.String Kydl.Ui.UiColorPicker::get_Hex()
-  method System.Void Kydl.Ui.UiColorPicker::.ctor(System.String,System.Action`1<System.String>,System.Boolean)
-  method UnityEngine.Color Kydl.Ui.UiColorPicker::get_Color()
-static class Kydl.Ui.UiControls
-  method UnityEngine.UIElements.Button Kydl.Ui.UiControls::Button(System.String,System.Action,System.Boolean)
-  method UnityEngine.UIElements.Button Kydl.Ui.UiControls::Dropdown(System.Collections.Generic.IList`1<System.String>,System.String,System.Func`2<System.String,System.String>,System.Action`1<System.String>)
-  method UnityEngine.UIElements.Button Kydl.Ui.UiControls::Field(System.String,System.Action)
-  method UnityEngine.UIElements.Label Kydl.Ui.UiControls::Note(System.String)
-  method UnityEngine.UIElements.TextField Kydl.Ui.UiControls::TextField(System.String,System.Int32,System.Action`1<System.String>)
-  method UnityEngine.UIElements.VisualElement Kydl.Ui.UiControls::ColorPicker(System.String,System.Action`1<System.String>,System.Action`1<System.String>&)
-  method UnityEngine.UIElements.VisualElement Kydl.Ui.UiControls::Heading(System.String)
-  method UnityEngine.UIElements.VisualElement Kydl.Ui.UiControls::Line(UnityEngine.UIElements.VisualElement[])
-  method UnityEngine.UIElements.VisualElement Kydl.Ui.UiControls::Row(System.String,UnityEngine.UIElements.VisualElement)
-  method UnityEngine.UIElements.VisualElement Kydl.Ui.UiControls::Slider(System.Single,System.Single,System.Single,System.String,System.Action`1<System.Single>)
-  method UnityEngine.UIElements.VisualElement Kydl.Ui.UiControls::Toggle(System.String,System.Boolean,System.Action`1<System.Boolean>)
-static class Kydl.Ui.UiKit
-  field Kydl.Ui.UiKit::Border : UnityEngine.Color
-  field Kydl.Ui.UiKit::ButtonSize : System.Int32 = 21
-  field Kydl.Ui.UiKit::FontSize : System.Int32 = 22
-  field Kydl.Ui.UiKit::Gold : UnityEngine.Color
-  field Kydl.Ui.UiKit::GoldDim : UnityEngine.Color
-  field Kydl.Ui.UiKit::NameColor : UnityEngine.Color
-  field Kydl.Ui.UiKit::NameSize : System.Int32 = 24
-  field Kydl.Ui.UiKit::OnDark : UnityEngine.Color
-  field Kydl.Ui.UiKit::Owner : System.String
-  field Kydl.Ui.UiKit::Panel : UnityEngine.Color
-  field Kydl.Ui.UiKit::PanelHover : UnityEngine.Color
-  field Kydl.Ui.UiKit::PanelLight : UnityEngine.Color
-  field Kydl.Ui.UiKit::SectionSize : System.Int32 = 24
-  field Kydl.Ui.UiKit::SmallSize : System.Int32 = 18
-  field Kydl.Ui.UiKit::TabColor : UnityEngine.Color
-  field Kydl.Ui.UiKit::Text : UnityEngine.Color
-  field Kydl.Ui.UiKit::TextDim : UnityEngine.Color
-  field Kydl.Ui.UiKit::Track : UnityEngine.Color
-  field Kydl.Ui.UiKit::ValueColor : UnityEngine.Color
-  method System.Void Kydl.Ui.UiKit::Borders(UnityEngine.UIElements.VisualElement,System.Single,UnityEngine.Color)
-  method System.Void Kydl.Ui.UiKit::Fade(UnityEngine.UIElements.VisualElement,System.String[])
-  method System.Void Kydl.Ui.UiKit::Pad(UnityEngine.UIElements.VisualElement,System.Single,System.Single)
-  method System.Void Kydl.Ui.UiKit::Radius(UnityEngine.UIElements.VisualElement,System.Single)
-  method UnityEngine.UIElements.Label Kydl.Ui.UiKit::Label(System.String,System.Single,UnityEngine.Color,System.Boolean)
-  method UnityEngine.UIElements.PanelSettings Kydl.Ui.UiKit::get_Settings()
-  method UnityEngine.UIElements.VisualElement Kydl.Ui.UiKit::Window(System.String,System.String,System.Action,Kydl.Ui.UiScroll&)
-  method UnityEngine.UIElements.VisualElement Kydl.Ui.UiKit::get_Root()
-static class Kydl.Ui.UiLog
-  field Kydl.Ui.UiLog::ErrorSink : System.Action`1<System.String>
-  field Kydl.Ui.UiLog::Owner : System.String
-  field Kydl.Ui.UiLog::VerboseSink : System.Action`1<System.String>
-  field Kydl.Ui.UiLog::WarnSink : System.Action`1<System.String>
-  method System.Action Kydl.Ui.UiLog::Wrap(System.Action)
-  method System.Action`1<T> Kydl.Ui.UiLog::Wrap(System.Action`1<T>)
-  method System.Void Kydl.Ui.UiLog::Error(System.String)
-  method System.Void Kydl.Ui.UiLog::Verbose(System.String)
-  method System.Void Kydl.Ui.UiLog::Warn(System.String)
-  method T Kydl.Ui.UiLog::Within(System.String,System.Func`1<T>)
-sealed class Kydl.Ui.UiScroll
-  field Kydl.Ui.UiScroll::Content : UnityEngine.UIElements.VisualElement
-  field Kydl.Ui.UiScroll::Root : UnityEngine.UIElements.VisualElement
-  method System.Void Kydl.Ui.UiScroll::.ctor(System.String)
-  method System.Void Kydl.Ui.UiScroll::ScrollBy(System.Single)
-  method System.Void Kydl.Ui.UiScroll::ScrollTo(System.Single)
-sealed class Kydl.Ui.UiSlider
-  field Kydl.Ui.UiSlider::Root : UnityEngine.UIElements.VisualElement
-  method System.Boolean Kydl.Ui.UiSlider::SetRange(System.Single,System.Single)
-  method System.Boolean Kydl.Ui.UiSlider::SetValueWithoutNotify(System.Single)
-  method System.Boolean Kydl.Ui.UiSlider::get_Enabled()
-  method System.Single Kydl.Ui.UiSlider::get_Max()
-  method System.Single Kydl.Ui.UiSlider::get_Min()
-  method System.Single Kydl.Ui.UiSlider::get_Value()
-  method System.Void Kydl.Ui.UiSlider::.ctor(System.Single,System.Single,System.Single,System.String,System.Action`1<System.Single>,System.Collections.Generic.IList`1<System.Single>)
-  method System.Void Kydl.Ui.UiSlider::set_Enabled(System.Boolean)
-sealed class KydlCore.KyButtonRow
-  method System.Action KydlCore.KyButtonRow::get_Clicked()
-sealed class KydlCore.KyCell
-  method KydlCore.KyCell KydlCore.KyCell::Button(System.String,System.Action)
-  method KydlCore.KyCell KydlCore.KyCell::Confirm(System.String,System.String,System.String)
-  method KydlCore.KyCell KydlCore.KyCell::Drop(System.Collections.Generic.IList`1<KydlCore.KyChoice>,System.String,System.Action`1<System.String>)
-  method KydlCore.KyCell KydlCore.KyCell::Label(System.String)
-  method KydlCore.KyCell KydlCore.KyCell::Rich(System.String)
-  method System.Action KydlCore.KyCell::get_Clicked()
-  method System.Action`1<System.String> KydlCore.KyCell::get_Chosen()
-  method System.Boolean KydlCore.KyCell::get_IsRich()
-  method System.Collections.Generic.IList`1<KydlCore.KyChoice> KydlCore.KyCell::get_Choices()
-  method System.String KydlCore.KyCell::get_ConfirmText()
-  method System.String KydlCore.KyCell::get_NoText()
-  method System.String KydlCore.KyCell::get_Selected()
-  method System.String KydlCore.KyCell::get_Text()
-  method System.String KydlCore.KyCell::get_YesText()
-sealed class KydlCore.KyChoice
-  method System.String KydlCore.KyChoice::get_Id()
-  method System.String KydlCore.KyChoice::get_Text()
-  method System.Void KydlCore.KyChoice::.ctor(System.String,System.String)
-sealed class KydlCore.KyChoiceRow
-  method System.Action`1<System.String> KydlCore.KyChoiceRow::get_Chosen()
-  method System.Collections.Generic.IList`1<KydlCore.KyChoice> KydlCore.KyChoiceRow::get_Choices()
-  method System.String KydlCore.KyChoiceRow::get_Selected()
-sealed class KydlCore.KyColumnsRow
-  method System.String KydlCore.KyColumnsRow::get_MaxValue()
-  method System.String KydlCore.KyColumnsRow::get_Value()
-sealed class KydlCore.KyContribution
-  field KydlCore.KyContribution::DisplayName : System.String
-  field KydlCore.KyContribution::Id : System.String
-  field KydlCore.KyContribution::Kind : KydlCore.KyKind
-  field KydlCore.KyContribution::ModGuid : System.String
-  field KydlCore.KyContribution::OnRegistered : System.Action`1<UnityEngine.GameObject>
-  field KydlCore.KyContribution::Prefab : UnityEngine.GameObject
-  field KydlCore.KyContribution::Recipe : KydlCore.KyRecipe
-  field KydlCore.KyContribution::RegisterInGame : System.Boolean
-  field KydlCore.KyContribution::Tags : System.String[]
-  method System.Void KydlCore.KyContribution::.ctor()
-sealed class KydlCore.KyEntry
-  field KydlCore.KyEntry::Id : System.String
-  field KydlCore.KyEntry::Kind : KydlCore.KyKind
-  field KydlCore.KyEntry::ModGuid : System.String
-  field KydlCore.KyEntry::ModName : System.String
-  field KydlCore.KyEntry::NameToken : System.String
-  field KydlCore.KyEntry::Prefab : System.String
-  field KydlCore.KyEntry::PrefabObject : UnityEngine.GameObject
-  field KydlCore.KyEntry::Source : System.String
-  field KydlCore.KyEntry::Tags : System.Collections.Generic.IReadOnlyList`1<System.String>
-  method System.String KydlCore.KyEntry::get_DisplayName()
-  method System.Void KydlCore.KyEntry::.ctor()
-  method System.Void KydlCore.KyEntry::set_Icon(UnityEngine.Sprite)
-  method UnityEngine.Sprite KydlCore.KyEntry::get_Icon()
-sealed class KydlCore.KyHostedRow
-  method System.Func`1<UnityEngine.UIElements.VisualElement> KydlCore.KyHostedRow::get_Build()
-static class KydlCore.KyHub
-  event KydlCore.KyHub::TabShown : System.Action`2<System.String,System.String>
-  method KydlCore.KyTab KydlCore.KyHub::AddPage(System.String,System.String,System.String,System.Func`1<KydlCore.KyPage>,System.Int32,System.Int32)
-  method KydlCore.KyTab KydlCore.KyHub::AddTab(System.String,System.String,System.String,System.Func`1<UnityEngine.UIElements.VisualElement>,System.Int32)
-  method System.Boolean KydlCore.KyHub::HasTab(System.String,System.String)
-  method System.Boolean KydlCore.KyHub::RemoveTab(System.String,System.String)
-  method System.Boolean KydlCore.KyHub::get_IsOpen()
-  method System.Void KydlCore.KyHub::Close()
-  method System.Void KydlCore.KyHub::Open(System.String,System.String)
-  method System.Void KydlCore.KyHub::SetModTitle(System.String,System.String,UnityEngine.Sprite)
-  method System.Void KydlCore.KyHub::add_TabShown(System.Action`2<System.String,System.String>)
-  method System.Void KydlCore.KyHub::remove_TabShown(System.Action`2<System.String,System.String>)
-  method UnityEngine.UIElements.VisualElement KydlCore.KyHub::ConfigEntries(BepInEx.Configuration.ConfigFile,System.String[])
-static class KydlCore.KyItems
-  event KydlCore.KyItems::Changed : System.Action
-  field KydlCore.KyItems::CategoryName : System.String = KY-Items
-  method KydlCore.KyEntry KydlCore.KyItems::Find(System.String)
-  method KydlCore.KyEntry KydlCore.KyItems::FindById(System.String)
-  method KydlCore.KyResult KydlCore.KyItems::Contribute(KydlCore.KyContribution)
-  method System.Boolean KydlCore.KyItems::IsUserGuid(System.String)
-  method System.Boolean KydlCore.KyItems::Register(UnityEngine.GameObject,System.String,KydlCore.KyKind,System.String[])
-  method System.Boolean KydlCore.KyItems::Withdraw(System.String)
-  method System.Boolean KydlCore.KyItems::get_Ready()
-  method System.Collections.Generic.IEnumerable`1<KydlCore.KyEntry> KydlCore.KyItems::ByMod(System.String)
-  method System.Collections.Generic.IReadOnlyList`1<KydlCore.KyEntry> KydlCore.KyItems::get_All()
-  method System.Nullable`1<Piece/PieceCategory> KydlCore.KyItems::get_Category()
-  method System.Void KydlCore.KyItems::add_Changed(System.Action)
-  method System.Void KydlCore.KyItems::remove_Changed(System.Action)
-enum KydlCore.KyKind
-  field KydlCore.KyKind::Item : KydlCore.KyKind = 0
-  field KydlCore.KyKind::Piece : KydlCore.KyKind = 1
-  field KydlCore.KyKind::value__ : System.Int32
-sealed class KydlCore.KyListRow
-  method System.Collections.Generic.IList`1<System.String> KydlCore.KyListRow::get_Items()
-sealed class KydlCore.KyNoteRow
-sealed class KydlCore.KyPage
-  field KydlCore.KyPage::State : System.String
-  method KydlCore.KySection KydlCore.KyPage::Section(System.String)
-  method System.Collections.Generic.List`1<KydlCore.KySection> KydlCore.KyPage::get_Sections()
-  method System.Void KydlCore.KyPage::.ctor()
-sealed class KydlCore.KyRecipe
-  field KydlCore.KyRecipe::Amount : System.Int32
-  field KydlCore.KyRecipe::CraftingStation : System.String
-  field KydlCore.KyRecipe::MinStationLevel : System.Int32
-  field KydlCore.KyRecipe::Resources : KydlCore.KyResource[]
-  method System.Void KydlCore.KyRecipe::.ctor()
-sealed class KydlCore.KyResource
-  field KydlCore.KyResource::Amount : System.Int32
-  field KydlCore.KyResource::AmountPerLevel : System.Int32
-  field KydlCore.KyResource::Item : System.String
-  field KydlCore.KyResource::Recover : System.Boolean
-  method System.Void KydlCore.KyResource::.ctor()
-  method System.Void KydlCore.KyResource::.ctor(System.String,System.Int32)
-sealed class KydlCore.KyResult
-  method System.Boolean KydlCore.KyResult::get_Accepted()
-  method System.String KydlCore.KyResult::ToString()
-  method System.String KydlCore.KyResult::get_Id()
-  method System.String KydlCore.KyResult::get_Reason()
-abstract class KydlCore.KyRow
-  method System.String KydlCore.KyRow::get_Label()
-sealed class KydlCore.KySection
-  method KydlCore.KySection KydlCore.KySection::Button(System.String,System.Action)
-  method KydlCore.KySection KydlCore.KySection::Choice(System.String,System.Collections.Generic.IList`1<KydlCore.KyChoice>,System.String,System.Action`1<System.String>)
-  method KydlCore.KySection KydlCore.KySection::Columns(System.String,System.String)
-  method KydlCore.KySection KydlCore.KySection::Hosted(System.Func`1<UnityEngine.UIElements.VisualElement>)
-  method KydlCore.KySection KydlCore.KySection::List(System.String,System.Collections.Generic.IList`1<System.String>)
-  method KydlCore.KySection KydlCore.KySection::Note(System.String)
-  method KydlCore.KySection KydlCore.KySection::Slider(System.String,System.Single,System.Single,System.Single,System.String,System.Action`1<System.Single>)
-  method KydlCore.KySection KydlCore.KySection::Table(System.Collections.Generic.IList`1<System.String>,System.Collections.Generic.IList`1<System.Collections.Generic.IList`1<KydlCore.KyCell>>)
-  method KydlCore.KySection KydlCore.KySection::TextBox(System.String,System.String,System.Int32,System.Action`1<System.String>)
-  method KydlCore.KySection KydlCore.KySection::Toggle(System.String,System.Boolean,System.Action`1<System.Boolean>)
-  method KydlCore.KySection KydlCore.KySection::Value(System.String,System.String,System.String)
-  method System.Collections.Generic.List`1<KydlCore.KyRow> KydlCore.KySection::get_Rows()
-  method System.String KydlCore.KySection::get_Title()
-sealed class KydlCore.KySliderRow
-  method System.Action`1<System.Single> KydlCore.KySliderRow::get_Changed()
-  method System.Single KydlCore.KySliderRow::get_Max()
-  method System.Single KydlCore.KySliderRow::get_Min()
-  method System.Single KydlCore.KySliderRow::get_Value()
-  method System.String KydlCore.KySliderRow::get_Format()
-sealed class KydlCore.KyTab
-  method System.Int32 KydlCore.KyTab::get_Order()
-  method System.String KydlCore.KyTab::get_Id()
-  method System.String KydlCore.KyTab::get_ModGuid()
-  method System.String KydlCore.KyTab::get_Title()
-  method System.Void KydlCore.KyTab::.ctor()
-  method System.Void KydlCore.KyTab::Refresh()
-sealed class KydlCore.KyTableRow
-  method System.Collections.Generic.IList`1<System.Collections.Generic.IList`1<KydlCore.KyCell>> KydlCore.KyTableRow::get_Cells()
-  method System.Collections.Generic.IList`1<System.String> KydlCore.KyTableRow::get_Headers()
-sealed class KydlCore.KyTextRow
-  method System.Action`1<System.String> KydlCore.KyTextRow::get_Changed()
-  method System.Int32 KydlCore.KyTextRow::get_MaxLength()
-  method System.String KydlCore.KyTextRow::get_Value()
-sealed class KydlCore.KyToggleRow
-  method System.Action`1<System.Boolean> KydlCore.KyToggleRow::get_Changed()
-  method System.Boolean KydlCore.KyToggleRow::get_On()
-static class KydlCore.KyUi
-  method KydlCore.KyWindow KydlCore.KyUi::Open(System.String,System.String,System.Func`1<UnityEngine.UIElements.VisualElement>,System.Action)
-  method KydlCore.KyWindow KydlCore.KyUi::Open(System.String,System.String,UnityEngine.UIElements.VisualElement,System.Action)
-  method System.Boolean KydlCore.KyUi::Close(System.String,System.String)
-  method System.Boolean KydlCore.KyUi::IsOpen(System.String,System.String)
-  method System.Boolean KydlCore.KyUi::get_AnyOpen()
-  method UnityEngine.UIElements.VisualElement KydlCore.KyUi::get_Root()
-sealed class KydlCore.KyValueRow
-  method System.String KydlCore.KyValueRow::get_MaxValue()
-  method System.String KydlCore.KyValueRow::get_Value()
-sealed class KydlCore.KyWindow
-  method System.String KydlCore.KyWindow::get_Id()
-  method System.String KydlCore.KyWindow::get_ModGuid()
-  method System.Void KydlCore.KyWindow::BringToFront()
-  method System.Void KydlCore.KyWindow::Close()
-class KydlCore.Plugin
-  field KydlCore.Plugin::BundleName : System.String = kydlcore
-  field KydlCore.Plugin::ModGuid : System.String = com.kydldev.KydlCore
-  field KydlCore.Plugin::ModName : System.String = KydlCore
-  field KydlCore.Plugin::ModVersion : System.String
-  method System.Void KydlCore.Plugin::.ctor()
+class KydlCore.Bootstrap.Plugin
+  field KydlCore.Bootstrap.Plugin::BundleName : System.String = kydlcore
+  field KydlCore.Bootstrap.Plugin::ModGuid : System.String = com.kydldev.KydlCore
+  field KydlCore.Bootstrap.Plugin::ModName : System.String = KydlCore
+  field KydlCore.Bootstrap.Plugin::ModVersion : System.String
+  method System.Void KydlCore.Bootstrap.Plugin::.ctor()
+sealed class KydlCore.Common.ConfigReloader
+  method System.Boolean KydlCore.Common.ConfigReloader::Tick()
+  method System.Boolean KydlCore.Common.ConfigReloader::get_Watching()
+  method System.Void KydlCore.Common.ConfigReloader::.ctor(BepInEx.Configuration.ConfigFile)
+  method System.Void KydlCore.Common.ConfigReloader::Dispose()
+static class KydlCore.Common.ConfigTools
+  method System.Int32 KydlCore.Common.ConfigTools::ApplyCommaFix(BepInEx.Configuration.ConfigFile,System.String[])
+  method System.Int32 KydlCore.Common.ConfigTools::DropRemoved(BepInEx.Configuration.ConfigFile)
+  method System.String[] KydlCore.Common.ConfigTools::Capture(BepInEx.Configuration.ConfigFile)
+static class KydlCore.Common.KyCategory
+  field KydlCore.Common.KyCategory::Name : System.String = KY-Items
+  method System.String KydlCore.Common.KyCategory::For(System.String)
+static class KydlCore.Common.Loc
+  method System.Boolean KydlCore.Common.Loc::Register(System.Collections.Generic.Dictionary`2<System.String,System.String>)
+  method System.Boolean KydlCore.Common.Loc::Register(System.Collections.Generic.Dictionary`2<System.String,System.String>,System.Collections.Generic.Dictionary`2<System.String,System.String>)
+  method System.String KydlCore.Common.Loc::T(System.String,System.String[])
+  method System.String KydlCore.Common.Loc::Token(System.String)
+static class KydlCore.Common.ModCache
+  method System.String KydlCore.Common.ModCache::Dir(System.String)
+  method System.String KydlCore.Common.ModCache::File(System.String,System.String)
+sealed class KydlCore.Common.ModContext
+  method System.String KydlCore.Common.ModContext::get_Name()
+static class KydlCore.Common.ModContexts
+  method KydlCore.Common.ModContext KydlCore.Common.ModContexts::For(System.Reflection.Assembly)
+  method KydlCore.Common.ModContext KydlCore.Common.ModContexts::For(System.Type)
+static class KydlCore.Common.ModLog
+  method System.Boolean KydlCore.Common.ModLog::Check(System.String,System.Double,System.Double,System.Double,System.String)
+  method System.Boolean KydlCore.Common.ModLog::CheckRange(System.String,System.Double,System.Double,System.Double,System.String)
+  method System.Boolean KydlCore.Common.ModLog::Init(BepInEx.Logging.ManualLogSource,System.String,System.Func`1<System.Boolean>)
+  method System.Boolean KydlCore.Common.ModLog::get_DebugOn()
+  method System.Void KydlCore.Common.ModLog::Error(System.String)
+  method System.Void KydlCore.Common.ModLog::Info(System.String)
+  method System.Void KydlCore.Common.ModLog::Verbose(System.String)
+  method System.Void KydlCore.Common.ModLog::VerboseWarn(System.String)
+  method System.Void KydlCore.Common.ModLog::Warn(System.String)
+static class KydlCore.Common.TestArena
+  field KydlCore.Common.TestArena::AreaHalf : System.Single = 20
+  field KydlCore.Common.TestArena::ArenaMetres : System.Single = 70
+  field KydlCore.Common.TestArena::LanesKey : System.String = Kydl.TestArena.Lanes
+  field KydlCore.Common.TestArena::MaxWater : System.Single = 0.1
+  field KydlCore.Common.TestArena::MinSpawnMetres : System.Single = 16
+  field KydlCore.Common.TestArena::RankedKey : System.String = Kydl.TestArena.Ranked
+  field KydlCore.Common.TestArena::SpotKey : System.String = Kydl.TestArena.Spot
+  field KydlCore.Common.TestArena::StartKey : System.String = Kydl.TestArena.Start
+  method System.String KydlCore.Common.TestArena::MovePlayer()
+  method UnityEngine.Vector3 KydlCore.Common.TestArena::InFront(System.Single,System.Single)
+  method UnityEngine.Vector3 KydlCore.Common.TestArena::get_Spot()
+sealed class KydlCore.Common.TestHookAttribute
+  method System.String KydlCore.Common.TestHookAttribute::get_Name()
+  method System.Void KydlCore.Common.TestHookAttribute::.ctor(System.String)
+static class KydlCore.Common.TestLabSupport
+  method System.String KydlCore.Common.TestLabSupport::RunInGameTests(System.Type,System.Boolean)
+sealed class KydlCore.Common.Tunable`1
+  event KydlCore.Common.Tunable`1::SettingChanged : System.EventHandler
+  method KydlCore.Common.Tunable`1<T> KydlCore.Common.Tunable`1::SetFromConfigOf(System.String)
+  method System.Boolean KydlCore.Common.Tunable`1::Reset()
+  method System.Boolean KydlCore.Common.Tunable`1::get_External()
+  method System.Object KydlCore.Common.Tunable`1::get_Max()
+  method System.Object KydlCore.Common.Tunable`1::get_Min()
+  method System.String KydlCore.Common.Tunable`1::ToString()
+  method System.String KydlCore.Common.Tunable`1::get_Description()
+  method System.String KydlCore.Common.Tunable`1::get_Name()
+  method System.String KydlCore.Common.Tunable`1::get_Section()
+  method System.Void KydlCore.Common.Tunable`1::.ctor(System.String,System.String,T,System.String)
+  method System.Void KydlCore.Common.Tunable`1::.ctor(System.String,System.String,T,T,T,System.String)
+  method System.Void KydlCore.Common.Tunable`1::add_SettingChanged(System.EventHandler)
+  method System.Void KydlCore.Common.Tunable`1::remove_SettingChanged(System.EventHandler)
+  method System.Void KydlCore.Common.Tunable`1::set_Value(T)
+  method T KydlCore.Common.Tunable`1::get_Default()
+  method T KydlCore.Common.Tunable`1::get_Value()
+static class KydlCore.Common.UiInputLock
+  method System.Boolean KydlCore.Common.UiInputLock::Hold(System.String)
+  method System.Boolean KydlCore.Common.UiInputLock::Install(System.String)
+  method System.Boolean KydlCore.Common.UiInputLock::Release(System.String)
+  method System.Int32 KydlCore.Common.UiInputLock::get_Count()
+sealed class KydlCore.Core.CommandDispatcher
+  method KydlCore.Core.OperationResponse`1<TResult> KydlCore.Core.CommandDispatcher::Dispatch(KydlCore.Core.ICommand`1<TResult>)
+  method System.Boolean KydlCore.Core.CommandDispatcher::Handles(System.Type)
+  method System.Boolean KydlCore.Core.CommandDispatcher::Register(KydlCore.Core.ICommandHandler`2<TCommand,TResult>)
+  method System.Int32 KydlCore.Core.CommandDispatcher::get_Count()
+  method System.Void KydlCore.Core.CommandDispatcher::.ctor(System.Action`1<System.String>)
+sealed class KydlCore.Core.FeatureRegistry
+  method KydlCore.Core.OperationResponse`1<System.Int32> KydlCore.Core.FeatureRegistry::Add(KydlCore.Core.IFeature)
+  method KydlCore.Core.OperationResponse`1<System.Int32> KydlCore.Core.FeatureRegistry::Refresh()
+  method KydlCore.Core.OperationResponse`1<System.Int32> KydlCore.Core.FeatureRegistry::StopAll()
+  method System.Boolean KydlCore.Core.FeatureRegistry::IsRunning(System.String)
+  method System.Collections.Generic.IReadOnlyList`1<KydlCore.Core.IFeature> KydlCore.Core.FeatureRegistry::get_All()
+  method System.Int32 KydlCore.Core.FeatureRegistry::get_Count()
+  method System.Void KydlCore.Core.FeatureRegistry::.ctor(System.Action`1<System.String>)
+interface KydlCore.Core.IClock
+  method System.Single KydlCore.Core.IClock::get_Now()
+interface KydlCore.Core.ICommandHandler`2
+  method KydlCore.Core.OperationResponse`1<TResult> KydlCore.Core.ICommandHandler`2::Handle(TCommand)
+interface KydlCore.Core.ICommand`1
+interface KydlCore.Core.IFeature
+  method System.Boolean KydlCore.Core.IFeature::IsEnabled()
+  method System.Boolean KydlCore.Core.IFeature::Start()
+  method System.Boolean KydlCore.Core.IFeature::Stop()
+  method System.String KydlCore.Core.IFeature::get_Id()
+interface KydlCore.Core.IOperationStep`2
+  method KydlCore.Core.OperationResponse`1<TOutput> KydlCore.Core.IOperationStep`2::Run(TInput)
+interface KydlCore.Core.IOwnership
+  method System.Boolean KydlCore.Core.IOwnership::get_IsOwner()
+  method System.Int64 KydlCore.Core.IOwnership::get_OwnerId()
+sealed class KydlCore.Core.ManualClock
+  method System.Boolean KydlCore.Core.ManualClock::Advance(System.Single)
+  method System.Single KydlCore.Core.ManualClock::get_Now()
+  method System.Void KydlCore.Core.ManualClock::.ctor(System.Single)
+sealed class KydlCore.Core.OperationPipeline`2
+  method KydlCore.Core.OperationPipeline`2<TInput,TOutput> KydlCore.Core.OperationPipeline`2::Validate(System.String,System.Func`2<TInput,KydlCore.Core.ValidationResult>)
+  method KydlCore.Core.OperationResponse`1<TOutput> KydlCore.Core.OperationPipeline`2::Run(TInput)
+  method System.Action`1<System.String> KydlCore.Core.OperationPipeline`2::get_Trace()
+  method System.Int32 KydlCore.Core.OperationPipeline`2::get_StepCount()
+  method System.Void KydlCore.Core.OperationPipeline`2::.ctor(System.String,KydlCore.Core.IOperationStep`2<TInput,TOutput>)
+  method System.Void KydlCore.Core.OperationPipeline`2::.ctor(System.String,System.Func`2<TInput,KydlCore.Core.OperationResponse`1<TOutput>>)
+  method System.Void KydlCore.Core.OperationPipeline`2::set_Trace(System.Action`1<System.String>)
+struct KydlCore.Core.OperationResponse`1
+  method KydlCore.Core.OperationResponse`1<T> KydlCore.Core.OperationResponse`1::Failed(System.String)
+  method KydlCore.Core.OperationResponse`1<T> KydlCore.Core.OperationResponse`1::Ignored(System.String)
+  method KydlCore.Core.OperationResponse`1<T> KydlCore.Core.OperationResponse`1::Rejected(System.String)
+  method KydlCore.Core.OperationResponse`1<T> KydlCore.Core.OperationResponse`1::Success(T,System.String)
+  method KydlCore.Core.OperationResponse`1<TOther> KydlCore.Core.OperationResponse`1::As()
+  method KydlCore.Core.ResponseStatus KydlCore.Core.OperationResponse`1::get_Status()
+  method System.Boolean KydlCore.Core.OperationResponse`1::get_IsSuccess()
+  method System.String KydlCore.Core.OperationResponse`1::ToString()
+  method System.String KydlCore.Core.OperationResponse`1::get_Reason()
+  method System.Void KydlCore.Core.OperationResponse`1::.ctor(KydlCore.Core.ResponseStatus,T,System.String)
+  method T KydlCore.Core.OperationResponse`1::get_Value()
+struct KydlCore.Core.PlayerId
+  field KydlCore.Core.PlayerId::Nobody : KydlCore.Core.PlayerId
+  method System.Boolean KydlCore.Core.PlayerId::get_IsNobody()
+  method System.Int64 KydlCore.Core.PlayerId::get_Id()
+  method System.String KydlCore.Core.PlayerId::ToString()
+  method System.String KydlCore.Core.PlayerId::get_Name()
+  method System.Void KydlCore.Core.PlayerId::.ctor(System.Int64,System.String)
+enum KydlCore.Core.ResponseStatus
+  field KydlCore.Core.ResponseStatus::Failed : KydlCore.Core.ResponseStatus = 3
+  field KydlCore.Core.ResponseStatus::Ignored : KydlCore.Core.ResponseStatus = 2
+  field KydlCore.Core.ResponseStatus::Rejected : KydlCore.Core.ResponseStatus = 1
+  field KydlCore.Core.ResponseStatus::Success : KydlCore.Core.ResponseStatus = 0
+  field KydlCore.Core.ResponseStatus::value__ : System.Int32
+struct KydlCore.Core.ValidationResult
+  field KydlCore.Core.ValidationResult::Valid : KydlCore.Core.ValidationResult
+  method KydlCore.Core.ResponseStatus KydlCore.Core.ValidationResult::get_Status()
+  method KydlCore.Core.ValidationResult KydlCore.Core.ValidationResult::Ignore(System.String)
+  method KydlCore.Core.ValidationResult KydlCore.Core.ValidationResult::IgnoreUnless(System.Boolean,System.String)
+  method KydlCore.Core.ValidationResult KydlCore.Core.ValidationResult::Reject(System.String)
+  method KydlCore.Core.ValidationResult KydlCore.Core.ValidationResult::RejectUnless(System.Boolean,System.String)
+  method System.Boolean KydlCore.Core.ValidationResult::get_IsValid()
+  method System.String KydlCore.Core.ValidationResult::ToString()
+  method System.String KydlCore.Core.ValidationResult::get_Reason()
+sealed class KydlCore.Features.Hub.Contracts.KyButtonRow
+  method System.Action KydlCore.Features.Hub.Contracts.KyButtonRow::get_Clicked()
+sealed class KydlCore.Features.Hub.Contracts.KyCell
+  method KydlCore.Features.Hub.Contracts.KyCell KydlCore.Features.Hub.Contracts.KyCell::Button(System.String,System.Action)
+  method KydlCore.Features.Hub.Contracts.KyCell KydlCore.Features.Hub.Contracts.KyCell::Confirm(System.String,System.String,System.String)
+  method KydlCore.Features.Hub.Contracts.KyCell KydlCore.Features.Hub.Contracts.KyCell::Drop(System.Collections.Generic.IList`1<KydlCore.Features.Hub.Contracts.KyChoice>,System.String,System.Action`1<System.String>)
+  method KydlCore.Features.Hub.Contracts.KyCell KydlCore.Features.Hub.Contracts.KyCell::Label(System.String)
+  method KydlCore.Features.Hub.Contracts.KyCell KydlCore.Features.Hub.Contracts.KyCell::Rich(System.String)
+  method System.Action KydlCore.Features.Hub.Contracts.KyCell::get_Clicked()
+  method System.Action`1<System.String> KydlCore.Features.Hub.Contracts.KyCell::get_Chosen()
+  method System.Boolean KydlCore.Features.Hub.Contracts.KyCell::get_IsRich()
+  method System.Collections.Generic.IList`1<KydlCore.Features.Hub.Contracts.KyChoice> KydlCore.Features.Hub.Contracts.KyCell::get_Choices()
+  method System.String KydlCore.Features.Hub.Contracts.KyCell::get_ConfirmText()
+  method System.String KydlCore.Features.Hub.Contracts.KyCell::get_NoText()
+  method System.String KydlCore.Features.Hub.Contracts.KyCell::get_Selected()
+  method System.String KydlCore.Features.Hub.Contracts.KyCell::get_Text()
+  method System.String KydlCore.Features.Hub.Contracts.KyCell::get_YesText()
+sealed class KydlCore.Features.Hub.Contracts.KyChoice
+  method System.String KydlCore.Features.Hub.Contracts.KyChoice::get_Id()
+  method System.String KydlCore.Features.Hub.Contracts.KyChoice::get_Text()
+  method System.Void KydlCore.Features.Hub.Contracts.KyChoice::.ctor(System.String,System.String)
+sealed class KydlCore.Features.Hub.Contracts.KyChoiceRow
+  method System.Action`1<System.String> KydlCore.Features.Hub.Contracts.KyChoiceRow::get_Chosen()
+  method System.Collections.Generic.IList`1<KydlCore.Features.Hub.Contracts.KyChoice> KydlCore.Features.Hub.Contracts.KyChoiceRow::get_Choices()
+  method System.String KydlCore.Features.Hub.Contracts.KyChoiceRow::get_Selected()
+sealed class KydlCore.Features.Hub.Contracts.KyColumnsRow
+  method System.String KydlCore.Features.Hub.Contracts.KyColumnsRow::get_MaxValue()
+  method System.String KydlCore.Features.Hub.Contracts.KyColumnsRow::get_Value()
+sealed class KydlCore.Features.Hub.Contracts.KyHostedRow
+  method System.Func`1<UnityEngine.UIElements.VisualElement> KydlCore.Features.Hub.Contracts.KyHostedRow::get_Build()
+static class KydlCore.Features.Hub.Contracts.KyHub
+  event KydlCore.Features.Hub.Contracts.KyHub::TabShown : System.Action`2<System.String,System.String>
+  method KydlCore.Features.Hub.Contracts.KyTab KydlCore.Features.Hub.Contracts.KyHub::AddPage(System.String,System.String,System.String,System.Func`1<KydlCore.Features.Hub.Contracts.KyPage>,System.Int32,System.Int32)
+  method KydlCore.Features.Hub.Contracts.KyTab KydlCore.Features.Hub.Contracts.KyHub::AddTab(System.String,System.String,System.String,System.Func`1<UnityEngine.UIElements.VisualElement>,System.Int32)
+  method System.Boolean KydlCore.Features.Hub.Contracts.KyHub::HasTab(System.String,System.String)
+  method System.Boolean KydlCore.Features.Hub.Contracts.KyHub::RemoveTab(System.String,System.String)
+  method System.Boolean KydlCore.Features.Hub.Contracts.KyHub::get_IsOpen()
+  method System.Void KydlCore.Features.Hub.Contracts.KyHub::Close()
+  method System.Void KydlCore.Features.Hub.Contracts.KyHub::Open(System.String,System.String)
+  method System.Void KydlCore.Features.Hub.Contracts.KyHub::SetModTitle(System.String,System.String,UnityEngine.Sprite)
+  method System.Void KydlCore.Features.Hub.Contracts.KyHub::add_TabShown(System.Action`2<System.String,System.String>)
+  method System.Void KydlCore.Features.Hub.Contracts.KyHub::remove_TabShown(System.Action`2<System.String,System.String>)
+  method UnityEngine.UIElements.VisualElement KydlCore.Features.Hub.Contracts.KyHub::ConfigEntries(BepInEx.Configuration.ConfigFile,System.String[])
+sealed class KydlCore.Features.Hub.Contracts.KyListRow
+  method System.Collections.Generic.IList`1<System.String> KydlCore.Features.Hub.Contracts.KyListRow::get_Items()
+sealed class KydlCore.Features.Hub.Contracts.KyNoteRow
+sealed class KydlCore.Features.Hub.Contracts.KyPage
+  field KydlCore.Features.Hub.Contracts.KyPage::State : System.String
+  method KydlCore.Features.Hub.Contracts.KySection KydlCore.Features.Hub.Contracts.KyPage::Section(System.String)
+  method System.Collections.Generic.List`1<KydlCore.Features.Hub.Contracts.KySection> KydlCore.Features.Hub.Contracts.KyPage::get_Sections()
+  method System.Void KydlCore.Features.Hub.Contracts.KyPage::.ctor()
+abstract class KydlCore.Features.Hub.Contracts.KyRow
+  method System.String KydlCore.Features.Hub.Contracts.KyRow::get_Label()
+sealed class KydlCore.Features.Hub.Contracts.KySection
+  method KydlCore.Features.Hub.Contracts.KySection KydlCore.Features.Hub.Contracts.KySection::Button(System.String,System.Action)
+  method KydlCore.Features.Hub.Contracts.KySection KydlCore.Features.Hub.Contracts.KySection::Choice(System.String,System.Collections.Generic.IList`1<KydlCore.Features.Hub.Contracts.KyChoice>,System.String,System.Action`1<System.String>)
+  method KydlCore.Features.Hub.Contracts.KySection KydlCore.Features.Hub.Contracts.KySection::Columns(System.String,System.String)
+  method KydlCore.Features.Hub.Contracts.KySection KydlCore.Features.Hub.Contracts.KySection::Hosted(System.Func`1<UnityEngine.UIElements.VisualElement>)
+  method KydlCore.Features.Hub.Contracts.KySection KydlCore.Features.Hub.Contracts.KySection::List(System.String,System.Collections.Generic.IList`1<System.String>)
+  method KydlCore.Features.Hub.Contracts.KySection KydlCore.Features.Hub.Contracts.KySection::Note(System.String)
+  method KydlCore.Features.Hub.Contracts.KySection KydlCore.Features.Hub.Contracts.KySection::Slider(System.String,System.Single,System.Single,System.Single,System.String,System.Action`1<System.Single>)
+  method KydlCore.Features.Hub.Contracts.KySection KydlCore.Features.Hub.Contracts.KySection::Table(System.Collections.Generic.IList`1<System.String>,System.Collections.Generic.IList`1<System.Collections.Generic.IList`1<KydlCore.Features.Hub.Contracts.KyCell>>)
+  method KydlCore.Features.Hub.Contracts.KySection KydlCore.Features.Hub.Contracts.KySection::TextBox(System.String,System.String,System.Int32,System.Action`1<System.String>)
+  method KydlCore.Features.Hub.Contracts.KySection KydlCore.Features.Hub.Contracts.KySection::Toggle(System.String,System.Boolean,System.Action`1<System.Boolean>)
+  method KydlCore.Features.Hub.Contracts.KySection KydlCore.Features.Hub.Contracts.KySection::Value(System.String,System.String,System.String)
+  method System.Collections.Generic.List`1<KydlCore.Features.Hub.Contracts.KyRow> KydlCore.Features.Hub.Contracts.KySection::get_Rows()
+  method System.String KydlCore.Features.Hub.Contracts.KySection::get_Title()
+sealed class KydlCore.Features.Hub.Contracts.KySliderRow
+  method System.Action`1<System.Single> KydlCore.Features.Hub.Contracts.KySliderRow::get_Changed()
+  method System.Single KydlCore.Features.Hub.Contracts.KySliderRow::get_Max()
+  method System.Single KydlCore.Features.Hub.Contracts.KySliderRow::get_Min()
+  method System.Single KydlCore.Features.Hub.Contracts.KySliderRow::get_Value()
+  method System.String KydlCore.Features.Hub.Contracts.KySliderRow::get_Format()
+sealed class KydlCore.Features.Hub.Contracts.KyTab
+  method System.Int32 KydlCore.Features.Hub.Contracts.KyTab::get_Order()
+  method System.String KydlCore.Features.Hub.Contracts.KyTab::get_Id()
+  method System.String KydlCore.Features.Hub.Contracts.KyTab::get_ModGuid()
+  method System.String KydlCore.Features.Hub.Contracts.KyTab::get_Title()
+  method System.Void KydlCore.Features.Hub.Contracts.KyTab::.ctor()
+  method System.Void KydlCore.Features.Hub.Contracts.KyTab::Refresh()
+sealed class KydlCore.Features.Hub.Contracts.KyTableRow
+  method System.Collections.Generic.IList`1<System.Collections.Generic.IList`1<KydlCore.Features.Hub.Contracts.KyCell>> KydlCore.Features.Hub.Contracts.KyTableRow::get_Cells()
+  method System.Collections.Generic.IList`1<System.String> KydlCore.Features.Hub.Contracts.KyTableRow::get_Headers()
+sealed class KydlCore.Features.Hub.Contracts.KyTextRow
+  method System.Action`1<System.String> KydlCore.Features.Hub.Contracts.KyTextRow::get_Changed()
+  method System.Int32 KydlCore.Features.Hub.Contracts.KyTextRow::get_MaxLength()
+  method System.String KydlCore.Features.Hub.Contracts.KyTextRow::get_Value()
+sealed class KydlCore.Features.Hub.Contracts.KyToggleRow
+  method System.Action`1<System.Boolean> KydlCore.Features.Hub.Contracts.KyToggleRow::get_Changed()
+  method System.Boolean KydlCore.Features.Hub.Contracts.KyToggleRow::get_On()
+static class KydlCore.Features.Hub.Contracts.KyUi
+  method KydlCore.Features.Hub.Contracts.KyWindow KydlCore.Features.Hub.Contracts.KyUi::Open(System.String,System.String,System.Func`1<UnityEngine.UIElements.VisualElement>,System.Action)
+  method KydlCore.Features.Hub.Contracts.KyWindow KydlCore.Features.Hub.Contracts.KyUi::Open(System.String,System.String,UnityEngine.UIElements.VisualElement,System.Action)
+  method System.Boolean KydlCore.Features.Hub.Contracts.KyUi::Close(System.String,System.String)
+  method System.Boolean KydlCore.Features.Hub.Contracts.KyUi::IsOpen(System.String,System.String)
+  method System.Boolean KydlCore.Features.Hub.Contracts.KyUi::get_AnyOpen()
+  method UnityEngine.UIElements.VisualElement KydlCore.Features.Hub.Contracts.KyUi::get_Root()
+sealed class KydlCore.Features.Hub.Contracts.KyValueRow
+  method System.String KydlCore.Features.Hub.Contracts.KyValueRow::get_MaxValue()
+  method System.String KydlCore.Features.Hub.Contracts.KyValueRow::get_Value()
+sealed class KydlCore.Features.Hub.Contracts.KyWindow
+  method System.String KydlCore.Features.Hub.Contracts.KyWindow::get_Id()
+  method System.String KydlCore.Features.Hub.Contracts.KyWindow::get_ModGuid()
+  method System.Void KydlCore.Features.Hub.Contracts.KyWindow::BringToFront()
+  method System.Void KydlCore.Features.Hub.Contracts.KyWindow::Close()
+sealed class KydlCore.Features.Items.Contracts.KyContribution
+  field KydlCore.Features.Items.Contracts.KyContribution::DisplayName : System.String
+  field KydlCore.Features.Items.Contracts.KyContribution::Id : System.String
+  field KydlCore.Features.Items.Contracts.KyContribution::Kind : KydlCore.Features.Items.Contracts.KyKind
+  field KydlCore.Features.Items.Contracts.KyContribution::ModGuid : System.String
+  field KydlCore.Features.Items.Contracts.KyContribution::OnRegistered : System.Action`1<UnityEngine.GameObject>
+  field KydlCore.Features.Items.Contracts.KyContribution::Prefab : UnityEngine.GameObject
+  field KydlCore.Features.Items.Contracts.KyContribution::Recipe : KydlCore.Features.Items.Contracts.KyRecipe
+  field KydlCore.Features.Items.Contracts.KyContribution::RegisterInGame : System.Boolean
+  field KydlCore.Features.Items.Contracts.KyContribution::Tags : System.String[]
+  method System.Void KydlCore.Features.Items.Contracts.KyContribution::.ctor()
+sealed class KydlCore.Features.Items.Contracts.KyEntry
+  field KydlCore.Features.Items.Contracts.KyEntry::Id : System.String
+  field KydlCore.Features.Items.Contracts.KyEntry::Kind : KydlCore.Features.Items.Contracts.KyKind
+  field KydlCore.Features.Items.Contracts.KyEntry::ModGuid : System.String
+  field KydlCore.Features.Items.Contracts.KyEntry::ModName : System.String
+  field KydlCore.Features.Items.Contracts.KyEntry::NameToken : System.String
+  field KydlCore.Features.Items.Contracts.KyEntry::Prefab : System.String
+  field KydlCore.Features.Items.Contracts.KyEntry::PrefabObject : UnityEngine.GameObject
+  field KydlCore.Features.Items.Contracts.KyEntry::Source : System.String
+  field KydlCore.Features.Items.Contracts.KyEntry::Tags : System.Collections.Generic.IReadOnlyList`1<System.String>
+  method System.String KydlCore.Features.Items.Contracts.KyEntry::get_DisplayName()
+  method System.Void KydlCore.Features.Items.Contracts.KyEntry::.ctor()
+  method System.Void KydlCore.Features.Items.Contracts.KyEntry::set_Icon(UnityEngine.Sprite)
+  method UnityEngine.Sprite KydlCore.Features.Items.Contracts.KyEntry::get_Icon()
+static class KydlCore.Features.Items.Contracts.KyItems
+  event KydlCore.Features.Items.Contracts.KyItems::Changed : System.Action
+  field KydlCore.Features.Items.Contracts.KyItems::CategoryName : System.String = KY-Items
+  method KydlCore.Features.Items.Contracts.KyEntry KydlCore.Features.Items.Contracts.KyItems::Find(System.String)
+  method KydlCore.Features.Items.Contracts.KyEntry KydlCore.Features.Items.Contracts.KyItems::FindById(System.String)
+  method KydlCore.Features.Items.Contracts.KyResult KydlCore.Features.Items.Contracts.KyItems::Contribute(KydlCore.Features.Items.Contracts.KyContribution)
+  method System.Boolean KydlCore.Features.Items.Contracts.KyItems::IsUserGuid(System.String)
+  method System.Boolean KydlCore.Features.Items.Contracts.KyItems::Register(UnityEngine.GameObject,System.String,KydlCore.Features.Items.Contracts.KyKind,System.String[])
+  method System.Boolean KydlCore.Features.Items.Contracts.KyItems::Withdraw(System.String)
+  method System.Boolean KydlCore.Features.Items.Contracts.KyItems::get_Ready()
+  method System.Collections.Generic.IEnumerable`1<KydlCore.Features.Items.Contracts.KyEntry> KydlCore.Features.Items.Contracts.KyItems::ByMod(System.String)
+  method System.Collections.Generic.IReadOnlyList`1<KydlCore.Features.Items.Contracts.KyEntry> KydlCore.Features.Items.Contracts.KyItems::get_All()
+  method System.Nullable`1<Piece/PieceCategory> KydlCore.Features.Items.Contracts.KyItems::get_Category()
+  method System.Void KydlCore.Features.Items.Contracts.KyItems::add_Changed(System.Action)
+  method System.Void KydlCore.Features.Items.Contracts.KyItems::remove_Changed(System.Action)
+enum KydlCore.Features.Items.Contracts.KyKind
+  field KydlCore.Features.Items.Contracts.KyKind::Item : KydlCore.Features.Items.Contracts.KyKind = 0
+  field KydlCore.Features.Items.Contracts.KyKind::Piece : KydlCore.Features.Items.Contracts.KyKind = 1
+  field KydlCore.Features.Items.Contracts.KyKind::value__ : System.Int32
+sealed class KydlCore.Features.Items.Contracts.KyRecipe
+  field KydlCore.Features.Items.Contracts.KyRecipe::Amount : System.Int32
+  field KydlCore.Features.Items.Contracts.KyRecipe::CraftingStation : System.String
+  field KydlCore.Features.Items.Contracts.KyRecipe::MinStationLevel : System.Int32
+  field KydlCore.Features.Items.Contracts.KyRecipe::Resources : KydlCore.Features.Items.Contracts.KyResource[]
+  method System.Void KydlCore.Features.Items.Contracts.KyRecipe::.ctor()
+sealed class KydlCore.Features.Items.Contracts.KyResource
+  field KydlCore.Features.Items.Contracts.KyResource::Amount : System.Int32
+  field KydlCore.Features.Items.Contracts.KyResource::AmountPerLevel : System.Int32
+  field KydlCore.Features.Items.Contracts.KyResource::Item : System.String
+  field KydlCore.Features.Items.Contracts.KyResource::Recover : System.Boolean
+  method System.Void KydlCore.Features.Items.Contracts.KyResource::.ctor()
+  method System.Void KydlCore.Features.Items.Contracts.KyResource::.ctor(System.String,System.Int32)
+sealed class KydlCore.Features.Items.Contracts.KyResult
+  method System.Boolean KydlCore.Features.Items.Contracts.KyResult::get_Accepted()
+  method System.String KydlCore.Features.Items.Contracts.KyResult::ToString()
+  method System.String KydlCore.Features.Items.Contracts.KyResult::get_Id()
+  method System.String KydlCore.Features.Items.Contracts.KyResult::get_Reason()
+sealed class KydlCore.Ui.UiColorPicker
+  field KydlCore.Ui.UiColorPicker::Root : UnityEngine.UIElements.VisualElement
+  method System.Boolean KydlCore.Ui.UiColorPicker::Set(UnityEngine.Color)
+  method System.String KydlCore.Ui.UiColorPicker::get_Hex()
+  method System.Void KydlCore.Ui.UiColorPicker::.ctor(System.String,System.Action`1<System.String>,System.Boolean)
+  method UnityEngine.Color KydlCore.Ui.UiColorPicker::get_Color()
+static class KydlCore.Ui.UiControls
+  method UnityEngine.UIElements.Button KydlCore.Ui.UiControls::Button(System.String,System.Action,System.Boolean)
+  method UnityEngine.UIElements.Button KydlCore.Ui.UiControls::Dropdown(System.Collections.Generic.IList`1<System.String>,System.String,System.Func`2<System.String,System.String>,System.Action`1<System.String>)
+  method UnityEngine.UIElements.Button KydlCore.Ui.UiControls::Field(System.String,System.Action)
+  method UnityEngine.UIElements.Label KydlCore.Ui.UiControls::Note(System.String)
+  method UnityEngine.UIElements.TextField KydlCore.Ui.UiControls::TextField(System.String,System.Int32,System.Action`1<System.String>)
+  method UnityEngine.UIElements.VisualElement KydlCore.Ui.UiControls::ColorPicker(System.String,System.Action`1<System.String>,System.Action`1<System.String>&)
+  method UnityEngine.UIElements.VisualElement KydlCore.Ui.UiControls::Heading(System.String)
+  method UnityEngine.UIElements.VisualElement KydlCore.Ui.UiControls::Line(UnityEngine.UIElements.VisualElement[])
+  method UnityEngine.UIElements.VisualElement KydlCore.Ui.UiControls::Row(System.String,UnityEngine.UIElements.VisualElement)
+  method UnityEngine.UIElements.VisualElement KydlCore.Ui.UiControls::Slider(System.Single,System.Single,System.Single,System.String,System.Action`1<System.Single>)
+  method UnityEngine.UIElements.VisualElement KydlCore.Ui.UiControls::Toggle(System.String,System.Boolean,System.Action`1<System.Boolean>)
+static class KydlCore.Ui.UiKit
+  field KydlCore.Ui.UiKit::Border : UnityEngine.Color
+  field KydlCore.Ui.UiKit::ButtonSize : System.Int32 = 21
+  field KydlCore.Ui.UiKit::FontSize : System.Int32 = 22
+  field KydlCore.Ui.UiKit::Gold : UnityEngine.Color
+  field KydlCore.Ui.UiKit::GoldDim : UnityEngine.Color
+  field KydlCore.Ui.UiKit::NameColor : UnityEngine.Color
+  field KydlCore.Ui.UiKit::NameSize : System.Int32 = 24
+  field KydlCore.Ui.UiKit::OnDark : UnityEngine.Color
+  field KydlCore.Ui.UiKit::Owner : System.String
+  field KydlCore.Ui.UiKit::Panel : UnityEngine.Color
+  field KydlCore.Ui.UiKit::PanelHover : UnityEngine.Color
+  field KydlCore.Ui.UiKit::PanelLight : UnityEngine.Color
+  field KydlCore.Ui.UiKit::SectionSize : System.Int32 = 24
+  field KydlCore.Ui.UiKit::SmallSize : System.Int32 = 18
+  field KydlCore.Ui.UiKit::TabColor : UnityEngine.Color
+  field KydlCore.Ui.UiKit::Text : UnityEngine.Color
+  field KydlCore.Ui.UiKit::TextDim : UnityEngine.Color
+  field KydlCore.Ui.UiKit::Track : UnityEngine.Color
+  field KydlCore.Ui.UiKit::ValueColor : UnityEngine.Color
+  method System.Void KydlCore.Ui.UiKit::Borders(UnityEngine.UIElements.VisualElement,System.Single,UnityEngine.Color)
+  method System.Void KydlCore.Ui.UiKit::Fade(UnityEngine.UIElements.VisualElement,System.String[])
+  method System.Void KydlCore.Ui.UiKit::Pad(UnityEngine.UIElements.VisualElement,System.Single,System.Single)
+  method System.Void KydlCore.Ui.UiKit::Radius(UnityEngine.UIElements.VisualElement,System.Single)
+  method UnityEngine.UIElements.Label KydlCore.Ui.UiKit::Label(System.String,System.Single,UnityEngine.Color,System.Boolean)
+  method UnityEngine.UIElements.PanelSettings KydlCore.Ui.UiKit::get_Settings()
+  method UnityEngine.UIElements.VisualElement KydlCore.Ui.UiKit::Window(System.String,System.String,System.Action,KydlCore.Ui.UiScroll&)
+  method UnityEngine.UIElements.VisualElement KydlCore.Ui.UiKit::get_Root()
+static class KydlCore.Ui.UiLog
+  field KydlCore.Ui.UiLog::ErrorSink : System.Action`1<System.String>
+  field KydlCore.Ui.UiLog::Owner : System.String
+  field KydlCore.Ui.UiLog::VerboseSink : System.Action`1<System.String>
+  field KydlCore.Ui.UiLog::WarnSink : System.Action`1<System.String>
+  method System.Action KydlCore.Ui.UiLog::Wrap(System.Action)
+  method System.Action`1<T> KydlCore.Ui.UiLog::Wrap(System.Action`1<T>)
+  method System.Void KydlCore.Ui.UiLog::Error(System.String)
+  method System.Void KydlCore.Ui.UiLog::Verbose(System.String)
+  method System.Void KydlCore.Ui.UiLog::Warn(System.String)
+  method T KydlCore.Ui.UiLog::Within(System.String,System.Func`1<T>)
+sealed class KydlCore.Ui.UiScroll
+  field KydlCore.Ui.UiScroll::Content : UnityEngine.UIElements.VisualElement
+  field KydlCore.Ui.UiScroll::Root : UnityEngine.UIElements.VisualElement
+  method System.Void KydlCore.Ui.UiScroll::.ctor(System.String)
+  method System.Void KydlCore.Ui.UiScroll::ScrollBy(System.Single)
+  method System.Void KydlCore.Ui.UiScroll::ScrollTo(System.Single)
+sealed class KydlCore.Ui.UiSlider
+  field KydlCore.Ui.UiSlider::Root : UnityEngine.UIElements.VisualElement
+  method System.Boolean KydlCore.Ui.UiSlider::SetRange(System.Single,System.Single)
+  method System.Boolean KydlCore.Ui.UiSlider::SetValueWithoutNotify(System.Single)
+  method System.Boolean KydlCore.Ui.UiSlider::get_Enabled()
+  method System.Single KydlCore.Ui.UiSlider::get_Max()
+  method System.Single KydlCore.Ui.UiSlider::get_Min()
+  method System.Single KydlCore.Ui.UiSlider::get_Value()
+  method System.Void KydlCore.Ui.UiSlider::.ctor(System.Single,System.Single,System.Single,System.String,System.Action`1<System.Single>,System.Collections.Generic.IList`1<System.Single>)
+  method System.Void KydlCore.Ui.UiSlider::set_Enabled(System.Boolean)

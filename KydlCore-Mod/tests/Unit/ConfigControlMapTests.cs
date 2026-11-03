@@ -14,8 +14,8 @@ namespace KydlCore.Tests.Unit
     [TestFixture]
     public class ConfigControlMapTests
     {
-        static readonly Type Map = ModAssembly.Type("KydlCore.Ui.ConfigControlMap");
-        static readonly Type KindType = ModAssembly.Type("KydlCore.Ui.ControlKind");
+        static readonly Type Map = ModAssembly.Type("KydlCore.Presentation.Hub.Pages.ConfigControlMap");
+        static readonly Type KindType = ModAssembly.Type("KydlCore.Presentation.Hub.Pages.ControlKind");
 
         static object Call(string name, params object[] args) { return Map.GetMethod(name).Invoke(null, args); }
         static string Kind(Type t, bool range = false, bool list = false) { return Call("Classify", t, range, list).ToString(); }

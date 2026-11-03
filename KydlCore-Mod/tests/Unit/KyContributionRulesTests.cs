@@ -1,4 +1,4 @@
-using Kydl.Core.Results;
+using KydlCore.Core;
 using KydlCore.Features.Items.Domain;
 
 namespace KydlCore.Tests.Unit

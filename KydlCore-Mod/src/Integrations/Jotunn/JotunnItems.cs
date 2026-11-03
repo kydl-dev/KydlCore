@@ -5,11 +5,11 @@ using Jotunn.Configs;
 using Jotunn.Entities;
 using Jotunn.Managers;
 using Jotunn.Utils;
-using Kydl.Common;
+using KydlCore.Common;
 using KydlCore.Features.Items.Contracts;
 using UnityEngine;
 
-namespace KydlCore.Integrations.JotunnAdapter
+namespace KydlCore.Integrations.Jotunn
 {
     /// <summary>
     /// The Jotunn side of KY-Items (MIGRATION_DECISIONS B13: the registry is Jotunn-free, the game side stays on Jotunn behind <see cref="IKyGameSide"/>

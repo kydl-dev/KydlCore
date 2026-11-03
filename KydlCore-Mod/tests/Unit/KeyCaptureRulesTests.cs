@@ -12,7 +12,7 @@ namespace KydlCore.Tests.Unit
     [TestFixture]
     public class KeyCaptureRulesTests
     {
-        static readonly Type Rules = ModAssembly.Type("KydlCore.Ui.KeyCaptureRules");
+        static readonly Type Rules = ModAssembly.Type("KydlCore.Features.Hub.Infrastructure.KeyCaptureRules");
 
         // returns "Step main [mods]" so one assertion shows the whole decision
         static string Decide(KeyCode[] pressed, KeyCode[] held, bool withModifiers)

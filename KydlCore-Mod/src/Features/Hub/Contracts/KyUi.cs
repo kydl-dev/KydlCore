@@ -1,19 +1,21 @@
 using System;
-using Kydl.Common;
+using KydlCore.Common;
+using KydlCore.Features.Hub.Domain;
+using KydlCore.Features.Hub.Infrastructure;
 using UnityEngine.UIElements;
 
-namespace KydlCore
+namespace KydlCore.Features.Hub.Contracts
 {
     /// <summary>
     /// Windows OUTSIDE the hub (DESIGN 3, D-019, PLAN T-038): a window tied to something in the world, like ChestDecor's chest editor, opened by the
     /// interaction (never by a mod hotkey of its own). Everything else is a tab in <see cref="KyHub"/>. Core owns what must exist once: the UI root,
     /// the window order, the input lock (held while ANY Core window is open) and Escape (closes only the front window). The mod builds the window
-    /// content with the shared kit (<c>Kydl.Ui.UiKit.Window</c> ...), passes it to <see cref="Open"/> and cleans up in `onClosed`.
+    /// content with the shared kit (<c>KydlCore.Ui.UiKit.Window</c> ...), passes it to <see cref="Open"/> and cleans up in `onClosed`.
     /// </summary>
     public static class KyUi
     {
         /// <summary>The one UI root of the game's KydlDev UI (null while the UI is not available yet).</summary>
-        public static VisualElement Root { get { return Kydl.Ui.UiKit.Root; } }
+        public static VisualElement Root { get { return global::KydlCore.Ui.UiKit.Root; } }
 
         /// <summary>True while any Core window (the hub included) is open: the game takes no input then.</summary>
         public static bool AnyOpen { get { return KyWindows.Stack.AnyOpen; } }
@@ -37,7 +39,7 @@ namespace KydlCore
         {
             if (build == null) { ModLog.Warn("KyUi.Open: refused (guid '" + modGuid + "', id '" + id + "', no window builder)"); return null; }
             VisualElement window;
-            try { window = Kydl.Ui.UiLog.Within(modGuid, build); }
+            try { window = global::KydlCore.Ui.UiLog.Within(modGuid, build); }
             // Stryker disable once all : the only effect of the handler is the warning (the null result is tested)
             catch (Exception e) { ModLog.Warn("KyUi.Open: the window builder of '" + modGuid + "' / '" + id + "' threw " + e.GetType().Name + ": " + e.Message); return null; }
             ModLog.Verbose("KyUi.Open: built '" + id + "' of '" + modGuid + "' as that mod (window " + (window == null ? "null" : "given") + ")");
@@ -45,12 +47,12 @@ namespace KydlCore
         }
 
         /// <summary>Closes a window of a mod (its `onClosed` runs). False when it was not open.</summary>
-        public static bool Close(string modGuid, string id) { return KyWindows.Remove(KydlCore.Ui.KyWindowId.Make(modGuid, id), "Close"); }
+        public static bool Close(string modGuid, string id) { return KyWindows.Remove(KyWindowId.Make(modGuid, id), "Close"); }
 
         /// <summary>Is the window of this mod and id open?</summary>
         public static bool IsOpen(string modGuid, string id)
         {
-            string full = KydlCore.Ui.KyWindowId.Make(modGuid, id);
+            string full = KyWindowId.Make(modGuid, id);
             return full != null && KyWindows.Stack.IsOpen(full);
         }
     }

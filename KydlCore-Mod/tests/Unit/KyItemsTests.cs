@@ -14,8 +14,8 @@ namespace KydlCore.Tests.Unit
     [TestFixture]
     public class KyItemsTests
     {
-        static readonly Type ModelType = ModAssembly.Type("KydlCore.KyItemsModel");
-        static readonly Type EntryType = ModAssembly.Type("KydlCore.KyEntry");
+        static readonly Type ModelType = ModAssembly.Type("KydlCore.Features.Items.Infrastructure.KyItemsModel");
+        static readonly Type EntryType = ModAssembly.Type("KydlCore.Features.Items.Contracts.KyEntry");
 
         static object NewModel() { return Activator.CreateInstance(ModelType, true); }
 
@@ -40,7 +40,7 @@ namespace KydlCore.Tests.Unit
             return ((System.Collections.IEnumerable)ModelType.GetProperty("All", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(model, null))
                 .Cast<object>().Select(e => (string)EntryType.GetField("Prefab").GetValue(e)).ToArray();
         }
-        static bool IsUser(string guid) { return (bool)ModAssembly.Call("KydlCore.KyItemsModel", "IsUserGuid", guid); }
+        static bool IsUser(string guid) { return (bool)ModAssembly.Call("KydlCore.Features.Items.Infrastructure.KyItemsModel", "IsUserGuid", guid); }
 
         // ---- IsUserGuid ----------------------------------------------------------------------------------------------------------
 

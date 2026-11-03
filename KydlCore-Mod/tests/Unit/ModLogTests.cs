@@ -7,13 +7,14 @@ using FsCheck;
 namespace KydlCore.Tests.Unit
 {
     /// <summary>
-    /// The shared ModLog (Kydl.Common, compiled into the mod): line format, session marker, debug switch and the 2.5 s repeat filter
+    /// The shared ModLog (KydlCore.Common, compiled into the mod): line format, session marker, debug switch and the 2.5 s repeat filter
     /// (user standards). Reached by reflection in the built DLL; the BepInEx logger is real, only a capturing listener is added.
     /// </summary>
     [TestFixture]
     public class ModLogTests
     {
-        const string LogType = "Kydl.Common.ModLog";
+        const string LogType = "KydlCore.Common.ModLog";
+        const string ContextsType = "KydlCore.Common.ModContexts";
         static readonly Regex TimestampedLine = new Regex(@"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3} - (?<msg>.*)$", RegexOptions.Singleline);
 
         sealed class CaptureListener : ILogListener
@@ -30,9 +31,7 @@ namespace KydlCore.Tests.Unit
         [SetUp]
         public void SetUp()
         {
-            ModAssembly.SetStatic(LogType, "_source", null);
-            ModAssembly.SetStatic(LogType, "_sessionStarted", false);
-            ModAssembly.Call(LogType, "ResetRepeats");
+            ModAssembly.Call(ContextsType, "ResetAllForTests");
             _debug = false;
             _listener = new CaptureListener();
             _source = new ManualLogSource("KydlCoreUnitTest");
@@ -48,8 +47,7 @@ namespace KydlCore.Tests.Unit
             BepInEx.Logging.Logger.Listeners.Remove(_listener);
             _source.Dispose();
             _listener.Dispose();
-            ModAssembly.SetStatic(LogType, "_source", null);
-            ModAssembly.SetStatic(LogType, "_sessionStarted", false);
+            ModAssembly.Call(ContextsType, "ResetAllForTests");
         }
 
         static string Msg(string line) { return TimestampedLine.Match(line).Groups["msg"].Value; }
@@ -155,7 +153,7 @@ namespace KydlCore.Tests.Unit
         [Test]
         public void Init_ReturnsTrue_AndASecondInitDoesNotWriteASecondSessionMarker()
         {
-            ModAssembly.Call(LogType, "ResetRepeats");   // without this the repeat filter would hide a second marker and the test proves nothing
+            ModAssembly.Call(ContextsType, "ResetRepeatsForTests");   // without this the repeat filter would hide a second marker and the test proves nothing
             Assert.That((bool)ModAssembly.Call(LogType, "Init", _source, "KydlCore", (Func<bool>)(() => _debug)), Is.True);
             Assert.That(_listener.Lines, Has.Count.EqualTo(1), "still only the first session marker");
         }
@@ -167,7 +165,7 @@ namespace KydlCore.Tests.Unit
             ModAssembly.Call(LogType, "Init", _source, "NameBefore", (Func<bool>)(() => _debug));
             ModAssembly.Call(LogType, "Init", _source, noName, (Func<bool>)(() => _debug));
 
-            Assert.That(ModAssembly.GetStatic(LogType, "_modName"), Is.EqualTo("NameBefore"));
+            Assert.That((string[])ModAssembly.Call(ContextsType, "Names"), Does.Contain("NameBefore"));
         }
 
         [Test]
@@ -223,11 +221,41 @@ namespace KydlCore.Tests.Unit
         [Test]
         public void Info_LoggedBeforeInit_GoesToAFallbackSourceInsteadOfBeingLost()
         {
-            ModAssembly.SetStatic(LogType, "_source", null);
+            ModAssembly.Call(ContextsType, "ResetAllForTests");
 
             ModAssembly.Call(LogType, "Info", "early line");
 
             Assert.That(_listener.Lines, Has.Some.EndsWith(" - early line"));
+        }
+
+        sealed class SourceListener : ILogListener
+        {
+            readonly List<string> _lines;
+            public SourceListener(List<string> lines) { _lines = lines; }
+            public void LogEvent(object sender, LogEventArgs e) { _lines.Add(e.Source.SourceName + "|" + Convert.ToString(e.Data)); }
+            public void Dispose() { }
+        }
+
+        [Test]
+        public void TwoMods_EachLineCarriesTheNameOfTheModThatWroteIt()
+        {
+            // KydlCore.dll holds the only ModLog: the mod name must come from the calling mod's context, never be "KydlCore" for everyone
+            var forAssembly = ModAssembly.Type(ContextsType).GetMethod("For", new[] { typeof(System.Reflection.Assembly) });
+            var modA = forAssembly.Invoke(null, new object[] { typeof(object).Assembly });
+            var modB = forAssembly.Invoke(null, new object[] { typeof(ModLogTests).Assembly });
+            Assert.That(modA, Is.Not.SameAs(modB));
+            var lines = new List<string>();
+            var listener = new SourceListener(lines);
+            BepInEx.Logging.Logger.Listeners.Add(listener);
+            try
+            {
+                ModAssembly.Call(LogType, "Warn", modA, "from mod A");
+                ModAssembly.Call(LogType, "Warn", modB, "from mod B");
+            }
+            finally { BepInEx.Logging.Logger.Listeners.Remove(listener); }
+
+            Assert.That(lines, Has.Some.StartsWith("mscorlib|").And.EndsWith(" - from mod A"));
+            Assert.That(lines, Has.Some.StartsWith("KydlCoreUnitTest|").And.EndsWith(" - from mod B"));
         }
 
         [Test]
@@ -260,7 +288,7 @@ namespace KydlCore.Tests.Unit
             ModAssembly.Call(LogType, "Info", "fresh");
 
             Assert.That(Remembered().Count, Is.EqualTo(1), "4002 remembered > 4000: every line older than the window is dropped, the fresh one stays");
-            Assert.That((bool)ModAssembly.Call(LogType, "ResetRepeats"), Is.True);
+            Assert.That((bool)ModAssembly.Call(ContextsType, "ResetRepeatsForTests"), Is.True);
             Assert.That(Remembered().Count, Is.Zero);
         }
 
@@ -329,14 +357,15 @@ namespace KydlCore.Tests.Unit
         /// Forget the lines of the previous property run and start counting from zero (session marker already written).
         void SetUpFresh()
         {
-            ModAssembly.Call(LogType, "ResetRepeats");
+            ModAssembly.Call(ContextsType, "ResetRepeatsForTests");
             _debug = false;
             _listener.Lines.Clear();
         }
 
         static System.Collections.Generic.Dictionary<string, double> Remembered()
         {
-            return (System.Collections.Generic.Dictionary<string, double>)ModAssembly.GetStatic(LogType, "LastWritten");
+            var ctx = ModAssembly.Call(ContextsType, "AnyInitialisedForTests");
+            return (System.Collections.Generic.Dictionary<string, double>)ctx.GetType().GetField("LastWritten", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(ctx);
         }
 
         /// Pretends every remembered line was written `seconds` earlier (the repeat filter uses a Stopwatch, not the wall clock).

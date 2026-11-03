@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using Kydl.Common;
-using Kydl.Ui;
+using KydlCore.Common;
 using KydlCore.Ui;
+using KydlCore.Features.Hub.Contracts;
+using KydlCore.Features.Hub.Domain;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace KydlCore
+namespace KydlCore.Presentation.Hub.Pages
 {
     /// <summary>
     /// T-098: the renderer of <see cref="KyPage"/>. Builds the elements with the kit's theme and scales the text to the hub's page size in the SAME call, before the element is

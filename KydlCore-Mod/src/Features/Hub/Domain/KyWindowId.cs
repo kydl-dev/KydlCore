@@ -1,4 +1,4 @@
-namespace KydlCore.Ui
+namespace KydlCore.Features.Hub.Domain
 {
     /// <summary>
     /// The id of a window in the one <see cref="WindowStack"/> (DESIGN 4, PLAN T-038): a mod's own short id plus its plugin GUID, so two mods can

@@ -7,7 +7,7 @@ namespace KydlCore.Tests.Unit
     [TestFixture]
     public class PageRulesTests
     {
-        static readonly Type Rules = ModAssembly.Type("KydlCore.PageRules");
+        static readonly Type Rules = ModAssembly.Type("KydlCore.Features.Hub.Domain.PageRules");
         static bool Needs(string shown, string next) { return (bool)Rules.GetMethod("NeedsRebuild", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public).Invoke(null, new object[] { shown, next }); }
 
         [Test] public void FirstBuild_IsShown() { Assert.That(Needs(null, "a"), Is.True); }

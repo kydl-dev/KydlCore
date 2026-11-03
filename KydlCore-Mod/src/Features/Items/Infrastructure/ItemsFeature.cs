@@ -1,5 +1,6 @@
-using Kydl.Common;
-using Kydl.Core.Features;
+using KydlCore.Common;
+using KydlCore.Features.Items.Contracts;
+using KydlCore.Core;
 
 namespace KydlCore.Features.Items.Infrastructure
 {

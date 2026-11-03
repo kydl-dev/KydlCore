@@ -6,14 +6,14 @@ using FsCheck;
 namespace KydlCore.Tests.Unit
 {
     /// <summary>
-    /// Kydl.Ui.UiLog (D-071): which mod a line of the shared UI code belongs to. `Owner` is set around a mod's tab builder (Within) and every
+    /// KydlCore.Ui.UiLog (D-071): which mod a line of the shared UI code belongs to. `Owner` is set around a mod's tab builder (Within) and every
     /// control remembers it for its callbacks (Wrap). Reached in the BUILT mod DLL by reflection (like KyHub). UiLog is static state: every test
     /// puts Owner and the sinks back.
     /// </summary>
     [TestFixture]
     public class UiLogTests
     {
-        const string T = "Kydl.Ui.UiLog";
+        const string T = "KydlCore.Ui.UiLog";
         static readonly Type Log = ModAssembly.Type(T);
 
         [SetUp]

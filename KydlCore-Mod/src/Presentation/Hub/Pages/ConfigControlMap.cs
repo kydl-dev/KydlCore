@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 
-namespace KydlCore.Ui
+namespace KydlCore.Presentation.Hub.Pages
 {
     /// <summary>The control the auto "Settings" page shows for one config entry.</summary>
     internal enum ControlKind

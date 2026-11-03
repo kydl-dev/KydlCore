@@ -1,7 +1,7 @@
-namespace KydlCore.Ui
+namespace KydlCore.Features.Hub.Domain
 {
     /// <summary>
-    /// The rules for a line written by the shared UI code (Kydl.Ui.UiLog) while KydlCore draws one mod's tab (PLAN T-050 follow-up, D-071): which
+    /// The rules for a line written by the shared UI code (KydlCore.Ui.UiLog) while KydlCore draws one mod's tab (PLAN T-050 follow-up, D-071): which
     /// debug switch decides whether it shows, and how it is tagged so the BepInEx log can be filtered per mod. Pure text / bool logic: no logging,
     /// no Unity, no game (the lookups of the owner's name and switch are in UiLogSinks).
     /// </summary>

@@ -15,8 +15,8 @@ namespace KydlCore.Tests.Unit
     [TestFixture]
     public class KyHubTests
     {
-        static readonly Type Hub = ModAssembly.Type("KydlCore.KyHub");
-        static readonly Type TabType = ModAssembly.Type("KydlCore.KyTab");
+        static readonly Type Hub = ModAssembly.Type("KydlCore.Features.Hub.Contracts.KyHub");
+        static readonly Type TabType = ModAssembly.Type("KydlCore.Features.Hub.Contracts.KyTab");
         static readonly Type ModelType = ModAssembly.Type("KydlCore.Ui.HubModel");
         static readonly MethodInfo AddTabM = Hub.GetMethod("AddTab");
         static readonly Type BuildType = AddTabM.GetParameters()[3].ParameterType;      // Func<VisualElement>
@@ -137,11 +137,11 @@ namespace KydlCore.Tests.Unit
             Assert.That(TabIds(g), Is.EqualTo(new[] { "t" }));
         }
 
-        // a page builder that records which mod the shared UI log says is drawing (Kydl.Ui.UiLog.Owner, D-071)
+        // a page builder that records which mod the shared UI log says is drawing (KydlCore.Ui.UiLog.Owner, D-071)
         static Delegate OwnerRecorder(string[] seen)
         {
             Expression read = Expression.Assign(Expression.ArrayAccess(Expression.Constant(seen), Expression.Constant(0)),
-                Expression.Field(null, ModAssembly.Type("Kydl.Ui.UiLog").GetField("Owner")));
+                Expression.Field(null, ModAssembly.Type("KydlCore.Ui.UiLog").GetField("Owner")));
             var body = Expression.Block(read, Expression.Constant(null, BuildType.GetGenericArguments()[0]));
             return Expression.Lambda(BuildType, body).Compile();
         }
@@ -155,7 +155,7 @@ namespace KydlCore.Tests.Unit
             var build = Hub.GetMethod("BuildPage", BindingFlags.Static | BindingFlags.NonPublic);
             build.Invoke(null, new object[] { g, "p" });
             Assert.That(seen[0], Is.EqualTo(g));
-            Assert.That(ModAssembly.GetStatic("Kydl.Ui.UiLog", "Owner"), Is.Null, "the owner is back to none after the page is built");
+            Assert.That(ModAssembly.GetStatic("KydlCore.Ui.UiLog", "Owner"), Is.Null, "the owner is back to none after the page is built");
         }
 
         [Test]

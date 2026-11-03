@@ -1,4 +1,4 @@
-namespace KydlCore
+namespace KydlCore.Features.Hub.Domain
 {
     /// <summary>T-098: the game-free decision of the page host (unit-tested).</summary>
     internal static class PageRules

@@ -1,5 +1,10 @@
 using System.Collections.Generic;
-using Kydl.Common;
+using KydlCore.Common;
+using KydlCore.Bootstrap;
+using KydlCore.Configuration;
+using KydlCore.Features.Hub.Contracts;
+using KydlCore.Features.Items.Contracts;
+using KydlCore.Presentation.Hub.Registration;
 using UnityEngine;
 
 namespace KydlCore.Testing
