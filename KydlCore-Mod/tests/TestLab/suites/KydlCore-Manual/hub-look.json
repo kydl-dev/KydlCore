@@ -1,0 +1,11 @@
+{
+  "name": "hub-look",
+  "description": "The mod's hub page looks right in the shared KydlCore theme (fonts, gold accents, nothing cut off) and F6 / Esc open and close it with real keys",
+  "manualOnly": true,
+  "timeout": 300,
+  "steps": [
+    { "do": "checkpoint", "message": "Press F6, pick KydlCore. Does the page use the shared look (dark panel, gold accents, readable text, nothing cut off)?" },
+    { "do": "checkpoint", "message": "Press Esc. Is the hub closed and can you move / look around again (input released)?" }
+  ],
+  "asserts": [ { "check": "noErrors", "source": "KydlCore" } ]
+}

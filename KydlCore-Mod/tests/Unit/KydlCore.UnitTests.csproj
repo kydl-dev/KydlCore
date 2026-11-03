@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Unit tests: pure logic, no game running. Logic worth testing lives in classes without Unity / Valheim types; link those files here
+       (<Compile Include="..\..\src\Features\<F>\Domain\X.cs" Link="Mod\X.cs" />) or reach them in the built DLL through ModAssembly.
+       Unity's plain value types (Vector3, Bounds, Mathf, Color) are managed code and work here; anything that calls into the engine
+       (ColorUtility.TryParseHtmlString, GameObject, ...) does not - test that in game (InGameTests).
+       How good the tests are: _agent\tools\test-quality.ps1 (coverage + mutation score, E:\Projects\Valheim\Claude\testing\TEST_QUALITY.md). -->
+  <PropertyGroup>
+    <AssemblyName>KydlCore.UnitTests</AssemblyName>
+    <RootNamespace>KydlCore.Tests.Unit</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- shared 3D viewer (from WhipItUp, user 2026-10-27): its pure math is tested here -->
+    <Compile Include="..\..\..\KydlCore-Unity\Assets\KydlCore_UI\Runtime\ViewerSettings.cs" Link="Ui\ViewerSettings.cs" />
+    <Compile Include="..\..\..\KydlCore-Unity\Assets\KydlCore_UI\Runtime\ViewerMath.cs" Link="Ui\ViewerMath.cs" />
+    <Compile Include="..\..\..\KydlCore-Unity\Assets\KydlCore_UI\Runtime\ViewerOrbit.cs" Link="Ui\ViewerOrbit.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- the mod's pure layers (Domain / Application / Execution): everything linked must compile without Unity (MIGRATION_DECISIONS B10) -->
+    <Compile Include="..\..\src\Features\*\Domain\**\*.cs" Link="Mod\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\..\src\Features\*\Application\**\*.cs" Link="Mod\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\..\src\Features\*\Execution\**\*.cs" Link="Mod\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="UnityEngine.CoreModule"><HintPath>$(ValheimRefs)\UnityEngine.CoreModule.dll</HintPath><Private>true</Private></Reference>
+  </ItemGroup>
+</Project>

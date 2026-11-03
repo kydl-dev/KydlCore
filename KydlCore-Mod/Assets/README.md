@@ -1,9 +1,5 @@
-# Assets
+# assets
 
-Drop zone for build output. Filled automatically:
-
-- **Plugin DLL** - copied here (and to `../build`) after every build by `Claude\shared\Kydl.Mod.targets`. `*.dll` here is git-ignored.
-- **AssetBundle `kydlcore`** - copied here by the Unity editor script `Assets/Editor/ModBundleExporter.cs`. It is embedded into the DLL
-  on the next mod build (players download one file). Bundles are tracked in git.
-
-Do not hand-edit files in here; rebuild instead.
+Build output drop zone (MIGRATION_DECISIONS A8): `Claude\shared\Kydl.Mod.targets` copies the built `KydlCore.dll` here on every build, and the
+Unity project's `ModBundleExporter` copies the AssetBundle `kydlcore` here (the next mod build embeds it into the DLL). These are the real,
+current files that the release gate packages. Never hand-edit; the DLL is git-ignored, the bundle is tracked.

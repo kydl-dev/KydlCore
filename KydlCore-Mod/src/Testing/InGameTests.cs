@@ -16,8 +16,8 @@ namespace KydlCore.Testing
         /// The player config is bound and the mod is switched on.
         static string Startup_ConfigBound()
         {
-            if (ModSettings.EnableAll == null) return "FAIL: ModSettings.Bind did not run (EnableAll is null)";
-            return ModSettings.On ? "PASS: EnableAll on, debug log " + (ModSettings.DebugLog != null && ModSettings.DebugLog.Value ? "on" : "off") : "SKIP: EnableAll is off in the config";
+            if (ModSettings.HubKey == null) return "FAIL: ModSettings.Bind did not run (HubKey is null)";
+            return "PASS: config bound (no EnableAll: KydlCore is always on), hub key " + ModSettings.HubKey.Value + ", debug log " + (ModSettings.DebugLog != null && ModSettings.DebugLog.Value ? "on" : "off");
         }
 
         /// PLAN T-022a: is Valheim's font NotoSansSC-Regular among the loaded Font objects (the same lookup UiKit.LoadFonts uses: Font.name, exact)?

@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Integration tests (MIGRATION_DECISIONS C20), no game running:
+       * contracts of the built DLL and the package: Hexium rules, version = manifest = CHANGELOG, settings layout, Harmony patch targets, the TestLab suite;
+       * the spec's: handlers + executors + dispatcher wired together (linked pure files, fake capabilities), architecture guard rules. -->
+  <PropertyGroup>
+    <AssemblyName>KydlCore.IntegrationTests</AssemblyName>
+    <RootNamespace>KydlCore.Tests.Integration</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\src\Features\*\Domain\**\*.cs" Link="Mod\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\..\src\Features\*\Application\**\*.cs" Link="Mod\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\..\src\Features\*\Execution\**\*.cs" Link="Mod\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="UnityEngine.CoreModule"><HintPath>$(ValheimRefs)\UnityEngine.CoreModule.dll</HintPath><Private>true</Private></Reference>
+    <!-- PatchTargetsTests: reads the mod and the game DLLs with Mono.Cecil (metadata only) -->
+    <Reference Include="Mono.Cecil"><HintPath>$(ValheimRefs)\Mono.Cecil.dll</HintPath><Private>true</Private></Reference>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,7 @@
+{
+  "name": "KydlCore-Manual",
+  "description": "What needs a person (spec 8.13): looks, real key presses, feel. Skipped in unattended runs - an automated PASS never covers these.",
+  "include": [ "../KydlCore/suite.json" ],
+  "resetBetweenTests": true,
+  "tests": [ "hub-look" ]
+}

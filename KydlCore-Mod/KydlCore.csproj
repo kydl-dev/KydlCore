@@ -1,9 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <!--
-    KydlCore mod. Everything shared by the user's mods (references from the shared reference folder, net48, no debug symbols,
-    the shared code Kydl.Common / Kydl.Ui, copy to Assets + build, embedded bundle) comes from Claude\shared\Kydl.Mod.props / .targets.
+    KydlCore mod. Everything shared by the user's mods (references from E:\Projects\Valheim\Claude\ref, net48, no debug symbols,
+    the shared code Kydl.Core / Kydl.Common, copy of the DLL to assets\, embedded bundle, the QA targets) comes from Claude\shared\Kydl.Mod.props / .targets.
     Add here only what is special about this mod (an extra reference: put the DLL into Claude\ref and add a line below).
     Build: dotnet build "KydlCore-Mod\KydlCore.csproj" -c Release
+    QA:    dotnet msbuild "KydlCore-Mod\KydlCore.csproj" -t:UnitTests | IntegrationTests | TestLab | TestLabAll | Release
   -->
   <Import Project="..\..\Claude\shared\Kydl.Mod.props" />
 
@@ -11,11 +12,20 @@
     <AssemblyName>KydlCore</AssemblyName>
     <RootNamespace>KydlCore</RootNamespace>
     <PackageId>KydlCore</PackageId>
-    <!-- AssetBundle built by the Unity project (Valheim > Build AssetBundles); embedded into the DLL when Assets\kydlcore exists -->
+    <!-- AssetBundle built by the Unity project (Valheim > Build AssetBundles); embedded into the DLL when assets\kydlcore exists -->
     <BundleName>kydlcore</BundleName>
-    <!-- D-040: KydlCore is the home of the UI kit; its Kydl.Ui types (and the members mods use) are public. The same shared source is internal in every mod that still compiles its own copy (D-005) -->
+    <!-- D-040: KydlCore is the home of the UI kit; its Kydl.Ui types (and the members mods use) are public. KydlCore never sets KydlUseCore: it compiles the kit -->
     <DefineConstants>$(DefineConstants);KYDL_CORE_PUBLIC</DefineConstants>
+    <!-- spec layout (MIGRATION_DECISIONS A8): the DLL goes to assets\ only, no build\ folder -->
+    <KydlBuildFolder>true</KydlBuildFolder>   <!-- MIGRATION: still also copied to build\ until every old-layout mod (its tests read KydlCore-Mod\build\KydlCore.dll) is ported; then false -->
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- tests\ (NUnit + TestLab suites) and docs\ live inside this folder but are never part of the mod (spec 3: excluded from the release) -->
+    <Compile Remove="tests\**;docs\**;release\**" />
+    <None Remove="tests\**;docs\**;release\**" />
+    <EmbeddedResource Remove="tests\**;docs\**;release\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <!-- the mod's menu views live in the Unity project (previewed there) and are compiled into the mod from there -->

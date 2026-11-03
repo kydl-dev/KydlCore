@@ -1,0 +1,104 @@
+{
+  "name": "ky-items-contribute",
+  "description": "Spec 5: a namespaced contribution is accepted and listed; a duplicate id, the same prefab under another id, a foreign namespace and a non-KydlDev owner are rejected; Withdraw leaves no stale entry",
+  "timeout": 60,
+  "steps": [
+    {
+      "do": "wait",
+      "until": {
+        "check": "hook",
+        "name": "kc.itemsReady",
+        "expect": true
+      },
+      "timeout": 20
+    },
+    {
+      "do": "hook",
+      "name": "kc.itemsContribute",
+      "args": {
+        "id": "kydlcore:lab_wood",
+        "prefab": "Wood",
+        "owner": "com.kydldev.KydlCore"
+      },
+      "contains": "accepted kydlcore:lab_wood",
+      "label": "accepted"
+    },
+    {
+      "do": "hook",
+      "name": "kc.itemsById",
+      "args": {
+        "id": "kydlcore:lab_wood"
+      },
+      "expect": "Wood",
+      "label": "listed by id"
+    },
+    {
+      "do": "hook",
+      "name": "kc.itemsContribute",
+      "args": {
+        "id": "kydlcore:lab_wood",
+        "prefab": "Stone",
+        "owner": "com.kydldev.KydlCore"
+      },
+      "contains": "already registered",
+      "label": "duplicate id rejected"
+    },
+    {
+      "do": "hook",
+      "name": "kc.itemsContribute",
+      "args": {
+        "id": "kydlcore:lab_wood2",
+        "prefab": "Wood",
+        "owner": "com.kydldev.KydlCore"
+      },
+      "contains": "already contributed",
+      "label": "same prefab twice rejected"
+    },
+    {
+      "do": "hook",
+      "name": "kc.itemsContribute",
+      "args": {
+        "id": "stevethetroll:lab_stone",
+        "prefab": "Stone",
+        "owner": "com.kydldev.KydlCore"
+      },
+      "contains": "is not the owning mod",
+      "label": "foreign namespace rejected"
+    },
+    {
+      "do": "hook",
+      "name": "kc.itemsContribute",
+      "args": {
+        "id": "other:lab_stone",
+        "prefab": "Stone",
+        "owner": "com.other.Mod"
+      },
+      "contains": "not a KydlDev mod",
+      "label": "foreign owner rejected"
+    },
+    {
+      "do": "hook",
+      "name": "kc.itemsWithdraw",
+      "args": {
+        "id": "kydlcore:lab_wood"
+      },
+      "expect": true,
+      "label": "withdrawn"
+    },
+    {
+      "do": "hook",
+      "name": "kc.itemsById",
+      "args": {
+        "id": "kydlcore:lab_wood"
+      },
+      "expect": "",
+      "label": "no stale entry"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "KydlCore"
+    }
+  ]
+}

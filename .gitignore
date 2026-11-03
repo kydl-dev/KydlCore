@@ -8,15 +8,15 @@ _agent/CATCHUP.txt
 secrets/
 *.token
 
-# --- references live in the shared reference folder (never in this repo); an old per-project copy stays ignored ---
+# --- references live in E:\Projects\Valheim\Claude\ref (never in this repo); an old per-project copy stays ignored ---
 /*-Mod/ref/
-/*-Tests/.nuget/
+/*-Mod/tests/.nuget/
 /*-Unity/ref/
 /_backup*/
 
 # --- build output copied into the mod's Assets folder (asset bundles stay tracked) ---
-/*-Mod/Assets/*.dll
-/*-Mod/Assets/*.pdb
+/*-Mod/assets/*.dll
+/*-Mod/assets/*.pdb
 
 # --- .NET / Visual Studio / Rider ---
 bin/
@@ -77,14 +77,17 @@ CLAUDE.md
 *.exe
 *.zip
 *.nupkg
-/*-Tests/.nuget/
+/*-Mod/tests/.nuget/
 # release-gate output (report + zip): rebuilt by _agent/tools/release-gate.ps1
 /*-Mod/release/*/release-gate.*
 /*-Mod/release/*/_stage/
 /*-Mod/release/*/*.zip
 
 # test-quality output (coverage, Stryker): rebuilt by _agent/tools/test-quality.ps1
-/*-Tests/_quality/
+/*-Mod/tests/_quality/
 
-# public API check: written by a failing PublicApiTests run, copied over PublicApi.approved.txt after review
-/*-Tests/Integration/PublicApi.received.txt
+# KydlDev spec layout (MIGRATION_DECISIONS A7/A8): docs are local only for now; test build output inside the mod folder
+/*-Mod/docs/
+/*-Mod/tests/**/bin/
+/*-Mod/tests/**/obj/
+/*-Mod/release/

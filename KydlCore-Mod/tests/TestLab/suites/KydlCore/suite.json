@@ -1,0 +1,40 @@
+{
+  "name": "KydlCore",
+  "description": "KydlCore: hub window, F6, mod tabs, KY-Items registry (Jotunn-free contributions, duplicate ids rejected), its own in-game checks (MIGRATION_DECISIONS C14-C21)",
+  "requireMods": [
+    {
+      "guid": "com.kydldev.KydlCore",
+      "minVersion": "0.1.0"
+    }
+  ],
+  "configOverrides": [
+    {
+      "guid": "com.kydldev.KydlCore",
+      "section": "General",
+      "key": "HubKey",
+      "value": "F6"
+    },
+    {
+      "guid": "com.kydldev.KydlCore",
+      "section": "DebugLog",
+      "key": "Enable",
+      "value": "true"
+    }
+  ],
+  "resetBetweenTests": true,
+  "tests": [
+    "selftest",
+    "hub-open-close",
+    "hub-key-f6",
+    "hub-lists-ported-mods",
+    "hub-opens-a-mod-tab",
+    "ky-items",
+    "ky-items-contribute"
+  ],
+  "setup": {
+    "timeOfDay": 0.5,
+    "freezeTime": 1,
+    "god": 1,
+    "hideUnlockPopups": 1
+  }
+}
