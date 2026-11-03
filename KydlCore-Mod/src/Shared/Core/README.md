@@ -1,7 +1,7 @@
-# Kydl.Core - shared pure contracts of every KydlDev mod (MIGRATION_DECISIONS A9)
+# KydlCore.Core - shared pure contracts of every KydlDev mod (MIGRATION_DECISIONS A9)
 
-Compiled into every mod by `Claude\shared\Kydl.Mod.props` (internal types: two mods never clash) and LINKED into each mod's unit-test
-project (`tests\Unit`). Pure C#: no UnityEngine, HarmonyLib, BepInEx, Jotunn, Kydl.Common, KydlCore or game types - the guard test
+Part of KydlCore.dll (public types, namespace `KydlCore.Core`; mods reference KydlCore) and LINKED into each mod's unit-test
+project (`tests\Unit`). Pure C#: no UnityEngine, HarmonyLib, BepInEx, Jotunn, KydlCore.Common/.Ui or game types - the guard test
 `KydlCoreContracts_ArePure` in every mod's integration tests checks it. Logging = an injected `Action<string>` trace (ModLog.Verbose in game).
 
 | Folder | Types |
