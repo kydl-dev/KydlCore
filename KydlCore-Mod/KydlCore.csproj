@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <!--
-    KydlCore mod. Everything shared by the user's mods (references from E:\Projects\Valheim\Claude\ref, net48, no debug symbols,
+    KydlCore mod. Everything shared by the user's mods (references from <workspace>\Claude\ref, net48, no debug symbols,
     the shared code Kydl.Core / Kydl.Common, copy of the DLL to assets\, embedded bundle, the QA targets) comes from Claude\shared\Kydl.Mod.props / .targets.
     Add here only what is special about this mod (an extra reference: put the DLL into Claude\ref and add a line below).
     Build: dotnet build "KydlCore-Mod\KydlCore.csproj" -c Release

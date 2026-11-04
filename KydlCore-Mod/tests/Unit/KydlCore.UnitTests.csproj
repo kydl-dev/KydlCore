@@ -3,7 +3,7 @@
        (<Compile Include="..\..\src\Features\<F>\Domain\X.cs" Link="Mod\X.cs" />) or reach them in the built DLL through ModAssembly.
        Unity's plain value types (Vector3, Bounds, Mathf, Color) are managed code and work here; anything that calls into the engine
        (ColorUtility.TryParseHtmlString, GameObject, ...) does not - test that in game (InGameTests).
-       How good the tests are: _agent\tools\test-quality.ps1 (coverage + mutation score, E:\Projects\Valheim\Claude\testing\TEST_QUALITY.md). -->
+       How good the tests are: _agent\tools\test-quality.ps1 (coverage + mutation score, <workspace>\Claude\testing\TEST_QUALITY.md). -->
   <PropertyGroup>
     <AssemblyName>KydlCore.UnitTests</AssemblyName>
     <RootNamespace>KydlCore.Tests.Unit</RootNamespace>

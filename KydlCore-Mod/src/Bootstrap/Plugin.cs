@@ -25,7 +25,7 @@ public class Plugin : BaseUnityPlugin
     // ModGuid never changes after the first release. ModVersion = manifest.json version_number = newest CHANGELOG heading (tests check it).
     public const string ModGuid = "com.kydldev.KydlCore";
     public const string ModName = "KydlCore";
-    public const string ModVersion = "0.1.0";
+    public const string ModVersion = "1.0.0";
     public const string BundleName = "kydlcore";
     /// UiKit.Owner: the name part of the one UI root object ("Kydl_UI_" + owner).
     internal const string UiOwner = "Root";

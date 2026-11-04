@@ -7,7 +7,7 @@ namespace KydlCore.Common;
 
 /// <summary>
 /// SHARED. A DEV-ONLY setting: NOT in the player's config file. It has a fixed value chosen by the user; the code reads it like a config entry
-/// (`.Value`, `SettingChanged`). The user's own tools mod KydlTools (E:\Projects\Valheim\KydlTools, never published, F7 menu) finds EVERY
+/// (`.Value`, `SettingChanged`). The user's own tools mod KydlTools (<workspace>\KydlTools, never published, F7 menu) finds EVERY
 /// static Tunable field of every loaded com.kydldev.* mod by reflection, gives it a tab and a KydlTools config entry, and pushes changes in.
 /// Nothing is saved by the mod itself: without KydlTools every start uses the fixed value.
 /// Rule (user, 2026-10-21): the player config only holds what a player should change; everything else is a Tunable.

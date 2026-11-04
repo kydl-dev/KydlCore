@@ -8,7 +8,7 @@ _agent/CATCHUP.txt
 secrets/
 *.token
 
-# --- references live in E:\Projects\Valheim\Claude\ref (never in this repo); an old per-project copy stays ignored ---
+# --- references live in <workspace>\Claude\ref (never in this repo); an old per-project copy stays ignored ---
 /*-Mod/ref/
 /*-Mod/tests/.nuget/
 /*-Unity/ref/
