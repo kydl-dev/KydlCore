@@ -39,6 +39,10 @@ static class KydlCore.Common.ModLog
   method System.Void KydlCore.Common.ModLog::Verbose(System.String)
   method System.Void KydlCore.Common.ModLog::VerboseWarn(System.String)
   method System.Void KydlCore.Common.ModLog::Warn(System.String)
+static class KydlCore.Common.PieceLearning
+  method System.Boolean KydlCore.Common.PieceLearning::KnowsMaterial(Player,System.String)
+  method System.Boolean KydlCore.Common.PieceLearning::KnowsPiece(Player,Piece)
+  method System.Boolean KydlCore.Common.PieceLearning::Learn(Player,System.String)
 static class KydlCore.Common.TestArena
   field KydlCore.Common.TestArena::AreaHalf : System.Single = 20
   field KydlCore.Common.TestArena::ArenaMetres : System.Single = 70
