@@ -60,9 +60,12 @@ public class HubModelTests
     [Test]
     public void Constants_AreWhatTheDesignSays()
     {
-        Assert.That(Hub.ModPrefix, Is.EqualTo("com.kydldev."));
-        Assert.That(Hub.AutoTabId, Is.EqualTo("settings"));
-        Assert.That(Hub.AutoTabTitle, Is.EqualTo("Settings"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Hub.ModPrefix, Is.EqualTo("com.kydldev."));
+            Assert.That(Hub.AutoTabId, Is.EqualTo("settings"));
+            Assert.That(Hub.AutoTabTitle, Is.EqualTo("Settings"));
+        }
     }
 
     [TestCase("com.kydldev.ChestDecor", true)]
@@ -82,35 +85,44 @@ public class HubModelTests
     public void New_IsEmpty_NothingSelected_AnyModShowsTheAutoTab()
     {
         var h = new Hub();
-        Assert.That(h.ModCount, Is.EqualTo(0));
-        Assert.That(h.ModGuids(), Is.Empty);
-        Assert.That(h.SelectedMod, Is.Null);
-        Assert.That(h.SelectedTab, Is.Null);
-        Assert.That(Join(h.TabIds(A)), Is.EqualTo("settings"));
-        Assert.That(h.IsAutoTab(A), Is.True);
-        Assert.That(h.Changes, Is.EqualTo(0));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.ModCount, Is.EqualTo(0));
+            Assert.That(h.ModGuids(), Is.Empty);
+            Assert.That(h.SelectedMod, Is.Null);
+            Assert.That(h.SelectedTab, Is.Null);
+            Assert.That(Join(h.TabIds(A)), Is.EqualTo("settings"));
+            Assert.That(h.IsAutoTab(A), Is.True);
+            Assert.That(h.Changes, Is.EqualTo(0));
+        }
     }
 
     [Test]
     public void AddMod_FirstModIsSelected_WithItsAutoTab_OneChangedEvent()
     {
         var h = new Hub();
-        Assert.That(h.AddMod(A, "Alpha"), Is.True);
-        Assert.That(h.SelectedMod, Is.EqualTo(A));
-        Assert.That(h.SelectedTab, Is.EqualTo("settings"));
-        Assert.That(h.ModTitle(A), Is.EqualTo("Alpha"));
-        Assert.That(h.Changes, Is.EqualTo(1));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.AddMod(A, "Alpha"), Is.True);
+            Assert.That(h.SelectedMod, Is.EqualTo(A));
+            Assert.That(h.SelectedTab, Is.EqualTo("settings"));
+            Assert.That(h.ModTitle(A), Is.EqualTo("Alpha"));
+            Assert.That(h.Changes, Is.EqualTo(1));
+        }
     }
 
     [Test]
     public void AddMod_RejectsGuidsTheHubDoesNotList_NothingChanges()
     {
         var h = new Hub();
-        Assert.That(h.AddMod("000.kydldev.GameProbe", "Probe"), Is.False);
-        Assert.That(h.AddMod("com.other.Mod", "Other"), Is.False);
-        Assert.That(h.AddMod(null, "x"), Is.False);
-        Assert.That(h.ModCount, Is.EqualTo(0));
-        Assert.That(h.Changes, Is.EqualTo(0));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.AddMod("000.kydldev.GameProbe", "Probe"), Is.False);
+            Assert.That(h.AddMod("com.other.Mod", "Other"), Is.False);
+            Assert.That(h.AddMod(null, "x"), Is.False);
+            Assert.That(h.ModCount, Is.EqualTo(0));
+            Assert.That(h.Changes, Is.EqualTo(0));
+        }
     }
 
     [TestCase(null)]
@@ -129,9 +141,12 @@ public class HubModelTests
         var h = new Hub();
         h.AddMod(A, "Alpha");
         int before = h.Changes;
-        Assert.That(h.AddMod(A, "Alpha"), Is.True);
-        Assert.That(h.Changes, Is.EqualTo(before), "same title: no event");
-        Assert.That(h.AddMod(A, "Alpha Two"), Is.True);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.AddMod(A, "Alpha"), Is.True);
+            Assert.That(h.Changes, Is.EqualTo(before), "same title: no event");
+            Assert.That(h.AddMod(A, "Alpha Two"), Is.True);
+        }
         Assert.That(h.Changes, Is.EqualTo(before + 1));
         Assert.That(h.ModCount, Is.EqualTo(1));
         Assert.That(h.ModTitle(A), Is.EqualTo("Alpha Two"));
@@ -142,9 +157,12 @@ public class HubModelTests
     {
         var h = new Hub();
         h.AddMod(A, "Alpha");
-        Assert.That(h.ModTitle(B), Is.Null);
-        Assert.That(h.ModTitle(null), Is.Null);
-        Assert.That(h.ModTitle(""), Is.Null);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.ModTitle(B), Is.Null);
+            Assert.That(h.ModTitle(null), Is.Null);
+            Assert.That(h.ModTitle(""), Is.Null);
+        }
     }
 
     [Test]
@@ -165,8 +183,11 @@ public class HubModelTests
         var h = new Hub();
         h.AddMod(C, "Gamma");
         h.AddMod(A, "Alpha");
-        Assert.That(h.SelectedMod, Is.EqualTo(C));
-        Assert.That(Join(h.ModGuids()), Is.EqualTo(A + "," + C));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.SelectedMod, Is.EqualTo(C));
+            Assert.That(Join(h.ModGuids()), Is.EqualTo(A + "," + C));
+        }
     }
 
     [Test]
@@ -176,12 +197,15 @@ public class HubModelTests
         h.AddMod(B, "Beta"); h.AddMod(A, "Alpha"); h.AddMod(C, "Gamma");
         h.Select(B, null);
         int before = h.Changes;
-        Assert.That(h.RemoveMod(B), Is.True);
-        Assert.That(h.SelectedMod, Is.EqualTo(A));
-        Assert.That(h.SelectedTab, Is.EqualTo("settings"));
-        Assert.That(h.Changes, Is.EqualTo(before + 1));
-        Assert.That(h.RemoveMod(A), Is.True);
-        Assert.That(h.RemoveMod(C), Is.True);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.RemoveMod(B), Is.True);
+            Assert.That(h.SelectedMod, Is.EqualTo(A));
+            Assert.That(h.SelectedTab, Is.EqualTo("settings"));
+            Assert.That(h.Changes, Is.EqualTo(before + 1));
+            Assert.That(h.RemoveMod(A), Is.True);
+            Assert.That(h.RemoveMod(C), Is.True);
+        }
         Assert.That(h.SelectedMod, Is.Null);
         Assert.That(h.SelectedTab, Is.Null);
         Assert.That(h.ModCount, Is.EqualTo(0));
@@ -196,8 +220,11 @@ public class HubModelTests
         h.AddTab(B, "x", "X", 0); h.AddTab(B, "y", "Y", 1);
         h.SelectTab("y");
         h.RemoveMod(A);
-        Assert.That(h.SelectedMod, Is.EqualTo(B));
-        Assert.That(h.SelectedTab, Is.EqualTo("x"), "B was never shown, so its first tab, whatever tab A had");
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.SelectedMod, Is.EqualTo(B));
+            Assert.That(h.SelectedTab, Is.EqualTo("x"), "B was never shown, so its first tab, whatever tab A had");
+        }
     }
 
     [Test]
@@ -209,8 +236,11 @@ public class HubModelTests
         h.Select(B, "y");
         h.SelectMod(A);
         h.RemoveMod(A);
-        Assert.That(h.SelectedMod, Is.EqualTo(B));
-        Assert.That(h.SelectedTab, Is.EqualTo("y"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.SelectedMod, Is.EqualTo(B));
+            Assert.That(h.SelectedTab, Is.EqualTo("y"));
+        }
     }
 
     [Test]
@@ -219,8 +249,11 @@ public class HubModelTests
         var h = new Hub();
         h.AddMod(A, "Alpha"); h.AddMod(B, "Beta");
         int before = h.Changes;
-        Assert.That(h.RemoveMod(B), Is.True);
-        Assert.That(h.SelectedMod, Is.EqualTo(A));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.RemoveMod(B), Is.True);
+            Assert.That(h.SelectedMod, Is.EqualTo(A));
+        }
         Assert.That(h.RemoveMod(B), Is.False);
         Assert.That(h.RemoveMod(null), Is.False);
         Assert.That(h.RemoveMod(""), Is.False);
@@ -236,17 +269,23 @@ public class HubModelTests
         h.AddTab(A, "look", "Look", 5);
         h.AddTab(A, "general", "General", 1);
         h.AddTab(A, "camera", "Camera", 5);
-        Assert.That(Join(h.TabIds(A)), Is.EqualTo("general,look,camera"));
-        Assert.That(h.IsAutoTab(A), Is.False);
-        Assert.That(h.TabIds(A), Does.Not.Contain("settings"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Join(h.TabIds(A)), Is.EqualTo("general,look,camera"));
+            Assert.That(h.IsAutoTab(A), Is.False);
+            Assert.That(h.TabIds(A), Does.Not.Contain("settings"));
+        }
     }
 
     [Test]
     public void AddTab_RegisteredBeforeTheModIsKnown_IsKept()
     {
         var h = new Hub();
-        Assert.That(h.AddTab(A, "look", "Look", 0), Is.True);
-        Assert.That(h.SelectedMod, Is.Null);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.AddTab(A, "look", "Look", 0), Is.True);
+            Assert.That(h.SelectedMod, Is.Null);
+        }
         h.AddMod(A, "Alpha");
         Assert.That(h.SelectedTab, Is.EqualTo("look"));
     }
@@ -259,11 +298,14 @@ public class HubModelTests
         h.AddTab(A, "a", "A", 1);
         h.AddTab(A, "b", "B", 2);
         int before = h.Changes;
-        Assert.That(h.AddTab(A, "a", "A", 1), Is.True);
-        Assert.That(h.Changes, Is.EqualTo(before), "same values: no event");
-        Assert.That(h.AddTab(A, "a", "A2", 3), Is.True);
-        Assert.That(Join(h.TabIds(A)), Is.EqualTo("b,a"));
-        Assert.That(h.TabTitle(A, "a"), Is.EqualTo("A2"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.AddTab(A, "a", "A", 1), Is.True);
+            Assert.That(h.Changes, Is.EqualTo(before), "same values: no event");
+            Assert.That(h.AddTab(A, "a", "A2", 3), Is.True);
+            Assert.That(Join(h.TabIds(A)), Is.EqualTo("b,a"));
+            Assert.That(h.TabTitle(A, "a"), Is.EqualTo("A2"));
+        }
         Assert.That(h.Changes, Is.EqualTo(before + 1));
         h.AddTab(A, "a", "A2", 0);
         Assert.That(Join(h.TabIds(A)), Is.EqualTo("a,b"), "an order change alone counts as a change");
@@ -278,9 +320,12 @@ public class HubModelTests
         var h = new Hub();
         h.AddMod(A, "Alpha");
         int before = h.Changes;
-        Assert.That(h.AddTab(guid, id, "T", 0), Is.False);
-        Assert.That(h.IsAutoTab(A), Is.True);
-        Assert.That(h.Changes, Is.EqualTo(before));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.AddTab(guid, id, "T", 0), Is.False);
+            Assert.That(h.IsAutoTab(A), Is.True);
+            Assert.That(h.Changes, Is.EqualTo(before));
+        }
     }
 
     [Test]
@@ -290,13 +335,16 @@ public class HubModelTests
         h.AddMod(A, "Alpha"); h.AddMod(B, "Beta");
         h.AddTab(B, "look", "  ", 0);
         h.AddTab(B, "cam", "Camera", 1);
-        Assert.That(h.TabTitle(A, "settings"), Is.EqualTo("Settings"));
-        Assert.That(h.TabTitle(A, "look"), Is.Null);
-        Assert.That(h.TabTitle(B, "look"), Is.EqualTo("look"));
-        Assert.That(h.TabTitle(B, "cam"), Is.EqualTo("Camera"));
-        Assert.That(h.TabTitle(B, "nope"), Is.Null);
-        Assert.That(h.TabTitle(B, null), Is.Null);
-        Assert.That(h.TabTitle(null, "settings"), Is.EqualTo("Settings"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.TabTitle(A, "settings"), Is.EqualTo("Settings"));
+            Assert.That(h.TabTitle(A, "look"), Is.Null);
+            Assert.That(h.TabTitle(B, "look"), Is.EqualTo("look"));
+            Assert.That(h.TabTitle(B, "cam"), Is.EqualTo("Camera"));
+            Assert.That(h.TabTitle(B, "nope"), Is.Null);
+            Assert.That(h.TabTitle(B, null), Is.Null);
+            Assert.That(h.TabTitle(null, "settings"), Is.EqualTo("Settings"));
+        }
     }
 
     [Test]
@@ -305,9 +353,12 @@ public class HubModelTests
         var h = new Hub();
         h.AddMod(A, "Alpha");
         h.AddTab(A, "settings", "My settings", 0);
-        Assert.That(h.IsAutoTab(A), Is.False);
-        Assert.That(h.TabTitle(A, "settings"), Is.EqualTo("My settings"));
-        Assert.That(h.RemoveTab(A, "settings"), Is.True);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.IsAutoTab(A), Is.False);
+            Assert.That(h.TabTitle(A, "settings"), Is.EqualTo("My settings"));
+            Assert.That(h.RemoveTab(A, "settings"), Is.True);
+        }
         Assert.That(h.IsAutoTab(A), Is.True);
         Assert.That(h.TabTitle(A, "settings"), Is.EqualTo("Settings"));
     }
@@ -329,10 +380,13 @@ public class HubModelTests
         h.AddMod(A, "Alpha");
         h.AddTab(A, "a", "A", 0); h.AddTab(A, "b", "B", 1); h.AddTab(A, "c", "C", 2);
         h.SelectTab("b");
-        Assert.That(h.RemoveTab(A, "b"), Is.True);
-        Assert.That(h.SelectedTab, Is.EqualTo("a"));
-        Assert.That(h.RemoveTab(A, "a"), Is.True);
-        Assert.That(h.RemoveTab(A, "c"), Is.True);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.RemoveTab(A, "b"), Is.True);
+            Assert.That(h.SelectedTab, Is.EqualTo("a"));
+            Assert.That(h.RemoveTab(A, "a"), Is.True);
+            Assert.That(h.RemoveTab(A, "c"), Is.True);
+        }
         Assert.That(h.SelectedTab, Is.EqualTo("settings"));
         Assert.That(Join(h.TabIds(A)), Is.EqualTo("settings"));
     }
@@ -344,13 +398,16 @@ public class HubModelTests
         h.AddMod(A, "Alpha");
         h.AddTab(A, "a", "A", 0);
         int before = h.Changes;
-        Assert.That(h.RemoveTab(A, "zzz"), Is.False);
-        Assert.That(h.RemoveTab(B, "a"), Is.False);
-        Assert.That(h.RemoveTab(null, "a"), Is.False);
-        Assert.That(h.RemoveTab(A, null), Is.False);
-        Assert.That(h.RemoveTab(A, ""), Is.False);
-        Assert.That(h.RemoveTab("", "a"), Is.False);
-        Assert.That(h.Changes, Is.EqualTo(before));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.RemoveTab(A, "zzz"), Is.False);
+            Assert.That(h.RemoveTab(B, "a"), Is.False);
+            Assert.That(h.RemoveTab(null, "a"), Is.False);
+            Assert.That(h.RemoveTab(A, null), Is.False);
+            Assert.That(h.RemoveTab(A, ""), Is.False);
+            Assert.That(h.RemoveTab("", "a"), Is.False);
+            Assert.That(h.Changes, Is.EqualTo(before));
+        }
     }
 
     [Test]
@@ -362,8 +419,11 @@ public class HubModelTests
         h.SelectTab("b");
         int before = h.Changes;
         h.RemoveTab(A, "a");
-        Assert.That(h.SelectedTab, Is.EqualTo("b"));
-        Assert.That(h.Changes, Is.EqualTo(before + 1), "row 2 changed, so the view must redraw");
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.SelectedTab, Is.EqualTo("b"));
+            Assert.That(h.Changes, Is.EqualTo(before + 1), "row 2 changed, so the view must redraw");
+        }
     }
 
     [Test]
@@ -374,12 +434,18 @@ public class HubModelTests
         h.AddTab(A, "a1", "A1", 0); h.AddTab(A, "a2", "A2", 1);
         h.AddTab(B, "b1", "B1", 0); h.AddTab(B, "b2", "B2", 1);
         h.SelectTab("a2");
-        Assert.That(h.SelectMod(B), Is.True);
-        Assert.That(h.SelectedTab, Is.EqualTo("b1"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.SelectMod(B), Is.True);
+            Assert.That(h.SelectedTab, Is.EqualTo("b1"));
+        }
         h.SelectTab("b2");
-        Assert.That(h.SelectMod(A), Is.True);
-        Assert.That(h.SelectedTab, Is.EqualTo("a2"));
-        Assert.That(h.SelectMod(B), Is.True);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.SelectMod(A), Is.True);
+            Assert.That(h.SelectedTab, Is.EqualTo("a2"));
+            Assert.That(h.SelectMod(B), Is.True);
+        }
         Assert.That(h.SelectedTab, Is.EqualTo("b2"));
     }
 
@@ -402,11 +468,14 @@ public class HubModelTests
         var h = new Hub();
         h.AddMod(A, "Alpha");
         int before = h.Changes;
-        Assert.That(h.SelectMod(B), Is.False);
-        Assert.That(h.SelectMod(null), Is.False);
-        Assert.That(h.SelectMod(""), Is.False);
-        Assert.That(h.SelectedMod, Is.EqualTo(A));
-        Assert.That(h.Changes, Is.EqualTo(before));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.SelectMod(B), Is.False);
+            Assert.That(h.SelectMod(null), Is.False);
+            Assert.That(h.SelectMod(""), Is.False);
+            Assert.That(h.SelectedMod, Is.EqualTo(A));
+            Assert.That(h.Changes, Is.EqualTo(before));
+        }
     }
 
     [Test]
@@ -417,11 +486,14 @@ public class HubModelTests
         h.AddMod(A, "Alpha");
         h.AddTab(A, "a", "A", 0);
         int before = h.Changes;
-        Assert.That(h.SelectTab("zzz"), Is.False);
-        Assert.That(h.SelectTab(null), Is.False);
-        Assert.That(h.SelectTab("settings"), Is.False, "the auto tab does not exist when the mod registered tabs");
-        Assert.That(h.SelectedTab, Is.EqualTo("a"));
-        Assert.That(h.Changes, Is.EqualTo(before));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.SelectTab("zzz"), Is.False);
+            Assert.That(h.SelectTab(null), Is.False);
+            Assert.That(h.SelectTab("settings"), Is.False, "the auto tab does not exist when the mod registered tabs");
+            Assert.That(h.SelectedTab, Is.EqualTo("a"));
+            Assert.That(h.Changes, Is.EqualTo(before));
+        }
     }
 
     [Test]
@@ -430,16 +502,22 @@ public class HubModelTests
         var h = new Hub();
         h.AddMod(A, "Alpha"); h.AddMod(B, "Beta");
         h.AddTab(B, "x", "X", 0); h.AddTab(B, "y", "Y", 1);
-        Assert.That(h.Select(B, "y"), Is.True);
-        Assert.That(h.SelectedMod, Is.EqualTo(B));
-        Assert.That(h.SelectedTab, Is.EqualTo("y"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.Select(B, "y"), Is.True);
+            Assert.That(h.SelectedMod, Is.EqualTo(B));
+            Assert.That(h.SelectedTab, Is.EqualTo("y"));
+        }
         int before = h.Changes;
-        Assert.That(h.Select(B, "nope"), Is.False);
-        Assert.That(h.Select(C, null), Is.False);
-        Assert.That(h.Select(B, "y"), Is.True);
-        Assert.That(h.Changes, Is.EqualTo(before), "selecting what is already selected is silent");
-        Assert.That(h.SelectedMod, Is.EqualTo(B));
-        Assert.That(h.SelectedTab, Is.EqualTo("y"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(h.Select(B, "nope"), Is.False);
+            Assert.That(h.Select(C, null), Is.False);
+            Assert.That(h.Select(B, "y"), Is.True);
+            Assert.That(h.Changes, Is.EqualTo(before), "selecting what is already selected is silent");
+            Assert.That(h.SelectedMod, Is.EqualTo(B));
+            Assert.That(h.SelectedTab, Is.EqualTo("y"));
+        }
     }
 
     [Test]

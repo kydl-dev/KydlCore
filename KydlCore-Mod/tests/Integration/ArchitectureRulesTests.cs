@@ -50,14 +50,20 @@ public class ArchitectureRulesTests
 
     [Test] public void PureLayers_ReferenceNoGameOrEngine()
     {
-        Assert.That(PureFiles(), Is.Not.Empty, "src/Features/<F>/{Domain,Application,Execution}");
-        Assert.That(Violations(PureFiles()), Is.Empty, "the domain decides without the game - move game reads into the feature's Infrastructure adapter");
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(PureFiles(), Is.Not.Empty, "src/Features/<F>/{Domain,Application,Execution}");
+            Assert.That(Violations(PureFiles()), Is.Empty, "the domain decides without the game - move game reads into the feature's Infrastructure adapter");
+        }
     }
 
     [Test] public void KydlCoreContracts_ArePure()
     {
-        Assert.That(Directory.Exists(SharedCore), Is.True, SharedCore);
-        Assert.That(Violations(Directory.GetFiles(SharedCore, "*.cs", SearchOption.AllDirectories)), Is.Empty, "src\\Shared\\Core (KydlCore.Core) must stay pure");
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Directory.Exists(SharedCore), Is.True, SharedCore);
+            Assert.That(Violations(Directory.GetFiles(SharedCore, "*.cs", SearchOption.AllDirectories)), Is.Empty, "src\\Shared\\Core (KydlCore.Core) must stay pure");
+        }
     }
 
     [Test] public void HarmonyPatches_LiveOnlyIn_IntegrationsHarmony()
@@ -74,8 +80,11 @@ public class ArchitectureRulesTests
     {
         string plugin = File.ReadAllText(Path.Combine(Src, "Bootstrap", "Plugin.cs"));
         string proj = File.ReadAllText(Directory.GetFiles(TestPaths.ModDir, "*.csproj").Single());
-        Assert.That(proj, Does.Not.Contain("<KydlUseCore>true</KydlUseCore>"));
-        Assert.That(Directory.Exists(Path.Combine(Src, "Shared", "Ui")), Is.True, "the UI kit is compiled from src/Shared/Ui (D-089)");
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(proj, Does.Not.Contain("<KydlUseCore>true</KydlUseCore>"));
+            Assert.That(Directory.Exists(Path.Combine(Src, "Shared", "Ui")), Is.True, "the UI kit is compiled from src/Shared/Ui (D-089)");
+        }
         Assert.That(proj, Does.Not.Match(@"shared\\Kydl\.(Core|Common|Ui)\b"), "no shared source is linked from Claude\\shared any more");
         Assert.That(plugin, Does.Contain("[NetworkCompatibility(CompatibilityLevel.VersionCheckOnly, VersionStrictness.Patch)]"), "MIGRATION_DECISIONS: KydlCore = VersionCheckOnly + Patch");
         string settings = File.ReadAllText(Path.Combine(Src, "Configuration", "ModSettings.cs"));

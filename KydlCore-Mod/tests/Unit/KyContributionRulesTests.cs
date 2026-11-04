@@ -14,7 +14,10 @@ public class KyContributionRulesTests
     public void ValidId_IsAcceptedInLowercase(string id, string expected)
     {
         var r = KyItemRules.ValidateId(id, Steve);
-        Assert.That(r.Status, Is.EqualTo(ResponseStatus.Success)); Assert.That(r.Value, Is.EqualTo(expected));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(r.Status, Is.EqualTo(ResponseStatus.Success)); Assert.That(r.Value, Is.EqualTo(expected));
+        }
     }
 
     [TestCase(null, Steve, KyItemRules.NoId)]
@@ -31,13 +34,19 @@ public class KyContributionRulesTests
     public void InvalidId_IsRejectedWithTheReason(string id, string guid, string reason)
     {
         var r = KyItemRules.ValidateId(id, guid);
-        Assert.That(r.Status, Is.EqualTo(ResponseStatus.Rejected)); Assert.That(r.Reason, Is.EqualTo(reason));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(r.Status, Is.EqualTo(ResponseStatus.Rejected)); Assert.That(r.Reason, Is.EqualTo(reason));
+        }
     }
 
     [Test] public void ForeignNamespace_IsRejected()
     {
         var r = KyItemRules.ValidateId("kydltools:slippers", Steve);
-        Assert.That(r.Status, Is.EqualTo(ResponseStatus.Rejected)); Assert.That(r.Reason, Does.Contain("'kydltools'").And.Contain("'stevethetroll'"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(r.Status, Is.EqualTo(ResponseStatus.Rejected)); Assert.That(r.Reason, Does.Contain("'kydltools'").And.Contain("'stevethetroll'"));
+        }
     }
 
     [TestCase("com.kydldev.SteveTheTroll", "stevethetroll")]
@@ -51,20 +60,30 @@ public class KyContributionRulesTests
         var b = new ContributionBook();
         Assert.That(b.Add(new ContributionRecord("stevethetroll:slippers", Steve, "Slippers")).Value, Is.EqualTo(1));
         var dupId = b.Add(new ContributionRecord("stevethetroll:slippers", "com.kydldev.Other", "Other"));
-        Assert.That(dupId.Status, Is.EqualTo(ResponseStatus.Rejected)); Assert.That(dupId.Reason, Does.Contain(Steve));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(dupId.Status, Is.EqualTo(ResponseStatus.Rejected)); Assert.That(dupId.Reason, Does.Contain(Steve));
+        }
         var dupPrefab = b.Add(new ContributionRecord("other:slippers", "com.kydldev.Other", "SLIPPERS"));
-        Assert.That(dupPrefab.Status, Is.EqualTo(ResponseStatus.Rejected)); Assert.That(dupPrefab.Reason, Does.Contain("stevethetroll:slippers"));
-        Assert.That(b.Add(new ContributionRecord("other:x", "com.kydldev.Other", "")).Reason, Is.EqualTo(ContributionBook.NoPrefab));
-        Assert.That(b.Count, Is.EqualTo(1));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(dupPrefab.Status, Is.EqualTo(ResponseStatus.Rejected)); Assert.That(dupPrefab.Reason, Does.Contain("stevethetroll:slippers"));
+            Assert.That(b.Add(new ContributionRecord("other:x", "com.kydldev.Other", "")).Reason, Is.EqualTo(ContributionBook.NoPrefab));
+            Assert.That(b.Count, Is.EqualTo(1));
+        }
     }
 
     [Test] public void Book_Remove_FreesIdAndPrefab()
     {
         var b = new ContributionBook();
         b.Add(new ContributionRecord("kydlcore:a", "com.kydldev.KydlCore", "Wood"));
-        Assert.That(b.Find("kydlcore:a").Prefab, Is.EqualTo("Wood"));
-        Assert.That(b.Remove("kydlcore:a"), Is.True); Assert.That(b.Remove("never"), Is.True); Assert.That(b.Remove(null), Is.True);
-        Assert.That(b.Contains("kydlcore:a"), Is.False); Assert.That(b.Find("kydlcore:a").Prefab, Is.EqualTo(""));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(b.Find("kydlcore:a").Prefab, Is.EqualTo("Wood"));
+            Assert.That(b.Remove("kydlcore:a"), Is.True); Assert.That(b.Remove("never"), Is.True); Assert.That(b.Remove(null), Is.True);
+            Assert.That(b.Contains("kydlcore:a"), Is.False);
+        }
+        Assert.That(b.Find("kydlcore:a").Prefab, Is.EqualTo(""));
         Assert.That(b.Add(new ContributionRecord("kydlcore:b", "com.kydldev.KydlCore", "Wood")).IsSuccess, Is.True);
     }
 }

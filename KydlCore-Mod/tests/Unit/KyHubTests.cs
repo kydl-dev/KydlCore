@@ -52,11 +52,14 @@ public class KyHubTests
     {
         string g = Guid("A");
         var tab = AddTab(g, "look", "Look", Builder(new int[1]), 3);
-        Assert.That(tab, Is.Not.Null);
-        Assert.That(Prop(tab, "ModGuid"), Is.EqualTo(g));
-        Assert.That(Prop(tab, "Id"), Is.EqualTo("look"));
-        Assert.That(Prop(tab, "Title"), Is.EqualTo("Look"));
-        Assert.That(Prop(tab, "Order"), Is.EqualTo("3"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(tab, Is.Not.Null);
+            Assert.That(Prop(tab, "ModGuid"), Is.EqualTo(g));
+            Assert.That(Prop(tab, "Id"), Is.EqualTo("look"));
+            Assert.That(Prop(tab, "Title"), Is.EqualTo("Look"));
+            Assert.That(Prop(tab, "Order"), Is.EqualTo("3"));
+        }
     }
 
     [Test]
@@ -64,8 +67,11 @@ public class KyHubTests
     {
         string g = Guid("B");
         AddTab(g, "one", "One", Builder(new int[1]));
-        Assert.That(TabIds(g), Is.EqualTo(new[] { "one" }));
-        Assert.That((string)ModelCall("TabTitle", g, "one"), Is.EqualTo("One"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(TabIds(g), Is.EqualTo(new[] { "one" }));
+            Assert.That((string)ModelCall("TabTitle", g, "one"), Is.EqualTo("One"));
+        }
     }
 
     [Test]
@@ -83,10 +89,13 @@ public class KyHubTests
         string g = Guid("D");
         var first = AddTab(g, "t", "Old", Builder(new int[1]));
         var second = AddTab(g, "t", "New", Builder(new int[1]), 2);
-        Assert.That(second, Is.SameAs(first));
-        Assert.That(Prop(first, "Title"), Is.EqualTo("New"));
-        Assert.That(Prop(first, "Order"), Is.EqualTo("2"));
-        Assert.That(TabIds(g), Is.EqualTo(new[] { "t" }));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(second, Is.SameAs(first));
+            Assert.That(Prop(first, "Title"), Is.EqualTo("New"));
+            Assert.That(Prop(first, "Order"), Is.EqualTo("2"));
+            Assert.That(TabIds(g), Is.EqualTo(new[] { "t" }));
+        }
     }
 
     [Test]
@@ -101,12 +110,15 @@ public class KyHubTests
     public void AddTab_WrongInput_IsRefused_AndChangesNothing()
     {
         string g = Guid("F");
-        Assert.That(AddTab(null, "id", "T", Builder(new int[1])), Is.Null);
-        Assert.That(AddTab("", "id", "T", Builder(new int[1])), Is.Null);
-        Assert.That(AddTab(g, null, "T", Builder(new int[1])), Is.Null);
-        Assert.That(AddTab(g, "", "T", Builder(new int[1])), Is.Null);
-        Assert.That(AddTab(g, "id", "T", null), Is.Null);
-        Assert.That(TabIds(g), Is.EqualTo(new[] { "settings" }), "no tab registered: the hub shows its one automatic Settings tab");
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(AddTab(null, "id", "T", Builder(new int[1])), Is.Null);
+            Assert.That(AddTab("", "id", "T", Builder(new int[1])), Is.Null);
+            Assert.That(AddTab(g, null, "T", Builder(new int[1])), Is.Null);
+            Assert.That(AddTab(g, "", "T", Builder(new int[1])), Is.Null);
+            Assert.That(AddTab(g, "id", "T", null), Is.Null);
+            Assert.That(TabIds(g), Is.EqualTo(new[] { "settings" }), "no tab registered: the hub shows its one automatic Settings tab");
+        }
     }
 
     [Test]
@@ -115,15 +127,21 @@ public class KyHubTests
         string g = Guid("G");
         AddTab(g, "a", "A", Builder(new int[1]));
         AddTab(g, "b", "B", Builder(new int[1]));
-        Assert.That(Call("RemoveTab", g, "a"), Is.True);
-        Assert.That(TabIds(g), Is.EqualTo(new[] { "b" }));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Call("RemoveTab", g, "a"), Is.True);
+            Assert.That(TabIds(g), Is.EqualTo(new[] { "b" }));
+        }
     }
 
     [Test]
     public void RemoveTab_UnknownTab_IsFalse()
     {
-        Assert.That(Call("RemoveTab", Guid("H"), "none"), Is.False);
-        Assert.That(Call("RemoveTab", null, null), Is.False);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Call("RemoveTab", Guid("H"), "none"), Is.False);
+            Assert.That(Call("RemoveTab", null, null), Is.False);
+        }
     }
 
     [Test]
@@ -133,8 +151,11 @@ public class KyHubTests
         var first = AddTab(g, "t", "T", Builder(new int[1]));
         Call("RemoveTab", g, "t");
         var again = AddTab(g, "t", "T", Builder(new int[1]));
-        Assert.That(again, Is.Not.SameAs(first));
-        Assert.That(TabIds(g), Is.EqualTo(new[] { "t" }));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(again, Is.Not.SameAs(first));
+            Assert.That(TabIds(g), Is.EqualTo(new[] { "t" }));
+        }
     }
 
     // a page builder that records which mod the shared UI log says is drawing (KydlCore.Ui.UiLog.Owner, D-071)
@@ -154,8 +175,11 @@ public class KyHubTests
         AddTab(g, "p", "P", OwnerRecorder(seen));
         var build = Hub.GetMethod("BuildPage", BindingFlags.Static | BindingFlags.NonPublic);
         build.Invoke(null, new object[] { g, "p" });
-        Assert.That(seen[0], Is.EqualTo(g));
-        Assert.That(ModAssembly.GetStatic("KydlCore.Ui.UiLog", "Owner"), Is.Null, "the owner is back to none after the page is built");
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(seen[0], Is.EqualTo(g));
+            Assert.That(ModAssembly.GetStatic("KydlCore.Ui.UiLog", "Owner"), Is.Null, "the owner is back to none after the page is built");
+        }
     }
 
     [Test]
@@ -201,8 +225,11 @@ public class KyHubTests
         AddTab(a, "t", "T", Builder(ca));
         AddTab(b, "t", "T", Builder(cb));
         Hub.GetMethod("BuildPage", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, new object[] { a, "t" });
-        Assert.That(ca[0], Is.EqualTo(1));
-        Assert.That(cb[0], Is.EqualTo(0));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(ca[0], Is.EqualTo(1));
+            Assert.That(cb[0], Is.EqualTo(0));
+        }
     }
 
     [Test]
@@ -214,8 +241,11 @@ public class KyHubTests
         AddTab(a, "yz", "A", Builder(ca));
         AddTab(b, "z", "B", Builder(cb));
         Hub.GetMethod("BuildPage", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, new object[] { a, "yz" });
-        Assert.That(ca[0], Is.EqualTo(1));
-        Assert.That(cb[0], Is.EqualTo(0));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(ca[0], Is.EqualTo(1));
+            Assert.That(cb[0], Is.EqualTo(0));
+        }
     }
 
     [Test]
@@ -224,8 +254,11 @@ public class KyHubTests
         string g = Guid("N");
         ModelCall("AddMod", g, "Plugin Name");
         Call("SetModTitle", g, "My Title", null);
-        Assert.That((string)ModelCall("ModTitle", g), Is.EqualTo("My Title"));
-        Assert.That((string)Hub.GetMethod("TitleOf", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, new object[] { g }), Is.EqualTo("My Title"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That((string)ModelCall("ModTitle", g), Is.EqualTo("My Title"));
+            Assert.That((string)Hub.GetMethod("TitleOf", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, new object[] { g }), Is.EqualTo("My Title"));
+        }
     }
 
     [Test]
@@ -233,8 +266,11 @@ public class KyHubTests
     {
         string g = Guid("O");
         Call("SetModTitle", g, "Early Title", null);
-        Assert.That((string)ModelCall("ModTitle", g), Is.Null);
-        Assert.That((string)Hub.GetMethod("TitleOf", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, new object[] { g }), Is.EqualTo("Early Title"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That((string)ModelCall("ModTitle", g), Is.Null);
+            Assert.That((string)Hub.GetMethod("TitleOf", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, new object[] { g }), Is.EqualTo("Early Title"));
+        }
     }
 
     [Test]

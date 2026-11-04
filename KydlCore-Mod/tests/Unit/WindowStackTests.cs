@@ -59,31 +59,40 @@ public class WindowStackTests
     {
         var s = new WindowStack();
         Assert.That(s.Count, Is.EqualTo(0));
-        Assert.That(s.AnyOpen, Is.False);
-        Assert.That(s.Top, Is.Null);
-        Assert.That(s.Ids(), Is.Empty);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(s.AnyOpen, Is.False);
+            Assert.That(s.Top, Is.Null);
+            Assert.That(s.Ids(), Is.Empty);
+        }
     }
 
     [Test]
     public void Open_PutsTheNewWindowOnTop_InOrder()
     {
         var w = new Watched();
-        Assert.That(w.Stack.Open("a"), Is.True);
-        Assert.That(w.Stack.Open("b"), Is.True);
-        Assert.That(w.Stack.Open("c"), Is.True);
-        Assert.That(Join(w.Stack), Is.EqualTo("a,b,c"));
-        Assert.That(w.Stack.Top, Is.EqualTo("c"));
-        Assert.That(w.Stack.Count, Is.EqualTo(3));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(w.Stack.Open("a"), Is.True);
+            Assert.That(w.Stack.Open("b"), Is.True);
+            Assert.That(w.Stack.Open("c"), Is.True);
+            Assert.That(Join(w.Stack), Is.EqualTo("a,b,c"));
+            Assert.That(w.Stack.Top, Is.EqualTo("c"));
+            Assert.That(w.Stack.Count, Is.EqualTo(3));
+        }
     }
 
     [Test]
     public void Open_AlreadyOpen_OnlyBringsItToTheFront_NoSecondEntry_NoEvent()
     {
         var w = new Watched().With("a", "b", "c");
-        Assert.That(w.Stack.Open("a"), Is.True);
-        Assert.That(Join(w.Stack), Is.EqualTo("b,c,a"));
-        Assert.That(w.Stack.Count, Is.EqualTo(3));
-        Assert.That(w.Events, Is.Empty);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(w.Stack.Open("a"), Is.True);
+            Assert.That(Join(w.Stack), Is.EqualTo("b,c,a"));
+            Assert.That(w.Stack.Count, Is.EqualTo(3));
+            Assert.That(w.Events, Is.Empty);
+        }
     }
 
     [TestCase(null)]
@@ -91,13 +100,19 @@ public class WindowStackTests
     public void Open_InvalidId_ReturnsFalse_AndChangesNothing(string id)
     {
         var w = new Watched().With("a");
-        Assert.That(w.Stack.Open(id), Is.False);
-        Assert.That(Join(w.Stack), Is.EqualTo("a"));
-        Assert.That(w.Events, Is.Empty);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(w.Stack.Open(id), Is.False);
+            Assert.That(Join(w.Stack), Is.EqualTo("a"));
+            Assert.That(w.Events, Is.Empty);
+        }
         var empty = new Watched();
-        Assert.That(empty.Stack.Open(id), Is.False);
-        Assert.That(empty.Stack.AnyOpen, Is.False);
-        Assert.That(empty.Events, Is.Empty);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(empty.Stack.Open(id), Is.False);
+            Assert.That(empty.Stack.AnyOpen, Is.False);
+            Assert.That(empty.Events, Is.Empty);
+        }
     }
 
     [Test]
@@ -105,35 +120,47 @@ public class WindowStackTests
     {
         var w = new Watched().With("Hub");
         w.Stack.Open("hub");
-        Assert.That(Join(w.Stack), Is.EqualTo("Hub,hub"));
-        Assert.That(w.Stack.IsOpen("HUB"), Is.False);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Join(w.Stack), Is.EqualTo("Hub,hub"));
+            Assert.That(w.Stack.IsOpen("HUB"), Is.False);
+        }
     }
 
     [Test]
     public void IsOpen_TellsOpenFromClosed_AndNeverForInvalidIds()
     {
         var w = new Watched().With("a");
-        Assert.That(w.Stack.IsOpen("a"), Is.True);
-        Assert.That(w.Stack.IsOpen("b"), Is.False);
-        Assert.That(w.Stack.IsOpen(null), Is.False);
-        Assert.That(w.Stack.IsOpen(""), Is.False);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(w.Stack.IsOpen("a"), Is.True);
+            Assert.That(w.Stack.IsOpen("b"), Is.False);
+            Assert.That(w.Stack.IsOpen(null), Is.False);
+            Assert.That(w.Stack.IsOpen(""), Is.False);
+        }
     }
 
     [Test]
     public void BringToFront_MovesAnOpenWindowToTheTop_AndKeepsTheOthersInOrder()
     {
         var w = new Watched().With("a", "b", "c", "d");
-        Assert.That(w.Stack.BringToFront("b"), Is.True);
-        Assert.That(Join(w.Stack), Is.EqualTo("a,c,d,b"));
-        Assert.That(w.Events, Is.Empty);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(w.Stack.BringToFront("b"), Is.True);
+            Assert.That(Join(w.Stack), Is.EqualTo("a,c,d,b"));
+            Assert.That(w.Events, Is.Empty);
+        }
     }
 
     [Test]
     public void BringToFront_OfTheTopWindow_ChangesNothing()
     {
         var w = new Watched().With("a", "b");
-        Assert.That(w.Stack.BringToFront("b"), Is.True);
-        Assert.That(Join(w.Stack), Is.EqualTo("a,b"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(w.Stack.BringToFront("b"), Is.True);
+            Assert.That(Join(w.Stack), Is.EqualTo("a,b"));
+        }
     }
 
     [TestCase("zzz")]
@@ -142,18 +169,24 @@ public class WindowStackTests
     public void BringToFront_OfAWindowThatIsNotOpen_ReturnsFalse_AndDoesNotOpenIt(string id)
     {
         var w = new Watched().With("a");
-        Assert.That(w.Stack.BringToFront(id), Is.False);
-        Assert.That(Join(w.Stack), Is.EqualTo("a"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(w.Stack.BringToFront(id), Is.False);
+            Assert.That(Join(w.Stack), Is.EqualTo("a"));
+        }
     }
 
     [Test]
     public void Close_RemovesTheWindowWhereverItIs_AndKeepsTheOrderOfTheRest()
     {
         var w = new Watched().With("a", "b", "c");
-        Assert.That(w.Stack.Close("b"), Is.True);
-        Assert.That(Join(w.Stack), Is.EqualTo("a,c"));
-        Assert.That(w.Stack.IsOpen("b"), Is.False);
-        Assert.That(w.Events, Is.Empty);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(w.Stack.Close("b"), Is.True);
+            Assert.That(Join(w.Stack), Is.EqualTo("a,c"));
+            Assert.That(w.Stack.IsOpen("b"), Is.False);
+            Assert.That(w.Events, Is.Empty);
+        }
     }
 
     [TestCase("zzz")]
@@ -162,17 +195,23 @@ public class WindowStackTests
     public void Close_OfAWindowThatIsNotOpen_ReturnsFalse_AndChangesNothing(string id)
     {
         var w = new Watched().With("a");
-        Assert.That(w.Stack.Close(id), Is.False);
-        Assert.That(Join(w.Stack), Is.EqualTo("a"));
-        Assert.That(w.Events, Is.Empty);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(w.Stack.Close(id), Is.False);
+            Assert.That(Join(w.Stack), Is.EqualTo("a"));
+            Assert.That(w.Events, Is.Empty);
+        }
     }
 
     [Test]
     public void CloseTop_ClosesOnlyTheFrontWindow_EachEscapeOne()
     {
         var w = new Watched().With("a", "b", "c");
-        Assert.That(w.Stack.CloseTop(), Is.EqualTo("c"));
-        Assert.That(Join(w.Stack), Is.EqualTo("a,b"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(w.Stack.CloseTop(), Is.EqualTo("c"));
+            Assert.That(Join(w.Stack), Is.EqualTo("a,b"));
+        }
         Assert.That(w.Stack.CloseTop(), Is.EqualTo("b"));
         Assert.That(Join(w.Stack), Is.EqualTo("a"));
     }
@@ -182,17 +221,23 @@ public class WindowStackTests
     {
         var w = new Watched().With("a", "b", "c");
         w.Stack.BringToFront("a");
-        Assert.That(w.Stack.CloseTop(), Is.EqualTo("a"));
-        Assert.That(Join(w.Stack), Is.EqualTo("b,c"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(w.Stack.CloseTop(), Is.EqualTo("a"));
+            Assert.That(Join(w.Stack), Is.EqualTo("b,c"));
+        }
     }
 
     [Test]
     public void CloseTop_WhenNothingIsOpen_ReturnsNull_NoEvent()
     {
         var w = new Watched();
-        Assert.That(w.Stack.CloseTop(), Is.Null);
-        Assert.That(w.Events, Is.Empty);
-        Assert.That(w.Stack.AnyOpen, Is.False);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(w.Stack.CloseTop(), Is.Null);
+            Assert.That(w.Events, Is.Empty);
+            Assert.That(w.Stack.AnyOpen, Is.False);
+        }
     }
 
     [Test]
@@ -207,8 +252,11 @@ public class WindowStackTests
         w.Stack.Close("b");
         Assert.That(w.Events, Is.EqualTo(new[] { true }), "no event while at least one window stays open");
         w.Stack.CloseTop();
-        Assert.That(w.Events, Is.EqualTo(new[] { true, false }));
-        Assert.That(w.Stack.AnyOpen, Is.False);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(w.Events, Is.EqualTo(new[] { true, false }));
+            Assert.That(w.Stack.AnyOpen, Is.False);
+        }
     }
 
     [Test]
@@ -242,8 +290,11 @@ public class WindowStackTests
         var s = new WindowStack();
         s.AnyOpenChanged += open => { throw new InvalidOperationException("handler"); };
         Assert.Throws<InvalidOperationException>(() => s.Open("a"));
-        Assert.That(s.IsOpen("a"), Is.True);
-        Assert.That(s.Count, Is.EqualTo(1));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(s.IsOpen("a"), Is.True);
+            Assert.That(s.Count, Is.EqualTo(1));
+        }
     }
 
     /// Commands: op 0 Open, 1 BringToFront, 2 Close, 3 CloseTop; id 0..3 (a small set so that ids repeat and every case is reached).

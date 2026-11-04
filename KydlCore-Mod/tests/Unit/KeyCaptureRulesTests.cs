@@ -63,8 +63,11 @@ public class KeyCaptureRulesTests
     [Test] public void Shortcut_NullHeld_NoModifiers()
     {
         var args = new object[] { new List<KeyCode> { KeyCode.K }, null, true, KeyCode.None, null };
-        Assert.That(Rules.GetMethod("Decide").Invoke(null, args).ToString(), Is.EqualTo("Done"));
-        Assert.That(((List<KeyCode>)args[4]).Count, Is.EqualTo(0));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Rules.GetMethod("Decide").Invoke(null, args).ToString(), Is.EqualTo("Done"));
+            Assert.That(((List<KeyCode>)args[4]), Is.Empty);
+        }
     }
 
     [Test] public void KeyName_None() { Assert.That(Name(KeyCode.None), Is.EqualTo("(none)")); }

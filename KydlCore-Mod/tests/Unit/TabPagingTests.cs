@@ -61,35 +61,47 @@ public class TabPagingTests
     [Test]
     public void RowTops_ExactlyTheToleranceStaysOnTheLine()
     {
-        Assert.That(Tops(new[] { 10f, 18f }, 8f), Is.EqualTo(new[] { 10f }));
-        Assert.That(Tops(new[] { 10f, 18.5f }, 8f), Is.EqualTo(new[] { 10f, 18.5f }));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Tops(new[] { 10f, 18f }, 8f), Is.EqualTo(new[] { 10f }));
+            Assert.That(Tops(new[] { 10f, 18.5f }, 8f), Is.EqualTo(new[] { 10f, 18.5f }));
+        }
     }
 
     [Test]
     public void RowTops_NoTabs_NoRows()
     {
-        Assert.That(Tops(new float[0]), Is.Empty);
-        Assert.That(Call("RowTops", null, 8f), Is.Empty);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Tops(new float[0]), Is.Empty);
+            Assert.That(Call("RowTops", null, 8f), Is.Empty);
+        }
     }
 
     [Test]
     public void RowOf_CountsLines()
     {
         var tops = new[] { 10f, 13f, 50f, 53f, 90f };
-        Assert.That(RowOf(tops, 0), Is.EqualTo(0));
-        Assert.That(RowOf(tops, 1), Is.EqualTo(0));
-        Assert.That(RowOf(tops, 2), Is.EqualTo(1));
-        Assert.That(RowOf(tops, 3), Is.EqualTo(1));
-        Assert.That(RowOf(tops, 4), Is.EqualTo(2));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(RowOf(tops, 0), Is.EqualTo(0));
+            Assert.That(RowOf(tops, 1), Is.EqualTo(0));
+            Assert.That(RowOf(tops, 2), Is.EqualTo(1));
+            Assert.That(RowOf(tops, 3), Is.EqualTo(1));
+            Assert.That(RowOf(tops, 4), Is.EqualTo(2));
+        }
     }
 
     [Test]
     public void RowOf_BadIndex_IsMinusOne()
     {
         var tops = new[] { 10f, 50f };
-        Assert.That(RowOf(tops, -1), Is.EqualTo(-1));
-        Assert.That(RowOf(tops, 2), Is.EqualTo(-1));
-        Assert.That(Call("RowOf", null, 8f, 0), Is.EqualTo(-1));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(RowOf(tops, -1), Is.EqualTo(-1));
+            Assert.That(RowOf(tops, 2), Is.EqualTo(-1));
+            Assert.That(Call("RowOf", null, 8f, 0), Is.EqualTo(-1));
+        }
     }
 
     [Test]
@@ -102,49 +114,64 @@ public class TabPagingTests
     [Test]
     public void Needed_OnlyAboveTwoRows()
     {
-        Assert.That(Needed(0), Is.False);
-        Assert.That(Needed(1), Is.False);
-        Assert.That(Needed(2), Is.False);
-        Assert.That(Needed(3), Is.True);
-        Assert.That(Needed(10), Is.True);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Needed(0), Is.False);
+            Assert.That(Needed(1), Is.False);
+            Assert.That(Needed(2), Is.False);
+            Assert.That(Needed(3), Is.True);
+            Assert.That(Needed(10), Is.True);
+        }
     }
 
     [Test]
     public void MaxTop_IsTheLastPage()
     {
-        Assert.That(MaxTop(0), Is.EqualTo(0));
-        Assert.That(MaxTop(2), Is.EqualTo(0));
-        Assert.That(MaxTop(3), Is.EqualTo(1));
-        Assert.That(MaxTop(7), Is.EqualTo(5));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(MaxTop(0), Is.EqualTo(0));
+            Assert.That(MaxTop(2), Is.EqualTo(0));
+            Assert.That(MaxTop(3), Is.EqualTo(1));
+            Assert.That(MaxTop(7), Is.EqualTo(5));
+        }
     }
 
     [Test]
     public void Clamp_KeepsTopInside()
     {
-        Assert.That(Clamp(-3, 5), Is.EqualTo(0));
-        Assert.That(Clamp(2, 5), Is.EqualTo(2));
-        Assert.That(Clamp(3, 5), Is.EqualTo(3));
-        Assert.That(Clamp(4, 5), Is.EqualTo(3));
-        Assert.That(Clamp(9, 2), Is.EqualTo(0));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Clamp(-3, 5), Is.EqualTo(0));
+            Assert.That(Clamp(2, 5), Is.EqualTo(2));
+            Assert.That(Clamp(3, 5), Is.EqualTo(3));
+            Assert.That(Clamp(4, 5), Is.EqualTo(3));
+            Assert.That(Clamp(9, 2), Is.EqualTo(0));
+        }
     }
 
     [Test]
     public void Step_MovesOneLineAndStopsAtTheEnds()
     {
-        Assert.That(Step(0, 1, 5), Is.EqualTo(1));
-        Assert.That(Step(3, 1, 5), Is.EqualTo(3), "already on the last page");
-        Assert.That(Step(1, -1, 5), Is.EqualTo(0));
-        Assert.That(Step(0, -1, 5), Is.EqualTo(0));
-        Assert.That(Step(2, 0, 5), Is.EqualTo(2));
-        Assert.That(Step(0, 1, 2), Is.EqualTo(0), "nothing to scroll");
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Step(0, 1, 5), Is.EqualTo(1));
+            Assert.That(Step(3, 1, 5), Is.EqualTo(3), "already on the last page");
+            Assert.That(Step(1, -1, 5), Is.EqualTo(0));
+            Assert.That(Step(0, -1, 5), Is.EqualTo(0));
+            Assert.That(Step(2, 0, 5), Is.EqualTo(2));
+            Assert.That(Step(0, 1, 2), Is.EqualTo(0), "nothing to scroll");
+        }
     }
 
     // --- Reveal -------------------------------------------------------------------------------------------------------------
     [Test]
     public void Reveal_RowAlreadyShown_KeepsTop()
     {
-        Assert.That(Reveal(2, 2, 6), Is.EqualTo(2));
-        Assert.That(Reveal(3, 2, 6), Is.EqualTo(2));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Reveal(2, 2, 6), Is.EqualTo(2));
+            Assert.That(Reveal(3, 2, 6), Is.EqualTo(2));
+        }
     }
 
     [Test]
@@ -156,16 +183,22 @@ public class TabPagingTests
     [Test]
     public void Reveal_RowBelow_MovesTopSoItIsTheSecondLine()
     {
-        Assert.That(Reveal(4, 0, 6), Is.EqualTo(3));
-        Assert.That(Reveal(2, 0, 6), Is.EqualTo(1));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Reveal(4, 0, 6), Is.EqualTo(3));
+            Assert.That(Reveal(2, 0, 6), Is.EqualTo(1));
+        }
     }
 
     [Test]
     public void Reveal_NeverLeavesThePages()
     {
-        Assert.That(Reveal(5, 0, 6), Is.EqualTo(4));
-        Assert.That(Reveal(-2, 1, 6), Is.EqualTo(0));
-        Assert.That(Reveal(0, 0, 1), Is.EqualTo(0));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Reveal(5, 0, 6), Is.EqualTo(4));
+            Assert.That(Reveal(-2, 1, 6), Is.EqualTo(0));
+            Assert.That(Reveal(0, 0, 1), Is.EqualTo(0));
+        }
     }
 
     [Test]
@@ -195,49 +228,67 @@ public class TabPagingTests
     public void Offset_IsTheDistanceFromTheFirstLine()
     {
         var tops = new[] { 10f, 50f, 90f, 130f };
-        Assert.That(Offset(tops, 0), Is.EqualTo(0f));
-        Assert.That(Offset(tops, 1), Is.EqualTo(40f));
-        Assert.That(Offset(tops, 2), Is.EqualTo(80f));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Offset(tops, 0), Is.EqualTo(0f));
+            Assert.That(Offset(tops, 1), Is.EqualTo(40f));
+            Assert.That(Offset(tops, 2), Is.EqualTo(80f));
+        }
     }
 
     [Test]
     public void Offset_BadTopOrNoRows_IsSafe()
     {
         var tops = new[] { 10f, 50f };
-        Assert.That(Offset(tops, 9), Is.EqualTo(40f), "past the end: the last line");
-        Assert.That(Offset(tops, -4), Is.EqualTo(0f));
-        Assert.That(Offset(new float[0], 1), Is.EqualTo(0f));
-        Assert.That(Call("Offset", null, 1), Is.EqualTo(0f));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Offset(tops, 9), Is.EqualTo(40f), "past the end: the last line");
+            Assert.That(Offset(tops, -4), Is.EqualTo(0f));
+            Assert.That(Offset(new float[0], 1), Is.EqualTo(0f));
+            Assert.That(Call("Offset", null, 1), Is.EqualTo(0f));
+        }
     }
 
     [Test]
     public void ViewHeight_TwoLinesFromTop()
     {
         var tops = new[] { 10f, 50f, 90f, 130f };
-        Assert.That(ViewHeight(tops, 170f, 0), Is.EqualTo(80f));
-        Assert.That(ViewHeight(tops, 170f, 1), Is.EqualTo(80f));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(ViewHeight(tops, 170f, 0), Is.EqualTo(80f));
+            Assert.That(ViewHeight(tops, 170f, 1), Is.EqualTo(80f));
+        }
     }
 
     [Test]
     public void ViewHeight_LastPage_EndsAtTheContentEnd()
     {
         var tops = new[] { 10f, 50f, 90f, 130f };
-        Assert.That(ViewHeight(tops, 170f, 2), Is.EqualTo(80f));
-        Assert.That(ViewHeight(new[] { 10f, 50f, 90f }, 130f, 1), Is.EqualTo(80f));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(ViewHeight(tops, 170f, 2), Is.EqualTo(80f));
+            Assert.That(ViewHeight(new[] { 10f, 50f, 90f }, 130f, 1), Is.EqualTo(80f));
+        }
     }
 
     [Test]
     public void ViewHeight_FewerThanTwoLines_IsAllOfIt()
     {
-        Assert.That(ViewHeight(new[] { 10f }, 50f, 0), Is.EqualTo(40f));
-        Assert.That(ViewHeight(new[] { 10f, 50f }, 90f, 0), Is.EqualTo(80f));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(ViewHeight(new[] { 10f }, 50f, 0), Is.EqualTo(40f));
+            Assert.That(ViewHeight(new[] { 10f, 50f }, 90f, 0), Is.EqualTo(80f));
+        }
     }
 
     [Test]
     public void ViewHeight_NoRows_IsTheContentHeight()
     {
-        Assert.That(ViewHeight(new float[0], 33f, 0), Is.EqualTo(33f));
-        Assert.That(Call("ViewHeight", null, 33f, 0), Is.EqualTo(33f));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(ViewHeight(new float[0], 33f, 0), Is.EqualTo(33f));
+            Assert.That(Call("ViewHeight", null, 33f, 0), Is.EqualTo(33f));
+        }
     }
 
     [Test]
@@ -249,27 +300,36 @@ public class TabPagingTests
     [Test]
     public void ViewHeight_BadTop_IsSafe()
     {
-        Assert.That(ViewHeight(new[] { 10f, 50f, 90f }, 130f, 9), Is.EqualTo(40f));
-        Assert.That(ViewHeight(new[] { 10f, 50f, 90f }, 130f, -9), Is.EqualTo(80f));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(ViewHeight(new[] { 10f, 50f, 90f }, 130f, 9), Is.EqualTo(40f));
+            Assert.That(ViewHeight(new[] { 10f, 50f, 90f }, 130f, -9), Is.EqualTo(80f));
+        }
     }
 
     // --- scroll bar thumb ---------------------------------------------------------------------------------------------------
     [Test]
     public void ThumbLength_IsTheShownShare()
     {
-        Assert.That(ThumbLength(4), Is.EqualTo(0.5f));
-        Assert.That(ThumbLength(3), Is.EqualTo(2f / 3f).Within(1e-6));
-        Assert.That(ThumbLength(2), Is.EqualTo(1f));
-        Assert.That(ThumbLength(0), Is.EqualTo(1f));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(ThumbLength(4), Is.EqualTo(0.5f));
+            Assert.That(ThumbLength(3), Is.EqualTo(2f / 3f).Within(1e-6));
+            Assert.That(ThumbLength(2), Is.EqualTo(1f));
+            Assert.That(ThumbLength(0), Is.EqualTo(1f));
+        }
     }
 
     [Test]
     public void ThumbStart_IsTheTopShare()
     {
-        Assert.That(ThumbStart(4, 0), Is.EqualTo(0f));
-        Assert.That(ThumbStart(4, 2), Is.EqualTo(0.5f));
-        Assert.That(ThumbStart(0, 0), Is.EqualTo(0f));
-        Assert.That(ThumbStart(4, 9), Is.EqualTo(0.5f), "top is clamped first");
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(ThumbStart(4, 0), Is.EqualTo(0f));
+            Assert.That(ThumbStart(4, 2), Is.EqualTo(0.5f));
+            Assert.That(ThumbStart(0, 0), Is.EqualTo(0f));
+            Assert.That(ThumbStart(4, 9), Is.EqualTo(0.5f), "top is clamped first");
+        }
     }
 
     [Test]

@@ -64,8 +64,11 @@ public class KyItemsTests
     public void Add_NewPrefab_IsListed()
     {
         object m = NewModel();
-        Assert.That(Add(m, Entry("Cart")), Is.True);
-        Assert.That(Count(m), Is.EqualTo(1));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Add(m, Entry("Cart")), Is.True);
+            Assert.That(Count(m), Is.EqualTo(1));
+        }
     }
 
     [Test]
@@ -74,19 +77,25 @@ public class KyItemsTests
         object m = NewModel();
         object first = Entry("Cart", "com.kydldev.A");
         Add(m, first);
-        Assert.That(Add(m, Entry("cart", "com.kydldev.B")), Is.False);
-        Assert.That(Count(m), Is.EqualTo(1));
-        Assert.That(Call(m, "Find", "CART"), Is.SameAs(first));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Add(m, Entry("cart", "com.kydldev.B")), Is.False);
+            Assert.That(Count(m), Is.EqualTo(1));
+            Assert.That(Call(m, "Find", "CART"), Is.SameAs(first));
+        }
     }
 
     [Test]
     public void Add_NullAndEmptyPrefab_AreRefused()
     {
         object m = NewModel();
-        Assert.That(Add(m, null), Is.False);
-        Assert.That(Add(m, Entry(null)), Is.False);
-        Assert.That(Add(m, Entry("")), Is.False);
-        Assert.That(Count(m), Is.Zero);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Add(m, null), Is.False);
+            Assert.That(Add(m, Entry(null)), Is.False);
+            Assert.That(Add(m, Entry("")), Is.False);
+            Assert.That(Count(m), Is.Zero);
+        }
     }
 
     [Test]
@@ -94,8 +103,11 @@ public class KyItemsTests
     {
         object m = NewModel();
         Add(m, Entry("Cart"));
-        Assert.That(Call(m, "Find", "Boat"), Is.Null);
-        Assert.That(Call(m, "Find", new object[] { null }), Is.Null);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Call(m, "Find", "Boat"), Is.Null);
+            Assert.That(Call(m, "Find", new object[] { null }), Is.Null);
+        }
     }
 
     [Test]
@@ -143,25 +155,34 @@ public class KyItemsTests
         object next = NewModel();
         object freshA = Entry("a"); object freshB = Entry("b");        // same names, other case and other objects
         Add(next, freshB); Add(next, freshA);
-        Assert.That((bool)Call(m, "ReplaceWith", next), Is.False);
-        Assert.That(Call(m, "Find", "A"), Is.SameAs(freshA));
-        Assert.That(Names(m), Is.EqualTo(new[] { "b", "a" }));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That((bool)Call(m, "ReplaceWith", next), Is.False);
+            Assert.That(Call(m, "Find", "A"), Is.SameAs(freshA));
+            Assert.That(Names(m), Is.EqualTo(new[] { "b", "a" }));
+        }
     }
 
     [Test]
     public void ReplaceWith_NewName_IsAChange()
     {
         object m = ModelOf("A");
-        Assert.That((bool)Call(m, "ReplaceWith", ModelOf("A", "B")), Is.True);
-        Assert.That(Count(m), Is.EqualTo(2));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That((bool)Call(m, "ReplaceWith", ModelOf("A", "B")), Is.True);
+            Assert.That(Count(m), Is.EqualTo(2));
+        }
     }
 
     [Test]
     public void ReplaceWith_GoneName_IsAChange()
     {
         object m = ModelOf("A", "B");
-        Assert.That((bool)Call(m, "ReplaceWith", ModelOf("A")), Is.True);
-        Assert.That(Count(m), Is.EqualTo(1));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That((bool)Call(m, "ReplaceWith", ModelOf("A")), Is.True);
+            Assert.That(Count(m), Is.EqualTo(1));
+        }
     }
 
     [Test]

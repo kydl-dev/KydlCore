@@ -26,9 +26,12 @@ public class PageRowsTests
         object page; var s = Section(out page);
         s.GetType().GetMethod("Slider").Invoke(s, new object[] { "L", 5f, 1f, 3f, "", null });
         var row = Rows(s)[0];
-        Assert.That(Prop(row, "Max"), Is.EqualTo(5f));
-        Assert.That(Prop(row, "Format"), Is.EqualTo("0.##"));
-        Assert.That(Prop(row, "Value"), Is.EqualTo(3f));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Prop(row, "Max"), Is.EqualTo(5f));
+            Assert.That(Prop(row, "Format"), Is.EqualTo("0.##"));
+            Assert.That(Prop(row, "Value"), Is.EqualTo(3f));
+        }
     }
 
     [Test]
@@ -50,8 +53,11 @@ public class PageRowsTests
         object page; var s = Section(out page);
         s.GetType().GetMethod("TextBox").Invoke(s, new object[] { "Name", null, 0, null });
         var row = Rows(s)[0];
-        Assert.That(Prop(row, "Value"), Is.EqualTo(""));
-        Assert.That(Prop(row, "MaxLength"), Is.EqualTo(64));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Prop(row, "Value"), Is.EqualTo(""));
+            Assert.That(Prop(row, "MaxLength"), Is.EqualTo(64));
+        }
     }
 
     [Test]
@@ -60,7 +66,10 @@ public class PageRowsTests
         object page; var s = Section(out page);
         s.GetType().GetMethod("List").Invoke(s, new object[] { "Title", null });
         s.GetType().GetMethod("List").Invoke(s, new object[] { "", new List<string> { "a", "b" } });
-        Assert.That(((ICollection)Prop(Rows(s)[0], "Items")).Count, Is.EqualTo(0));
-        Assert.That(((ICollection)Prop(Rows(s)[1], "Items")).Count, Is.EqualTo(2));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(((ICollection)Prop(Rows(s)[0], "Items")), Is.Empty);
+            Assert.That(((ICollection)Prop(Rows(s)[1], "Items")).Count, Is.EqualTo(2));
+        }
     }
 }

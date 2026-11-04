@@ -28,13 +28,23 @@ public class ConfigControlMapTests
     sealed class ReadOnlyFieldTag { public bool? ReadOnly = false; }       // like ServerSync's ConfigurationManagerAttributes
     sealed class ReadOnlyPropertyTag { public bool ReadOnly { get; set; } }
 
-    [Test] public void ReadOnly_NoTags_IsFalse() { Assert.That(ReadOnly(), Is.False); Assert.That(Call("IsReadOnly", new object[] { null }), Is.False); }
+    [Test] public void ReadOnly_NoTags_IsFalse() {
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(ReadOnly(), Is.False); Assert.That(Call("IsReadOnly", new object[] { null }), Is.False);
+        }
+    }
     [Test] public void ReadOnly_TrueField_IsTrue() { Assert.That(ReadOnly(new ReadOnlyFieldTag { ReadOnly = true }), Is.True); }
     [Test] public void ReadOnly_FalseField_IsFalse() { Assert.That(ReadOnly(new ReadOnlyFieldTag { ReadOnly = false }), Is.False); }
     [Test] public void ReadOnly_NullField_IsFalse() { Assert.That(ReadOnly(new ReadOnlyFieldTag { ReadOnly = null }), Is.False); }
     [Test] public void ReadOnly_TrueProperty_IsTrue() { Assert.That(ReadOnly(new ReadOnlyPropertyTag { ReadOnly = true }), Is.True); }
     [Test] public void ReadOnly_UnrelatedAndNullTags_AreIgnored() { Assert.That(ReadOnly(null, new UnrelatedTag(), new ReadOnlyFieldTag { ReadOnly = true }), Is.True); }
-    [Test] public void ReadOnly_IsNotHiddenNorAdminOnly() { var t = new ReadOnlyFieldTag { ReadOnly = true }; Assert.That(Hidden(t), Is.False); Assert.That(Admin(t), Is.False); }
+    [Test] public void ReadOnly_IsNotHiddenNorAdminOnly() { var t = new ReadOnlyFieldTag { ReadOnly = true };
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Hidden(t), Is.False); Assert.That(Admin(t), Is.False);
+        }
+    }
 
     // fake ConfigurationManagerAttributes classes: a public field, a public property, a private field, a bool? field, a wrong-typed member
     sealed class FieldTag { public bool Browsable = true; public bool IsAdminOnly = false; }
@@ -99,8 +109,11 @@ public class ConfigControlMapTests
         try
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("de-DE");
-            Assert.That(Format(typeof(double), 1234.5), Is.EqualTo("1234.5"));
-            Assert.That(Format(typeof(int), 1234), Is.EqualTo("1234"));
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(Format(typeof(double), 1234.5), Is.EqualTo("1234.5"));
+                Assert.That(Format(typeof(int), 1234), Is.EqualTo("1234"));
+            }
         }
         finally { System.Threading.Thread.CurrentThread.CurrentCulture = old; }
     }
@@ -110,10 +123,13 @@ public class ConfigControlMapTests
     [Test]
     public void SliderFormat_WholeAndFraction()
     {
-        Assert.That(Call("SliderFormat", typeof(int)), Is.EqualTo("0"));
-        Assert.That(Call("SliderFormat", typeof(long)), Is.EqualTo("0"));
-        Assert.That(Call("SliderFormat", typeof(float)), Is.EqualTo("0.##"));
-        Assert.That(Call("SliderFormat", typeof(double)), Is.EqualTo("0.##"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Call("SliderFormat", typeof(int)), Is.EqualTo("0"));
+            Assert.That(Call("SliderFormat", typeof(long)), Is.EqualTo("0"));
+            Assert.That(Call("SliderFormat", typeof(float)), Is.EqualTo("0.##"));
+            Assert.That(Call("SliderFormat", typeof(double)), Is.EqualTo("0.##"));
+        }
     }
 
     // --- Parse ------------------------------------------------------------------------------------------------------------
@@ -126,9 +142,12 @@ public class ConfigControlMapTests
     [Test]
     public void Parse_IntKeepsTheLimits()
     {
-        Assert.That(Parse(typeof(int), "2147483647"), Is.EqualTo(int.MaxValue));
-        Assert.That(Parse(typeof(int), "-2147483648"), Is.EqualTo(int.MinValue));
-        Assert.That(Parse(typeof(int), "-2147483649"), Is.Null);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Parse(typeof(int), "2147483647"), Is.EqualTo(int.MaxValue));
+            Assert.That(Parse(typeof(int), "-2147483648"), Is.EqualTo(int.MinValue));
+            Assert.That(Parse(typeof(int), "-2147483649"), Is.Null);
+        }
     }
     [Test] public void Parse_Long() { Assert.That(Parse(typeof(long), "9000000000"), Is.EqualTo(9000000000L).And.TypeOf<long>()); }
     [Test] public void Parse_Float() { Assert.That(Parse(typeof(float), "2.5"), Is.EqualTo(2.5f).And.TypeOf<float>()); }
@@ -219,12 +238,20 @@ public class ConfigControlMapTests
     }
 
     // --- tags -------------------------------------------------------------------------------------------------------------
-    [Test] public void Tags_None_NothingIsHiddenOrAdminOnly() { Assert.That(Hidden(), Is.False); Assert.That(Admin(), Is.False); }
+    [Test] public void Tags_None_NothingIsHiddenOrAdminOnly() {
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Hidden(), Is.False); Assert.That(Admin(), Is.False);
+        }
+    }
     [Test]
     public void Tags_Null_NothingIsHiddenOrAdminOnly()
     {
-        Assert.That(Call("IsHidden", new object[] { null }), Is.False);
-        Assert.That(Call("IsAdminOnly", new object[] { null }), Is.False);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Call("IsHidden", new object[] { null }), Is.False);
+            Assert.That(Call("IsAdminOnly", new object[] { null }), Is.False);
+        }
     }
     [Test] public void Tags_NullTag_IsSkipped() { Assert.That(Hidden(null, new FieldTag { Browsable = false }), Is.True); }
     [Test] public void Tags_FieldBrowsableFalse_IsHidden() { Assert.That(Hidden(new FieldTag { Browsable = false }), Is.True); }
@@ -233,25 +260,51 @@ public class ConfigControlMapTests
     [Test] public void Tags_PropertyBrowsableTrue_IsShown() { Assert.That(Hidden(new PropertyTag { Browsable = true }), Is.False); }
     [Test] public void Tags_NullableBrowsableFalse_IsHidden() { Assert.That(Hidden(new NullableTag { Browsable = false }), Is.True); }
     [Test] public void Tags_NullableBrowsableUnset_IsShown() { Assert.That(Hidden(new NullableTag()), Is.False); }
-    [Test] public void Tags_PrivateMember_IsFound() { Assert.That(Hidden(new PrivateTag()), Is.True); Assert.That(Admin(new PrivateTag()), Is.True); }
-    [Test] public void Tags_WrongTypedMember_IsIgnored() { Assert.That(Hidden(new WrongTypeTag()), Is.False); Assert.That(Admin(new WrongTypeTag()), Is.False); }
-    [Test] public void Tags_UnrelatedTag_IsIgnored() { Assert.That(Hidden(new UnrelatedTag()), Is.False); Assert.That(Admin(new UnrelatedTag(), "text", 5), Is.False); }
+    [Test] public void Tags_PrivateMember_IsFound() {
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Hidden(new PrivateTag()), Is.True); Assert.That(Admin(new PrivateTag()), Is.True);
+        }
+    }
+    [Test] public void Tags_WrongTypedMember_IsIgnored() {
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Hidden(new WrongTypeTag()), Is.False); Assert.That(Admin(new WrongTypeTag()), Is.False);
+        }
+    }
+    [Test] public void Tags_UnrelatedTag_IsIgnored() {
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Hidden(new UnrelatedTag()), Is.False); Assert.That(Admin(new UnrelatedTag(), "text", 5), Is.False);
+        }
+    }
     [Test] public void Tags_StringAndIndexerTags_DoNotThrow() { Assert.That(Hidden("a string", new IndexerTag()), Is.False); }
     [Test]
     public void Tags_AdminOnlyTrue_FieldAndProperty()
     {
-        Assert.That(Admin(new FieldTag { IsAdminOnly = true }), Is.True);
-        Assert.That(Admin(new PropertyTag { IsAdminOnly = true }), Is.True);
-        Assert.That(Admin(new NullableTag { IsAdminOnly = true }), Is.True);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Admin(new FieldTag { IsAdminOnly = true }), Is.True);
+            Assert.That(Admin(new PropertyTag { IsAdminOnly = true }), Is.True);
+            Assert.That(Admin(new NullableTag { IsAdminOnly = true }), Is.True);
+        }
     }
-    [Test] public void Tags_AdminOnlyFalse() { Assert.That(Admin(new FieldTag()), Is.False); Assert.That(Admin(new PropertyTag()), Is.False); }
+    [Test] public void Tags_AdminOnlyFalse() {
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Admin(new FieldTag()), Is.False); Assert.That(Admin(new PropertyTag()), Is.False);
+        }
+    }
     [Test] public void Tags_AdminOnlyDoesNotHide() { Assert.That(Hidden(new FieldTag { IsAdminOnly = true }), Is.False); }
     [Test] public void Tags_HiddenIsNotAdminOnly() { Assert.That(Admin(new FieldTag { Browsable = false }), Is.False); }
     [Test]
     public void Tags_FirstTagWithTheMemberWins()
     {
-        Assert.That(Hidden(new UnrelatedTag(), new FieldTag { Browsable = false }, new FieldTag { Browsable = true }), Is.True);
-        Assert.That(Hidden(new FieldTag { Browsable = true }, new FieldTag { Browsable = false }), Is.False);
-        Assert.That(Hidden(new NullableTag(), new FieldTag { Browsable = false }), Is.True, "an unset bool? does not stop the search");
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Hidden(new UnrelatedTag(), new FieldTag { Browsable = false }, new FieldTag { Browsable = true }), Is.True);
+            Assert.That(Hidden(new FieldTag { Browsable = true }, new FieldTag { Browsable = false }), Is.False);
+            Assert.That(Hidden(new NullableTag(), new FieldTag { Browsable = false }), Is.True, "an unset bool? does not stop the search");
+        }
     }
 }

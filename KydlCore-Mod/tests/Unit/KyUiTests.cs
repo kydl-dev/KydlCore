@@ -47,8 +47,11 @@ public class KyUiTests
     public void Open_WithBuilder_IsPublic_AndTakesAFuncOfVisualElement()
     {
         var p = BuilderOverload().GetParameters();
-        Assert.That(p[2].ParameterType.GetGenericTypeDefinition(), Is.EqualTo(typeof(Func<>)));
-        Assert.That(p[2].ParameterType.GetGenericArguments()[0].Name, Is.EqualTo("VisualElement"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(p[2].ParameterType.GetGenericTypeDefinition(), Is.EqualTo(typeof(Func<>)));
+            Assert.That(p[2].ParameterType.GetGenericArguments()[0].Name, Is.EqualTo("VisualElement"));
+        }
     }
 
     [Test]
@@ -58,17 +61,23 @@ public class KyUiTests
     public void Open_RunsTheBuilderAsTheMod_AndPutsTheOwnerBack()
     {
         var result = Open("com.kydldev.A", "w", Builder("Record"));
-        Assert.That(builds, Is.EqualTo(1));
-        Assert.That(seenOwner, Is.EqualTo("com.kydldev.A"));
-        Assert.That(ModAssembly.GetStatic("KydlCore.Ui.UiLog", "Owner"), Is.Null);
-        Assert.That(result, Is.Null, "a builder that returns no window opens nothing");
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(builds, Is.EqualTo(1));
+            Assert.That(seenOwner, Is.EqualTo("com.kydldev.A"));
+            Assert.That(ModAssembly.GetStatic("KydlCore.Ui.UiLog", "Owner"), Is.Null);
+            Assert.That(result, Is.Null, "a builder that returns no window opens nothing");
+        }
     }
 
     [Test]
     public void Open_ThrowingBuilder_GivesNull_AndPutsTheOwnerBack()
     {
-        Assert.That(Open("com.kydldev.A", "w", Builder("Throw")), Is.Null);
-        Assert.That(builds, Is.EqualTo(1));
-        Assert.That(ModAssembly.GetStatic("KydlCore.Ui.UiLog", "Owner"), Is.Null);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Open("com.kydldev.A", "w", Builder("Throw")), Is.Null);
+            Assert.That(builds, Is.EqualTo(1));
+            Assert.That(ModAssembly.GetStatic("KydlCore.Ui.UiLog", "Owner"), Is.Null);
+        }
     }
 }

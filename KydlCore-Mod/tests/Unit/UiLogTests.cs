@@ -49,9 +49,12 @@ public class UiLogTests
     {
         string seen = null;
         int result = Within("com.kydldev.A", () => { seen = Owner(); return 7; });
-        Assert.That(result, Is.EqualTo(7));
-        Assert.That(seen, Is.EqualTo("com.kydldev.A"));
-        Assert.That(Owner(), Is.Null);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(result, Is.EqualTo(7));
+            Assert.That(seen, Is.EqualTo("com.kydldev.A"));
+            Assert.That(Owner(), Is.Null);
+        }
     }
 
     [Test]
@@ -64,9 +67,12 @@ public class UiLogTests
             afterInner = Owner();
             return 0;
         });
-        Assert.That(inner, Is.EqualTo("inner"));
-        Assert.That(afterInner, Is.EqualTo("outer"));
-        Assert.That(Owner(), Is.Null);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(inner, Is.EqualTo("inner"));
+            Assert.That(afterInner, Is.EqualTo("outer"));
+            Assert.That(Owner(), Is.Null);
+        }
     }
 
     [Test]
@@ -81,15 +87,21 @@ public class UiLogTests
     public void Within_NullWork_GivesDefault_AndKeepsTheOwner()
     {
         SetOwner("keep");
-        Assert.That(Within<string>("other", null), Is.Null);
-        Assert.That(Owner(), Is.EqualTo("keep"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Within<string>("other", null), Is.Null);
+            Assert.That(Owner(), Is.EqualTo("keep"));
+        }
     }
 
     [Test]
     public void Wrap_NullIn_NullOut()
     {
-        Assert.That(Wrap(null), Is.Null);
-        Assert.That(WrapOne(null), Is.Null);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Wrap(null), Is.Null);
+            Assert.That(WrapOne(null), Is.Null);
+        }
     }
 
     [Test]
@@ -101,8 +113,11 @@ public class UiLogTests
         Assert.That(Owner(), Is.Null);
         SetOwner("someone else");
         wrapped();
-        Assert.That(seen, Is.EqualTo("com.kydldev.B"));
-        Assert.That(Owner(), Is.EqualTo("someone else"), "the owner of the caller is back after the callback");
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(seen, Is.EqualTo("com.kydldev.B"));
+            Assert.That(Owner(), Is.EqualTo("someone else"), "the owner of the caller is back after the callback");
+        }
     }
 
     [Test]
@@ -112,8 +127,11 @@ public class UiLogTests
         var wrapped = Wrap(() => seen = Owner());
         SetOwner("late");
         wrapped();
-        Assert.That(seen, Is.Null);
-        Assert.That(Owner(), Is.EqualTo("late"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(seen, Is.Null);
+            Assert.That(Owner(), Is.EqualTo("late"));
+        }
     }
 
     [Test]
@@ -123,9 +141,12 @@ public class UiLogTests
         Action<string> wrapped = null;
         Within("com.kydldev.C", () => { wrapped = WrapOne(v => { value = v; owner = Owner(); }); return 0; });
         wrapped("hello");
-        Assert.That(value, Is.EqualTo("hello"));
-        Assert.That(owner, Is.EqualTo("com.kydldev.C"));
-        Assert.That(Owner(), Is.Null);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(value, Is.EqualTo("hello"));
+            Assert.That(owner, Is.EqualTo("com.kydldev.C"));
+            Assert.That(Owner(), Is.Null);
+        }
     }
 
     [Test]

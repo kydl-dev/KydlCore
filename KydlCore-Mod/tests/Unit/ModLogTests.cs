@@ -55,8 +55,11 @@ public class ModLogTests
     [Test]
     public void Init_FirstCall_WritesTheSessionMarkerAsFirstLine()
     {
-        Assert.That(_listener.Lines, Has.Count.EqualTo(1));
-        Assert.That(Msg(_listener.Lines[0]), Is.EqualTo("NEW LOG SESSION STARTS HERE"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(_listener.Lines, Has.Count.EqualTo(1));
+            Assert.That(Msg(_listener.Lines[0]), Is.EqualTo("NEW LOG SESSION STARTS HERE"));
+        }
     }
 
     [Test]
@@ -101,8 +104,11 @@ public class ModLogTests
 
         ModAssembly.Call(LogType, "Verbose", "chatter");
 
-        Assert.That(_listener.Lines, Has.Count.EqualTo(2));
-        Assert.That(Msg(_listener.Lines[1]), Is.EqualTo("chatter"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(_listener.Lines, Has.Count.EqualTo(2));
+            Assert.That(Msg(_listener.Lines[1]), Is.EqualTo("chatter"));
+        }
     }
 
     [Test]
@@ -119,8 +125,11 @@ public class ModLogTests
     {
         var inside = (bool)ModAssembly.Call(LogType, "Check", "bone turn", 24.0, 24.05, 2.0, "deg");
 
-        Assert.That(inside, Is.True);
-        Assert.That(_listener.Lines, Has.Count.EqualTo(1), "only the session line");
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(inside, Is.True);
+            Assert.That(_listener.Lines, Has.Count.EqualTo(1), "only the session line");
+        }
     }
 
     [Test]
@@ -128,9 +137,12 @@ public class ModLogTests
     {
         var inside = (bool)ModAssembly.Call(LogType, "Check", "coil mismatch", 0.5, 0.0, 0.01, "m");
 
-        Assert.That(inside, Is.False);
-        Assert.That(_listener.Lines, Has.Count.EqualTo(2));
-        Assert.That(Msg(_listener.Lines[1]), Is.EqualTo("CHECK OFF: coil mismatch = 0.5 m (expected 0 +- 0.01 m), off by 0.5 m"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(inside, Is.False);
+            Assert.That(_listener.Lines, Has.Count.EqualTo(2));
+            Assert.That(Msg(_listener.Lines[1]), Is.EqualTo("CHECK OFF: coil mismatch = 0.5 m (expected 0 +- 0.01 m), off by 0.5 m"));
+        }
     }
 
     [Test]
@@ -138,8 +150,11 @@ public class ModLogTests
     {
         var inside = (bool)ModAssembly.Call(LogType, "CheckRange", "scale", 1.5, 0.9, 1.1, "");
 
-        Assert.That(inside, Is.False);
-        Assert.That(Msg(_listener.Lines[1]), Is.EqualTo("CHECK OFF: scale = 1.5 (expected 0.9 .. 1.1)"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(inside, Is.False);
+            Assert.That(Msg(_listener.Lines[1]), Is.EqualTo("CHECK OFF: scale = 1.5 (expected 0.9 .. 1.1)"));
+        }
     }
 
     [Test]
@@ -154,8 +169,11 @@ public class ModLogTests
     public void Init_ReturnsTrue_AndASecondInitDoesNotWriteASecondSessionMarker()
     {
         ModAssembly.Call(ContextsType, "ResetRepeatsForTests");   // without this the repeat filter would hide a second marker and the test proves nothing
-        Assert.That((bool)ModAssembly.Call(LogType, "Init", _source, "KydlCore", (Func<bool>)(() => _debug)), Is.True);
-        Assert.That(_listener.Lines, Has.Count.EqualTo(1), "still only the first session marker");
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That((bool)ModAssembly.Call(LogType, "Init", _source, "KydlCore", (Func<bool>)(() => _debug)), Is.True);
+            Assert.That(_listener.Lines, Has.Count.EqualTo(1), "still only the first session marker");
+        }
     }
 
     [TestCase("")]
@@ -287,9 +305,12 @@ public class ModLogTests
         Age(3.0);
         ModAssembly.Call(LogType, "Info", "fresh");
 
-        Assert.That(Remembered().Count, Is.EqualTo(1), "4002 remembered > 4000: every line older than the window is dropped, the fresh one stays");
-        Assert.That((bool)ModAssembly.Call(ContextsType, "ResetRepeatsForTests"), Is.True);
-        Assert.That(Remembered().Count, Is.Zero);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Remembered().Count, Is.EqualTo(1), "4002 remembered > 4000: every line older than the window is dropped, the fresh one stays");
+            Assert.That((bool)ModAssembly.Call(ContextsType, "ResetRepeatsForTests"), Is.True);
+        }
+        Assert.That(Remembered(), Is.Empty);
     }
 
     [Test]
@@ -299,8 +320,11 @@ public class ModLogTests
 
         var inside = (bool)ModAssembly.Call(LogType, "Check", "angle", 1.5, 1.0, 0.5, "deg");
 
-        Assert.That(inside, Is.True);
-        Assert.That(Msg(_listener.Lines[1]), Is.EqualTo("CHECK ok: angle = 1.5 deg (expected 1 +- 0.5 deg)"));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(inside, Is.True);
+            Assert.That(Msg(_listener.Lines[1]), Is.EqualTo("CHECK ok: angle = 1.5 deg (expected 1 +- 0.5 deg)"));
+        }
     }
 
     [Test]
@@ -319,8 +343,11 @@ public class ModLogTests
     [TestCase(double.NaN, false)]
     public void CheckRange_BoundsAreInclusive(double actual, bool expected)
     {
-        Assert.That((bool)ModAssembly.Call(LogType, "CheckRange", "scale", actual, 0.9, 1.1, ""), Is.EqualTo(expected));
-        Assert.That(_listener.Lines, Has.Count.EqualTo(expected ? 1 : 2), "a warning only when off");
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That((bool)ModAssembly.Call(LogType, "CheckRange", "scale", actual, 0.9, 1.1, ""), Is.EqualTo(expected));
+            Assert.That(_listener.Lines, Has.Count.EqualTo(expected ? 1 : 2), "a warning only when off");
+        }
     }
 
     // ---- properties ------------------------------------------------------------------------------------------------------------

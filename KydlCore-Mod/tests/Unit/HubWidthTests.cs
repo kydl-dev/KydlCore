@@ -35,9 +35,12 @@ public class HubWidthTests
     [Test]
     public void RightSide_MovesTenPercentOfTheOldWidthTowardsTheEdge()
     {
-        Assert.That(Const("ShiftRight"), Is.EqualTo(Old * 0.10f).Within(0.5f));
-        // 3440 px wide: the shared window keeps 5% = 172 px from the edge, the hub 172 - 76
-        Assert.That(Right(3440f), Is.EqualTo(3440f * 0.05f - 76f).Within(0.01f));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Const("ShiftRight"), Is.EqualTo(Old * 0.10f).Within(0.5f));
+            // 3440 px wide: the shared window keeps 5% = 172 px from the edge, the hub 172 - 76
+            Assert.That(Right(3440f), Is.EqualTo(3440f * 0.05f - 76f).Within(0.01f));
+        }
     }
 
     [Test]
