@@ -22,6 +22,8 @@
   <ItemGroup>
     <!-- tests\ (NUnit + TestLab suites) and docs\ live inside this folder but are never part of the mod (spec 3: excluded from the release) -->
     <Compile Remove="tests\**;docs\**;release\**" />
+    <Compile Remove="quality\**" />
+    <Compile Include="quality\QualityAccess.cs" Condition="'$(KydlQuality)' == 'true'" />
     <None Remove="tests\**;docs\**;release\**" />
     <EmbeddedResource Remove="tests\**;docs\**;release\**" />
   </ItemGroup>
