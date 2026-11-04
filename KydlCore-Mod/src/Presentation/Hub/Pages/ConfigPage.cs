@@ -23,7 +23,7 @@ internal sealed class ConfigPage : IDisposable
     const int TextMax = 256;
     const float FontScale = HubView.PageFontScale;  // every text of the page is this part of the kit's size (user 2026-10-30: 65%, D-061)
     const float SliderGapPercent = 6f;
-    const float LabelWidth = 230f;            // the setting-name column (before the scale does not apply to widths)
+    const float SliderMinWidth = 170f;        // a slider / colour editor never gets narrower; a longer setting name is cut with "..." instead
 
     readonly ConfigFile _file;
     readonly string[] _sections;              // null / empty = every section
@@ -145,16 +145,18 @@ internal sealed class ConfigPage : IDisposable
         r.style.flexDirection = FlexDirection.Row; r.style.alignItems = Align.Center; r.style.flexShrink = 0;
         r.style.marginTop = 4; r.style.marginBottom = 4;
         var l = UiKit.Label(label, UiKit.NameSize, UiKit.NameColor);
-        // fixed column; a name longer than the column is cut with "..." instead of running under the slider (user 2026-11-04)
-        l.style.width = LabelWidth; l.style.minWidth = LabelWidth; l.style.flexShrink = 0; l.style.whiteSpace = WhiteSpace.NoWrap;
+        // the name takes the width its text needs; only when the text would run into the slider (the slider keeps SliderMinWidth) the name is
+        // cut with "..." (user 2026-11-04: "..." only when the text really collides with the slider)
+        l.style.flexGrow = 0; l.style.flexShrink = 1; l.style.minWidth = 0; l.style.whiteSpace = WhiteSpace.NoWrap;
         l.style.overflow = Overflow.Hidden; l.style.textOverflow = TextOverflow.Ellipsis; l.style.marginRight = 8;
         l.tooltip = label;
         r.Add(l);
         bool stretch = control.name == "kydl-slider" || control.name == "kydl-color";
         bool textBox = control.name == "kydl-text";
         control.style.flexGrow = stretch ? 1f : 0f;
-        control.style.flexShrink = stretch || textBox ? 1f : 0f;      // a text box gives way when the panel is narrow; its text is clipped inside
-        if (stretch || textBox) control.style.minWidth = 60;
+        control.style.flexShrink = textBox ? 1f : 0f;                 // a text box gives way when the panel is narrow; its text is clipped inside; a slider keeps its minimum, the NAME gives way
+        if (stretch) control.style.minWidth = SliderMinWidth;
+        else if (textBox) control.style.minWidth = 60;
         if (!stretch) { control.style.alignSelf = Align.FlexStart; control.style.marginLeft = StyleKeyword.Auto; }   // value fields sit at the right edge (D-062)
         else control.style.marginLeft = Length.Percent(SliderGapPercent);      // user 2026-11-04: ~10 % shorter sliders and a gap to the name (percent of the row ~ 10 % of the slider)
         r.Add(control);
