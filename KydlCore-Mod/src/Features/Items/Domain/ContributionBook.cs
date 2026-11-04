@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using KydlCore.Core;
 
@@ -42,7 +42,7 @@ internal sealed class ContributionBook
     /// Expected outcome: true when the id is not taken any more (also when it never was).
     internal bool Remove(string id)
     {
-        ContributionRecord r;
+        ContributionRecord r = default(ContributionRecord);   // assigned up front: a chained out-variable breaks Stryker mutants (Safe Mode)
         if (id != null && _byId.TryGetValue(id, out r)) { _byId.Remove(id); _idByPrefab.Remove(r.Prefab); }
         return !Contains(id);
     }
@@ -50,7 +50,7 @@ internal sealed class ContributionBook
     /// The record of an id (Prefab "" when unknown).
     internal ContributionRecord Find(string id)
     {
-        ContributionRecord r;
+        ContributionRecord r = default(ContributionRecord);   // assigned up front: a chained out-variable breaks Stryker mutants (Safe Mode)
         return id != null && _byId.TryGetValue(id, out r) ? r : new ContributionRecord(id, "", "");
     }
 }

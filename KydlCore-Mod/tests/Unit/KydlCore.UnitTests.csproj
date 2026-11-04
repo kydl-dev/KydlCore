@@ -23,4 +23,15 @@
   <ItemGroup>
     <Reference Include="UnityEngine.CoreModule"><HintPath>$(ValheimRefs)\UnityEngine.CoreModule.dll</HintPath><Private>true</Private></Reference>
   </ItemGroup>
+  <!-- stryker-capture-refs: the mod derives from / calls types of these; copied next to the tests so every type of KydlCore.dll can be loaded (Stryker's coverage capture lists them; without them it fails and every mutant survives). Test-quality runs only. -->
+  <ItemGroup Condition="'$(KydlQuality)' == 'true'">
+    <Reference Include="Jotunn"><HintPath>$(ValheimRefs)\Jotunn.dll</HintPath><Private>true</Private></Reference>
+    <Reference Include="assembly_valheim"><HintPath>$(ValheimRefs)\assembly_valheim.dll</HintPath><Private>true</Private></Reference>
+    <Reference Include="assembly_utils"><HintPath>$(ValheimRefs)\assembly_utils.dll</HintPath><Private>true</Private></Reference>
+    <Reference Include="assembly_guiutils"><HintPath>$(ValheimRefs)\assembly_guiutils.dll</HintPath><Private>true</Private></Reference>
+    <Reference Include="UnityEngine.UI"><HintPath>$(ValheimRefs)\UnityEngine.UI.dll</HintPath><Private>true</Private></Reference>
+    <Reference Include="Unity.InputSystem"><HintPath>$(ValheimRefs)\Unity.InputSystem.dll</HintPath><Private>true</Private></Reference>
+    <Reference Include="Unity.TextMeshPro"><HintPath>$(ValheimRefs)\Unity.TextMeshPro.dll</HintPath><Private>true</Private></Reference>
+    <Reference Include="assembly_postprocessing"><HintPath>$(ValheimRefs)\assembly_postprocessing.dll</HintPath><Private>true</Private></Reference>
+  </ItemGroup>
 </Project>
