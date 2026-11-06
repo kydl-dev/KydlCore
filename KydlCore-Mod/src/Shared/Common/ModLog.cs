@@ -18,7 +18,7 @@ namespace KydlCore.Common;
 /// One class for all mods: the state (log source, debug switch, repeat filter) is kept per CALLING mod in a <see cref="ModContext"/>, so a line always carries the name of the mod that wrote it.
 /// Every line carries the date and time; the first line of a game launch is "{date&amp;time} - NEW LOG SESSION STARTS HERE".
 /// </summary>
-public static class ModLog
+public static partial class ModLog
 {
     // ---- look of a log line: edit here and nowhere else ------------------------------------------------------------
     const string TimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
@@ -90,7 +90,7 @@ public static class ModLog
         bool inside = !double.IsNaN(actual) && Math.Abs(off) <= Math.Abs(tolerance);
         string text = what + " = " + Num(actual) + Unit(unit) + " (expected " + Num(expected) + " +- " + Num(Math.Abs(tolerance)) + Unit(unit) + ")";
         if (inside) CheckOk(c, what, text);
-        else Warn(c, "CHECK OFF: " + text + ", off by " + Num(off) + Unit(unit));
+        else { Warn(c, "CHECK OFF: " + text + ", off by " + Num(off) + Unit(unit)); RaiseCheckOff(c, text + ", off by " + Num(off) + Unit(unit)); }
         return inside;
     }
 
@@ -103,7 +103,7 @@ public static class ModLog
         bool inside = !double.IsNaN(actual) && actual >= min && actual <= max;
         string text = what + " = " + Num(actual) + Unit(unit) + " (expected " + Num(min) + " .. " + Num(max) + Unit(unit) + ")";
         if (inside) CheckOk(c, what, text);
-        else Warn(c, "CHECK OFF: " + text);
+        else { Warn(c, "CHECK OFF: " + text); RaiseCheckOff(c, text); }
         return inside;
     }
 

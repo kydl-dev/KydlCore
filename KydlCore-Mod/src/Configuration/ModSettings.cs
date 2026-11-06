@@ -27,6 +27,17 @@ internal static class ModSettings
     public static readonly Tunable<float> ExampleSpeed = new Tunable<float>("Example", "ExampleSpeed", 1f, 0f, 10f,
         "Example dev-only value (0-10, with a range as PROJECT_RULES 11 asks): replace or remove. Read it with ModSettings.ExampleSpeed.Value.");
 
+    // [Diagnostics] the flight recorder (Features\Diagnostics, user 2026-11-06): always on; these only size it
+    public static readonly Tunable<float> FlightSampleSeconds = new Tunable<float>("Diagnostics", "FlightSampleSeconds", 1f, 0.25f, 10f,
+        "Flight recorder: seconds between two samples of every tracked object and of the environment (0.25-10 s). A change starts a fresh recording.");
+    public static readonly Tunable<int> FlightWindowSeconds = new Tunable<int>("Diagnostics", "FlightWindowSeconds", 120, 30, 600,
+        "Flight recorder: how many seconds of history a dump holds (30-600 s). A change starts a fresh recording.");
+    public static readonly Tunable<int> FlightMaxDumps = new Tunable<int>("Diagnostics", "FlightMaxDumps", 30, 1, 200,
+        "Flight recorder: the most dump files written per game start (1-200), so a repeating problem never fills the disk.");
+    public static readonly Tunable<int> FlightKeepDays = new Tunable<int>("Diagnostics", "FlightKeepDays", 3, 1, 30,
+        "Flight recorder: dumps older than this many days are removed at game start (1-30 days).");
+    public static readonly Tunable<int> FlightKeepFiles = new Tunable<int>("Diagnostics", "FlightKeepFiles", 100, 10, 1000,
+        "Flight recorder: at most this many dump files are kept; the oldest go first, at game start (10-1000 files).");
     /// Expected outcome: every player entry is bound (returns that check).
     public static bool Bind(ConfigFile c)
     {

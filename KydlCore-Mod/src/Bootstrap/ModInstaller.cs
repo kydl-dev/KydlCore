@@ -1,5 +1,6 @@
 using KydlCore.Common;
 using KydlCore.Core;
+using KydlCore.Features.Diagnostics.Infrastructure;
 using KydlCore.Features.Hub.Infrastructure;
 using KydlCore.Features.Items.Infrastructure;
 
@@ -25,7 +26,8 @@ internal sealed class ModInstaller
     internal bool Install()
     {
         Current = this;
-        Add(new ItemsFeature());          // first: the hub's KY-Items tab follows the registry
+        Add(new DiagnosticsFeature());    // first: the flight recorder hears everything that follows
+        Add(new ItemsFeature());          // the hub's KY-Items tab follows the registry
         Add(new HubFeature());
         OperationResponse<int> r = Features.Refresh();
         if (!r.IsSuccess) ModLog.Error("ModInstaller: " + r.Reason);

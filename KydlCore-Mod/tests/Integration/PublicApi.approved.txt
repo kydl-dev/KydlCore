@@ -32,8 +32,12 @@ static class KydlCore.Common.ModContexts
 static class KydlCore.Common.ModLog
   method System.Boolean KydlCore.Common.ModLog::Check(System.String,System.Double,System.Double,System.Double,System.String)
   method System.Boolean KydlCore.Common.ModLog::CheckRange(System.String,System.Double,System.Double,System.Double,System.String)
+  method System.Boolean KydlCore.Common.ModLog::Every(System.String,System.Double,System.String)
   method System.Boolean KydlCore.Common.ModLog::Init(BepInEx.Logging.ManualLogSource,System.String,System.Func`1<System.Boolean>)
+  method System.Boolean KydlCore.Common.ModLog::IsDue(System.String,System.Double)
+  method System.Boolean KydlCore.Common.ModLog::State(System.String,System.String,System.String,System.String)
   method System.Boolean KydlCore.Common.ModLog::get_DebugOn()
+  method System.String KydlCore.Common.ModLog::Decision(System.String,System.String,System.String)
   method System.Void KydlCore.Common.ModLog::Error(System.String)
   method System.Void KydlCore.Common.ModLog::Info(System.String)
   method System.Void KydlCore.Common.ModLog::Verbose(System.String)
@@ -159,6 +163,13 @@ struct KydlCore.Core.ValidationResult
   method System.Boolean KydlCore.Core.ValidationResult::get_IsValid()
   method System.String KydlCore.Core.ValidationResult::ToString()
   method System.String KydlCore.Core.ValidationResult::get_Reason()
+static class KydlCore.Features.Diagnostics.Contracts.FlightRecorder
+  method System.Boolean KydlCore.Features.Diagnostics.Contracts.FlightRecorder::Note(System.String)
+  method System.Boolean KydlCore.Features.Diagnostics.Contracts.FlightRecorder::Track(UnityEngine.Component,System.String,System.Func`1<System.String>)
+  method System.Boolean KydlCore.Features.Diagnostics.Contracts.FlightRecorder::Untrack(UnityEngine.Component)
+  method System.Int32 KydlCore.Features.Diagnostics.Contracts.FlightRecorder::get_TrackedCount()
+  method System.String KydlCore.Features.Diagnostics.Contracts.FlightRecorder::Dump(System.String)
+  method System.String KydlCore.Features.Diagnostics.Contracts.FlightRecorder::get_LastDumpPath()
 sealed class KydlCore.Features.Hub.Contracts.KyButtonRow
   method System.Action KydlCore.Features.Hub.Contracts.KyButtonRow::get_Clicked()
 sealed class KydlCore.Features.Hub.Contracts.KyCell

@@ -5,6 +5,7 @@ using HarmonyLib;
 using Jotunn.Utils;
 using KydlCore.Common;
 using KydlCore.Configuration;
+using KydlCore.Features.Diagnostics.Infrastructure;
 using KydlCore.Features.Hub.Infrastructure;
 using KydlCore.Presentation.Hub;
 using UnityEngine;
@@ -87,6 +88,7 @@ public class Plugin : BaseUnityPlugin
 
     void Update()
     {
+        FlightHost.Tick();                 // the flight recorder: one sample per interval, queued dumps written
         if (_cfgWatcher != null) _cfgWatcher.Tick();
         KeyCapture.Tick();                 // first: a key chosen for a setting is not also the hub key or Escape
         HubHost.Tick();

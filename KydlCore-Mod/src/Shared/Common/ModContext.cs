@@ -25,6 +25,8 @@ public sealed class ModContext
     internal readonly Dictionary<string, KeyValuePair<long, int>> OkSeen = new();
     internal readonly Dictionary<string, double> LastWritten = new();
     internal readonly object RepeatLock = new();
+    /// ModLog.Every: when each status key was last written (Stopwatch seconds), per mod.
+    internal readonly Dictionary<string, double> EveryLast = new();
 
     // ---- Loc ----
     internal Dictionary<string, string> English = new();
@@ -61,7 +63,7 @@ public static class ModContexts
             foreach (var c in ByAssembly.Values)
             {
                 c.Name = c.DefaultName; c.Source = null; c.SessionStarted = false; c.DebugOn = null;
-                lock (c.RepeatLock) { c.LastWritten.Clear(); c.OkSeen.Clear(); }
+                lock (c.RepeatLock) { c.LastWritten.Clear(); c.OkSeen.Clear(); c.EveryLast.Clear(); }
                 c.English = new Dictionary<string, string>();
             }
             return true;
@@ -71,7 +73,7 @@ public static class ModContexts
     /// Test support: forget the repeat filter of every context (a fresh game launch) but keep their log sources and sessions. Expected outcome: true.
     internal static bool ResetRepeatsForTests()
     {
-        lock (Gate) { foreach (var c in ByAssembly.Values) lock (c.RepeatLock) { c.LastWritten.Clear(); c.OkSeen.Clear(); } return true; }
+        lock (Gate) { foreach (var c in ByAssembly.Values) lock (c.RepeatLock) { c.LastWritten.Clear(); c.OkSeen.Clear(); c.EveryLast.Clear(); } return true; }
     }
 
     /// Test support: the context that has been initialised (its session line was written); null when none.
