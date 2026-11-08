@@ -1,5 +1,8 @@
+using System;
+using System.IO;
 using System.Linq;
 using KydlCore.Common;
+using KydlCore.Features.Diagnostics.Contracts;
 using KydlCore.Features.Hub.Contracts;
 using KydlCore.Features.Items.Contracts;
 
@@ -67,4 +70,29 @@ internal static class TestHooks
 
     [TestHook("kc.itemsWithdraw")]
     static bool ItemsWithdraw(string id) { return KyItems.Withdraw(id); }
+
+    /// <summary>1.1.0: the real FlightRecorder.Track on the local player (with one fact text). Returns whether it is tracked.</summary>
+    [TestHook("kc.flightTrackPlayer")]
+    static bool FlightTrackPlayer(string label) { return FlightRecorder.Track(Player.m_localPlayer, label, () => "lab fact"); }
+
+    [TestHook("kc.flightUntrack")]
+    static bool FlightUntrack() { return FlightRecorder.Untrack(Player.m_localPlayer); }
+
+    [TestHook("kc.flightNote")]
+    static bool FlightNote(string text) { return FlightRecorder.Note(text); }
+
+    /// <summary>The real FlightRecorder.Dump: the dump file's path ("" when none was written).</summary>
+    [TestHook("kc.flightDump")]
+    static string FlightDump(string reason) { return FlightRecorder.Dump(reason) ?? ""; }
+
+    /// <summary>Whether the newest dump file of this game start exists and holds the text.</summary>
+    [TestHook("kc.flightDumpHas")]
+    static bool FlightDumpHas(string text)
+    {
+        string path = FlightRecorder.LastDumpPath;
+        if (string.IsNullOrEmpty(path) || !File.Exists(path)) return false;
+        try { return File.ReadAllText(path).Contains(text); }
+        catch (IOException) { return false; }
+        catch (UnauthorizedAccessException) { return false; }
+    }
 }

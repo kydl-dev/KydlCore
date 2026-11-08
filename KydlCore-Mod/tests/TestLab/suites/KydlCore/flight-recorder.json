@@ -1,0 +1,74 @@
+{
+  "name": "flight-recorder",
+  "description": "1.1.0: FlightRecorder tracks the local player, takes a note, and a dump writes a report file that holds the tracked label and the note; Untrack drops the object",
+  "timeout": 60,
+  "steps": [
+    {
+      "do": "hook",
+      "name": "kc.arena",
+      "contains": "arena at",
+      "label": "start on the arena spot"
+    },
+    {
+      "do": "hook",
+      "name": "kc.flightTrackPlayer",
+      "args": {
+        "label": "lab player"
+      },
+      "expect": true,
+      "label": "player tracked"
+    },
+    {
+      "do": "hook",
+      "name": "kc.flightNote",
+      "args": {
+        "text": "lab note one"
+      },
+      "expect": true,
+      "label": "note stored"
+    },
+    {
+      "do": "wait",
+      "seconds": 3
+    },
+    {
+      "do": "hook",
+      "name": "kc.flightDump",
+      "args": {
+        "reason": "lab dump"
+      },
+      "contains": "flight",
+      "label": "dump written under the flight folder"
+    },
+    {
+      "do": "hook",
+      "name": "kc.flightDumpHas",
+      "args": {
+        "text": "lab player"
+      },
+      "expect": true,
+      "label": "report holds the tracked label"
+    },
+    {
+      "do": "hook",
+      "name": "kc.flightDumpHas",
+      "args": {
+        "text": "lab note one"
+      },
+      "expect": true,
+      "label": "report holds the note"
+    },
+    {
+      "do": "hook",
+      "name": "kc.flightUntrack",
+      "expect": true,
+      "label": "untracked"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "KydlCore"
+    }
+  ]
+}

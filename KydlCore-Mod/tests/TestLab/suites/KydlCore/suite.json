@@ -4,7 +4,7 @@
   "requireMods": [
     {
       "guid": "com.kydldev.KydlCore",
-      "minVersion": "1.0.0"
+      "minVersion": "1.1.0"
     }
   ],
   "configOverrides": [
@@ -19,6 +19,36 @@
       "section": "DebugLog",
       "key": "Enable",
       "value": "true"
+    },
+    {
+      "guid": "com.kydldev.KydlCore",
+      "section": "Diagnostics",
+      "key": "FlightSampleSeconds",
+      "value": "1"
+    },
+    {
+      "guid": "com.kydldev.KydlCore",
+      "section": "Diagnostics",
+      "key": "FlightWindowSeconds",
+      "value": "120"
+    },
+    {
+      "guid": "com.kydldev.KydlCore",
+      "section": "Diagnostics",
+      "key": "FlightMaxDumps",
+      "value": "30"
+    },
+    {
+      "guid": "com.kydldev.KydlCore",
+      "section": "Diagnostics",
+      "key": "FlightKeepDays",
+      "value": "3"
+    },
+    {
+      "guid": "com.kydldev.KydlCore",
+      "section": "Diagnostics",
+      "key": "FlightKeepFiles",
+      "value": "100"
     }
   ],
   "resetBetweenTests": true,
@@ -29,7 +59,8 @@
     "hub-lists-ported-mods",
     "hub-opens-a-mod-tab",
     "ky-items",
-    "ky-items-contribute"
+    "ky-items-contribute",
+    "flight-recorder"
   ],
   "setup": {
     "timeOfDay": 0.5,
