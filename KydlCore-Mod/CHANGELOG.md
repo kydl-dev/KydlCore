@@ -6,6 +6,7 @@
 - New for mod authors: `ModLog.State`, `ModLog.Decision`, `ModLog.Every` and `ModLog.IsDue` (debug lines as before, and always on the flight recorder's timeline, even with the debug log off).
 - New settings in the `[Diagnostics]` section (hub Settings tab): `FlightSampleSeconds` (1 s), `FlightWindowSeconds` (120 s), `FlightMaxDumps` (30), `FlightKeepDays` (3), `FlightKeepFiles` (100). They only size the recorder; it cannot be switched off.
 - Nothing was removed or renamed: mods built for KydlCore 1.0.0 keep working. A server that runs 1.1.0 needs the same version on every player who has KydlCore (exact match).
+- Tested in game with the full TestLab suite (8 tests, including the new flight recorder test): 3 green runs in a row on 2026-11-08; no errors from this mod, all 13 KydlDev mods loaded together.
 
 ## 1.0.0
 - Tested in game with the full TestLab suite (7 tests): 3 green runs in a row on 2026-11-05, plus the ecosystem run with all 12 KydlDev mods loaded together.
