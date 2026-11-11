@@ -47,4 +47,13 @@
     <ProjectReference Include="$(MSBuildThisFileDirectory)..\*.csproj" />
   </ItemGroup>
 
+  <!-- labdb (user 2026-11-10: every mod's test results go into E:\Projects\Valheim\_labdb automatically): each `dotnet test` writes labdb.trx and the database is
+       synced afterwards (Claude\...\_labdb\README.md). Never fails a test run. Off with -p:LabdbOff=true. -->
+  <PropertyGroup Condition="'$(LabdbOff)' != 'true'">
+    <VSTestLogger Condition="'$(VSTestLogger)' == ''">trx%3BLogFileName=labdb.trx</VSTestLogger>
+  </PropertyGroup>
+  <Target Name="LabdbSync" AfterTargets="VSTest" Condition="'$(LabdbOff)' != 'true' And Exists('$(MSBuildThisFileDirectory)..\..\..\_labdb\run.cmd')">
+    <Exec Command="&quot;$(MSBuildThisFileDirectory)..\..\..\_labdb\run.cmd&quot; sync --trx-only" ContinueOnError="true" IgnoreExitCode="true" StandardOutputImportance="low" StandardErrorImportance="low" />
+  </Target>
+
 </Project>
