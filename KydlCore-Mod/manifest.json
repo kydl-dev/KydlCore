@@ -1,6 +1,6 @@
 {
   "name": "KydlCore",
-  "version_number": "1.2.0",
+  "version_number": "1.1.0",
   "website_url": "",
   "description": "Shared runtime for all KydlDev mods: one UI root and theme, the KY hub window (F6; the one menu of every KydlDev mod) and the KY-Items category and registry.",
   "dependencies": [
